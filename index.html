@@ -6,28 +6,34 @@
   <title>Boston Transit Adventure</title>
   <style>
     /* =========================================================
-       1. RESET & CSS VARIABLES
+       1. RESET & DESIGN TOKENS
+       Fun, kid-friendly palette layered on top of an
+       accessible, high-contrast, dyslexia-friendly base.
        ========================================================= */
     *, *::before, *::after { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; }
     :root {
-      --cream:       #FFF8E7;
       --paper:       #FFFFFF;
       --ink:         #1F2A44;
       --ink-soft:    #4A5570;
       --navy:        #0B3D91;
       --navy-dark:   #082B68;
+      --sky:         #2C7BE5;
+      --grape:       #6C4BD8;
       --gold:        #F4B400;
+      --sun:         #FFC93C;
       --green:       #2E8B57;
       --green-soft:  #C7EBD1;
+      --pink:        #FF5C8A;
       --red-soft:    #FADADA;
       --line-red:    #DA291C;
       --line-green:  #00843D;
       --line-blue:   #003DA5;
       --line-orange: #ED8B00;
-      --shadow: 0 4px 12px rgba(0,0,0,0.08);
-      --radius: 14px;
-      --gap: 18px;
+      --shadow:      0 6px 18px rgba(20, 33, 61, 0.12);
+      --shadow-lg:   0 16px 40px rgba(20, 33, 61, 0.22);
+      --radius:      18px;
+      --gap:         18px;
     }
 
     body {
@@ -35,7 +41,12 @@
       font-size: 19px;
       line-height: 1.55;
       color: var(--ink);
-      background: var(--cream);
+      /* Playful but soft background so dark text stays readable */
+      background:
+        radial-gradient(circle at 12% -10%, #DCEBFF 0%, transparent 45%),
+        radial-gradient(circle at 92% 0%, #FFE9C7 0%, transparent 40%),
+        linear-gradient(180deg, #F4F8FF 0%, #FFF6E9 100%);
+      background-attachment: fixed;
       min-height: 100vh;
     }
 
@@ -44,45 +55,60 @@
        ========================================================= */
     .app {
       display: grid;
-      grid-template-columns: 1fr 320px;
-      grid-template-rows: auto 1fr;
+      grid-template-columns: 1fr 330px;
+      grid-template-rows: auto auto 1fr;
       grid-template-areas:
-        "header header"
-        "main   sidebar";
+        "header  header"
+        "journey journey"
+        "main    sidebar";
       gap: var(--gap);
-      max-width: 1240px;
+      max-width: 1260px;
       margin: 0 auto;
       padding: var(--gap);
     }
-
-    @media (max-width: 900px) {
+    @media (max-width: 920px) {
       .app {
         grid-template-columns: 1fr;
         grid-template-areas:
           "header"
+          "journey"
           "main"
           "sidebar";
       }
     }
 
+    /* ---- Header ---- */
     header.app-header {
       grid-area: header;
-      background: var(--navy);
+      background:
+        linear-gradient(120deg, var(--navy) 0%, var(--sky) 60%, var(--grape) 100%);
       color: white;
       border-radius: var(--radius);
-      padding: 18px 24px;
+      padding: 18px 22px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
       box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    /* Decorative dotted "track" stripe */
+    header.app-header::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 6px;
+      background: repeating-linear-gradient(90deg, var(--sun) 0 18px, transparent 18px 34px);
+      opacity: 0.9;
     }
     .app-title {
-      font-size: 28px;
+      font-size: 30px;
       font-weight: 800;
       margin: 0;
       flex: 1 1 auto;
       letter-spacing: 0.3px;
+      text-shadow: 0 2px 0 rgba(0,0,0,0.15);
     }
     .app-title .emoji { margin-right: 8px; }
 
@@ -96,16 +122,84 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      box-shadow: inset 0 0 0 3px var(--gold);
+      box-shadow: inset 0 0 0 3px var(--sun);
     }
     .tracker .label { color: var(--ink-soft); font-weight: 600; font-size: 15px; }
     .tracker .value { color: var(--navy-dark); font-size: 22px; }
+
+    /* Settings (teacher) gear button */
+    .gear-btn {
+      background: rgba(255,255,255,0.18);
+      color: white;
+      border: 2px solid rgba(255,255,255,0.65);
+      border-radius: 999px;
+      width: 48px; height: 48px;
+      font-size: 22px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.15s, background 0.15s;
+    }
+    .gear-btn:hover { background: rgba(255,255,255,0.32); transform: rotate(35deg); }
+    .gear-btn:focus-visible { outline: 3px solid var(--sun); outline-offset: 3px; }
+
+    /* ---- Journey progress map ---- */
+    .journey {
+      grid-area: journey;
+      display: flex;
+      align-items: stretch;
+      gap: 6px;
+      background: var(--paper);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      box-shadow: var(--shadow);
+    }
+    .journey-step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 4px;
+      border-radius: 12px;
+      position: relative;
+      color: var(--ink-soft);
+      font-weight: 700;
+      font-size: 14px;
+      text-align: center;
+      transition: background 0.2s, color 0.2s, transform 0.2s;
+    }
+    .journey-step .j-ico {
+      font-size: 26px;
+      filter: grayscale(0.7);
+      opacity: 0.55;
+      transition: filter 0.2s, opacity 0.2s, transform 0.2s;
+    }
+    .journey-step:not(:last-child)::after {
+      content: "›";
+      position: absolute;
+      right: -6px; top: 50%;
+      transform: translateY(-50%);
+      color: #C8D0E4;
+      font-size: 22px;
+      font-weight: 800;
+    }
+    .journey-step.done   { color: var(--green); }
+    .journey-step.done .j-ico { filter: none; opacity: 1; }
+    .journey-step.active {
+      background: linear-gradient(135deg, var(--sky), var(--grape));
+      color: white;
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: var(--shadow);
+    }
+    .journey-step.active .j-ico { filter: none; opacity: 1; transform: scale(1.12); }
 
     main.phase-root { grid-area: main; min-width: 0; }
     aside.sidebar  { grid-area: sidebar; display: flex; flex-direction: column; gap: var(--gap); }
 
     /* =========================================================
-       3. PHASE CARDS, BUTTONS, CHIPS
+       3. CARDS, BUTTONS, OPTIONS
        ========================================================= */
     .card {
       background: var(--paper);
@@ -113,29 +207,31 @@
       padding: 24px;
       box-shadow: var(--shadow);
     }
-    .phase-card { padding: 28px; }
+    .phase-card { padding: 28px; position: relative; }
     .phase-card + .phase-card { margin-top: var(--gap); }
 
     .phase-head {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 16px;
+      gap: 14px;
+      margin-bottom: 14px;
     }
     .phase-badge {
-      background: var(--navy);
+      background: linear-gradient(135deg, var(--sky), var(--grape));
       color: white;
-      width: 44px; height: 44px;
-      border-radius: 50%;
+      width: 52px; height: 52px;
+      border-radius: 16px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       font-weight: 800;
-      font-size: 22px;
+      font-size: 26px;
       flex-shrink: 0;
+      box-shadow: var(--shadow);
+      transform: rotate(-4deg);
     }
     .phase-title {
-      font-size: 26px;
+      font-size: 27px;
       font-weight: 800;
       margin: 0;
       color: var(--ink);
@@ -145,18 +241,30 @@
       color: var(--ink-soft);
       font-size: 17px;
     }
+    .step-label {
+      display: inline-block;
+      background: var(--sun);
+      color: #5a4500;
+      font-weight: 800;
+      font-size: 14px;
+      padding: 3px 12px;
+      border-radius: 999px;
+      margin: 6px 0;
+    }
 
-    .phase-locked { opacity: 0.55; }
-    .phase-locked .phase-badge { background: #B6BCCB; }
+    .phase-locked { opacity: 0.5; }
+    .phase-locked .phase-badge { background: #B6BCCB; transform: none; }
     .lock-note {
       background: #F0F2F8;
       color: var(--ink-soft);
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 14px 16px;
       font-size: 16px;
     }
+    .phase-done-card { background: linear-gradient(135deg, #F0FFF6, #E8FBEF); }
+    .phase-done-card .phase-badge { background: var(--green); transform: none; }
 
-    /* Generic option card (train/pass/answer) */
+    /* Generic option card (train / pass / answer) */
     .options {
       display: grid;
       gap: 12px;
@@ -166,21 +274,21 @@
     .option {
       background: var(--paper);
       border: 3px solid #E2E6F0;
-      border-radius: 12px;
+      border-radius: 14px;
       padding: 16px;
       cursor: pointer;
       font-size: 18px;
       text-align: left;
-      transition: transform 0.08s, border-color 0.15s, background 0.15s;
+      transition: transform 0.1s, border-color 0.15s, background 0.15s, box-shadow 0.15s;
       display: flex;
       flex-direction: column;
       gap: 6px;
       font-family: inherit;
       color: var(--ink);
     }
-    .option:hover { border-color: var(--navy); transform: translateY(-1px); }
+    .option:hover { border-color: var(--sky); transform: translateY(-2px); box-shadow: var(--shadow); }
     .option:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
-    .option.selected { border-color: var(--navy); background: #EEF3FF; }
+    .option.selected { border-color: var(--sky); background: #EAF2FF; }
     .option.correct  { border-color: var(--green); background: var(--green-soft); }
     .option.wrong    { border-color: #C0392B; background: var(--red-soft); }
     .option .opt-title { font-weight: 800; font-size: 19px; }
@@ -188,23 +296,26 @@
 
     /* Primary action button */
     .btn {
-      background: var(--navy);
+      background: linear-gradient(135deg, var(--sky), var(--navy));
       color: white;
       border: none;
-      border-radius: 10px;
-      padding: 14px 24px;
+      border-radius: 12px;
+      padding: 14px 26px;
       font-size: 19px;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
       font-family: inherit;
-      transition: background 0.15s, transform 0.08s;
+      box-shadow: var(--shadow);
+      transition: filter 0.15s, transform 0.08s;
     }
-    .btn:hover:not(:disabled) { background: var(--navy-dark); }
-    .btn:active:not(:disabled) { transform: translateY(1px); }
+    .btn:hover:not(:disabled) { filter: brightness(1.08); transform: translateY(-2px); }
+    .btn:active:not(:disabled) { transform: translateY(0); }
     .btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
-    .btn:disabled { background: #B6BCCB; cursor: not-allowed; }
+    .btn:disabled { background: #B6BCCB; cursor: not-allowed; box-shadow: none; }
     .btn.secondary { background: white; color: var(--navy); box-shadow: inset 0 0 0 3px var(--navy); }
-    .btn.secondary:hover:not(:disabled) { background: #EEF3FF; }
+    .btn.secondary:hover:not(:disabled) { background: #EAF2FF; filter: none; }
+    .btn.small { padding: 8px 14px; font-size: 15px; border-radius: 10px; }
+    .btn.danger { background: linear-gradient(135deg, #E2574C, #C0392B); }
 
     /* Subway color buttons */
     .line-buttons {
@@ -215,25 +326,26 @@
     }
     .line-btn {
       border: 4px solid var(--ink);
-      border-radius: 12px;
-      padding: 22px 16px;
+      border-radius: 14px;
+      padding: 24px 16px;
       font-size: 22px;
       font-weight: 800;
       color: white;
       cursor: pointer;
       font-family: inherit;
-      transition: transform 0.08s, box-shadow 0.15s;
+      box-shadow: var(--shadow);
+      transition: transform 0.1s, box-shadow 0.15s;
     }
-    .line-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+    .line-btn:hover { transform: translateY(-3px) scale(1.02); }
     .line-btn:focus-visible { outline: 4px solid var(--gold); outline-offset: 3px; }
     .line-btn.red    { background: var(--line-red); }
     .line-btn.green  { background: var(--line-green); }
     .line-btn.blue   { background: var(--line-blue); }
     .line-btn.orange { background: var(--line-orange); }
-    .line-btn.correct { box-shadow: 0 0 0 5px var(--green); }
-    .line-btn.wrong   { box-shadow: 0 0 0 5px #C0392B; opacity: 0.6; }
+    .line-btn.correct { box-shadow: 0 0 0 6px var(--green); }
+    .line-btn.wrong   { box-shadow: 0 0 0 6px #C0392B; opacity: 0.55; }
 
-    /* Line color chip (used in dest cards & summary) */
+    /* Line color chip */
     .chip {
       display: inline-flex;
       align-items: center;
@@ -251,7 +363,7 @@
       box-shadow: 0 0 0 1px var(--ink-soft);
     }
 
-    /* Phase 3 destination grid */
+    /* Destination grid (Phase 3) */
     .dest-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -261,7 +373,7 @@
     .dest-card {
       background: var(--paper);
       border: 3px solid #E2E6F0;
-      border-radius: 14px;
+      border-radius: 16px;
       padding: 16px;
       cursor: pointer;
       display: flex;
@@ -270,30 +382,28 @@
       text-align: left;
       font-family: inherit;
       color: var(--ink);
-      transition: border-color 0.15s, transform 0.08s, background 0.15s;
+      transition: border-color 0.15s, transform 0.1s, background 0.15s, box-shadow 0.15s;
     }
-    .dest-card:hover { border-color: var(--navy); transform: translateY(-2px); }
+    .dest-card:hover { border-color: var(--sky); transform: translateY(-3px); box-shadow: var(--shadow); }
     .dest-card:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
     .dest-card.selected { border-color: var(--green); background: var(--green-soft); }
-    .dest-card .emoji { font-size: 36px; line-height: 1; }
+    .dest-card .emoji { font-size: 40px; line-height: 1; }
     .dest-card .name  { font-weight: 800; font-size: 18px; line-height: 1.25; }
     .dest-card .cat   { color: var(--ink-soft); font-size: 15px; }
-    .dest-card .meta  {
-      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
-      margin-top: 4px;
-    }
+    .dest-card .meta  { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 4px; }
     .dest-card .price { font-weight: 800; }
     .dest-card .hours { color: var(--ink-soft); }
 
     .totals-bar {
       margin-top: 18px;
       padding: 14px 16px;
-      background: #F4F7FF;
-      border: 2px dashed var(--navy);
-      border-radius: 12px;
+      background: linear-gradient(135deg, #EEF4FF, #F7FBFF);
+      border: 2px dashed var(--sky);
+      border-radius: 14px;
       display: flex;
       flex-wrap: wrap;
       gap: 18px;
+      align-items: center;
       font-size: 17px;
       font-weight: 700;
     }
@@ -304,7 +414,7 @@
     .feedback {
       margin-top: 18px;
       padding: 14px 16px;
-      border-radius: 10px;
+      border-radius: 12px;
       font-weight: 700;
       font-size: 17px;
       display: none;
@@ -312,134 +422,239 @@
     .feedback.ok   { display: block; background: var(--green-soft); color: #155724; border: 2px solid var(--green); }
     .feedback.hint { display: block; background: #FFF4D6; color: #6A4A00; border: 2px solid var(--gold); }
 
+    /* Itinerary summary */
+    .summary-box {
+      background: linear-gradient(180deg, #FAFCFF, #FFF8EE);
+      border: 2px solid #D2D8E8;
+      border-radius: 16px;
+      padding: 20px;
+    }
+    .summary-box h3 { margin: 18px 0 6px; font-size: 20px; }
+    .summary-box h3:first-child { margin-top: 0; }
+
     /* =========================================================
-       4. PASSPORT
+       4. PASSPORT (sidebar)
        ========================================================= */
     .passport h2 {
       margin: 0 0 12px;
       font-size: 22px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      display: flex; align-items: center; gap: 8px;
     }
-    .stamps {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+    .stamps { display: flex; flex-direction: column; gap: 10px; }
     .stamp {
       display: flex;
       align-items: center;
       gap: 12px;
       padding: 12px;
-      border-radius: 10px;
+      border-radius: 12px;
       background: #F4F7FF;
       border: 2px dashed #C8D0E4;
       color: var(--ink-soft);
     }
     .stamp .seal {
-      width: 46px; height: 46px;
+      width: 48px; height: 48px;
       border-radius: 50%;
       background: #D9DEEC;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
       flex-shrink: 0;
     }
     .stamp .stamp-name { font-weight: 700; }
     .stamp.unlocked {
-      background: var(--green-soft);
+      background: linear-gradient(135deg, #E8FBEF, var(--green-soft));
       border: 2px solid var(--green);
       color: var(--ink);
       animation: stampIn 0.5s ease-out;
     }
-    .stamp.unlocked .seal {
-      background: var(--green);
-      color: white;
-    }
+    .stamp.unlocked .seal { background: var(--green); color: white; }
     @keyframes stampIn {
-      0%   { transform: scale(1.3) rotate(-8deg); opacity: 0; }
-      60%  { transform: scale(0.95) rotate(2deg); opacity: 1; }
+      0%   { transform: scale(1.4) rotate(-12deg); opacity: 0; }
+      60%  { transform: scale(0.95) rotate(3deg); opacity: 1; }
       100% { transform: scale(1) rotate(0); }
     }
 
     /* =========================================================
-       5. TIME HELPER
+       5. TIME HELPER (sidebar)
        ========================================================= */
     .time-helper h2 {
       margin: 0 0 8px;
       font-size: 22px;
       display: flex; align-items: center; gap: 8px;
     }
-    .time-helper p.help-text {
-      margin: 0 0 12px;
-      font-size: 15px;
-      color: var(--ink-soft);
-    }
-    .time-helper .row {
-      display: flex; align-items: center; gap: 10px;
-      margin-bottom: 10px; flex-wrap: wrap;
-    }
+    .time-helper p.help-text { margin: 0 0 12px; font-size: 15px; color: var(--ink-soft); }
+    .time-helper .row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
     .time-helper label { font-weight: 700; font-size: 15px; }
-    .time-helper select, .time-helper input[type=range] {
-      font-family: inherit;
-      font-size: 16px;
-    }
-    .time-helper select {
-      padding: 6px 10px;
-      border-radius: 8px;
-      border: 2px solid #D2D8E8;
-      background: white;
-    }
-    .time-helper input[type=range] {
-      width: 100%;
-    }
-    .time-helper .ticks {
-      display: flex;
-      gap: 2px;
-      margin-top: 6px;
-    }
+    .time-helper select, .time-helper input[type=range] { font-family: inherit; font-size: 16px; }
+    .time-helper select { padding: 6px 10px; border-radius: 8px; border: 2px solid #D2D8E8; background: white; }
+    .time-helper input[type=range] { width: 100%; accent-color: var(--green); }
+    .time-helper .ticks { display: flex; gap: 2px; margin-top: 6px; }
     .time-helper .tick {
-      flex: 1;
-      height: 28px;
+      flex: 1; height: 30px;
       background: #ECEFF7;
       border-radius: 4px;
-      font-size: 11px;
-      color: var(--ink-soft);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      font-size: 11px; color: var(--ink-soft);
+      display: flex; align-items: center; justify-content: center;
       font-weight: 700;
+      transition: background 0.12s;
     }
     .time-helper .tick.active { background: var(--green); color: white; }
     .time-helper .duration-out {
       margin-top: 10px;
       padding: 10px 12px;
-      background: var(--navy);
+      background: linear-gradient(135deg, var(--sky), var(--navy));
       color: white;
-      border-radius: 10px;
+      border-radius: 12px;
       font-weight: 700;
       font-size: 17px;
       text-align: center;
     }
 
     /* =========================================================
-       6. PRINT STYLES
+       6. STANDARDS BADGES (toggle from Settings)
+       Hidden until <body> has .show-standards.
        ========================================================= */
-    @media print {
-      body { background: white; }
-      header.app-header, aside.sidebar, .no-print, .btn { display: none !important; }
-      .app {
-        display: block;
-        max-width: 100%;
-        padding: 0;
-      }
-      .card, .phase-card { box-shadow: none; border: 1px solid #999; }
+    .std-badge {
+      display: none;
+      align-items: center;
+      gap: 4px;
+      vertical-align: middle;
+      background: #FBEEFF;
+      color: #5B2A86;
+      border: 1.5px solid #C99BE0;
+      border-radius: 999px;
+      padding: 2px 10px;
+      font-size: 13px;
+      font-weight: 800;
+      margin-left: 6px;
+      cursor: help;
+      white-space: nowrap;
+    }
+    .std-badge.skill { background: #E9F6FF; color: #14507A; border-color: #97C7E6; }
+    body.show-standards .std-badge { display: inline-flex; }
+
+    /* =========================================================
+       7. SETTINGS MODAL (teacher tools)
+       ========================================================= */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 24px;
+      overflow: auto;
+      z-index: 50;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--paper);
+      border-radius: 20px;
+      max-width: 820px;
+      width: 100%;
+      padding: 24px 26px;
+      box-shadow: var(--shadow-lg);
+    }
+    .modal-head {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 8px;
+    }
+    .modal-head h2 { margin: 0; font-size: 26px; flex: 1; }
+    .modal-intro { color: var(--ink-soft); font-size: 15px; margin: 0 0 18px; }
+    .settings-section {
+      border: 2px solid #ECEFF7;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .settings-section h3 { margin: 0 0 12px; font-size: 19px; display: flex; align-items: center; gap: 8px; }
+    .set-input, .set-select {
+      font-family: inherit;
+      font-size: 16px;
+      padding: 8px 10px;
+      border: 2px solid #D2D8E8;
+      border-radius: 8px;
+      width: 100%;
+      background: white;
+      color: var(--ink);
+    }
+    .erows-scroll { overflow-x: auto; }
+    .erow-head, .erow {
+      display: grid;
+      gap: 8px;
+      align-items: center;
+      min-width: 520px;
+    }
+    .erow-head { font-size: 13px; font-weight: 800; color: var(--ink-soft); margin-bottom: 6px; }
+    .erow { margin-bottom: 8px; }
+    .erow.train     { grid-template-columns: 1.4fr 1.1fr 90px 44px; }
+    .erow-head.train{ grid-template-columns: 1.4fr 1.1fr 90px 44px; }
+    .erow.pass      { grid-template-columns: 1.2fr 90px 1.6fr 44px; }
+    .erow-head.pass { grid-template-columns: 1.2fr 90px 1.6fr 44px; }
+    .erow.dest      { grid-template-columns: 64px 1.6fr 1.3fr 110px 80px 80px 44px; }
+    .erow-head.dest { grid-template-columns: 64px 1.6fr 1.3fr 110px 80px 80px 44px; min-width: 760px; }
+    .erow.dest      { min-width: 760px; }
+    .row-del {
+      background: #FCE9E7; color: #C0392B;
+      border: 2px solid #F1B8B1; border-radius: 8px;
+      font-size: 18px; font-weight: 800; cursor: pointer;
+      height: 40px;
+    }
+    .row-del:hover { background: #F8D7D2; }
+    .switch-row { display: flex; align-items: center; gap: 14px; font-weight: 700; }
+    .switch {
+      position: relative; width: 60px; height: 32px; flex-shrink: 0;
+      display: inline-block;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .switch .slider {
+      position: absolute; inset: 0;
+      background: #C8D0E4; border-radius: 999px;
+      transition: background 0.2s;
+    }
+    .switch .slider::before {
+      content: ""; position: absolute;
+      width: 24px; height: 24px; left: 4px; top: 4px;
+      background: white; border-radius: 50%;
+      transition: transform 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+    .switch input:checked + .slider { background: var(--green); }
+    .switch input:checked + .slider::before { transform: translateX(28px); }
+    .switch input:focus-visible + .slider { outline: 3px solid var(--gold); outline-offset: 2px; }
+    .modal-foot {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      justify-content: flex-end;
+      margin-top: 8px;
+    }
+    .modal-foot .spacer { flex: 1; }
+
+    /* =========================================================
+       8. CONFETTI
+       ========================================================= */
+    #confetti { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 60; }
+    .confetti-bit {
+      position: absolute; top: -24px;
+      width: 12px; height: 14px; border-radius: 3px;
+      animation: fall 2.3s linear forwards;
+    }
+    @keyframes fall {
+      0%   { opacity: 1; }
+      100% { transform: translateY(108vh) rotate(720deg); opacity: 0.9; }
     }
 
     /* =========================================================
-       7. REDUCED MOTION
+       9. PRINT
+       ========================================================= */
+    @media print {
+      body { background: white; }
+      header.app-header, aside.sidebar, .journey, .no-print, .btn, .gear-btn { display: none !important; }
+      .app { display: block; max-width: 100%; padding: 0; }
+      .card, .phase-card { box-shadow: none; border: 1px solid #999; }
+      body.show-standards .std-badge { display: inline-flex; } /* keep tags on printout for grading */
+    }
+
+    /* =========================================================
+       10. REDUCED MOTION
        ========================================================= */
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
@@ -448,7 +663,6 @@
       }
     }
 
-    /* Visually hidden but accessible to screen readers */
     .sr-only {
       position: absolute; width: 1px; height: 1px;
       padding: 0; margin: -1px; overflow: hidden;
@@ -470,14 +684,22 @@
         <span class="label">Time Away:</span>
         <span class="value" id="time-value">0 hr</span>
       </div>
+      <button class="gear-btn" id="open-settings" aria-label="Open teacher settings" title="Teacher settings">⚙️</button>
     </header>
+
+    <!-- ====== JOURNEY PROGRESS MAP ====== -->
+    <div class="journey" id="journey" aria-label="Trip progress">
+      <div class="journey-step" data-step="1"><span class="j-ico" aria-hidden="true">🚆</span><span>Train</span></div>
+      <div class="journey-step" data-step="2"><span class="j-ico" aria-hidden="true">🚇</span><span>Subway</span></div>
+      <div class="journey-step" data-step="3"><span class="j-ico" aria-hidden="true">🎡</span><span>Explore</span></div>
+      <div class="journey-step" data-step="4"><span class="j-ico" aria-hidden="true">🏆</span><span>Finish</span></div>
+    </div>
 
     <!-- ====== MAIN PHASE PANEL ====== -->
     <main class="phase-root" id="phase-root" aria-live="polite"></main>
 
     <!-- ====== SIDEBAR ====== -->
     <aside class="sidebar" aria-label="Passport and Time Helper">
-
       <section class="card passport" aria-labelledby="passport-h">
         <h2 id="passport-h"><span aria-hidden="true">🛂</span> My Passport</h2>
         <div class="stamps" id="stamps">
@@ -497,7 +719,9 @@
       </section>
 
       <section class="card time-helper" aria-labelledby="th-h">
-        <h2 id="th-h"><span aria-hidden="true">⏱️</span> Time Helper</h2>
+        <h2 id="th-h"><span aria-hidden="true">⏱️</span> Time Helper
+          <span class="std-badge" id="th-std" title="">📐 3.MD.A.1</span>
+        </h2>
         <p class="help-text">Pick a start time. Slide to find the end time. Count the green blocks!</p>
         <div class="row">
           <label for="th-start">Start:</label>
@@ -510,61 +734,152 @@
         <div class="ticks" id="th-ticks" aria-hidden="true"></div>
         <div class="duration-out" id="th-out">From 8:00 AM to 11:00 AM = 3 hours</div>
       </section>
-
     </aside>
   </div>
 
+  <!-- ====== SETTINGS MODAL (teacher tools) ====== -->
+  <div class="modal-overlay" id="settings-overlay" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <div class="modal">
+      <div class="modal-head">
+        <h2 id="settings-title">⚙️ Teacher Settings</h2>
+        <button class="btn secondary small" id="close-settings-x" aria-label="Close settings">✕</button>
+      </div>
+      <p class="modal-intro">
+        Customize the trip here — no code editing needed. Keep prices as whole
+        dollars and times on the half hour. Changes save in this browser.
+        <strong>Saving restarts the trip.</strong>
+      </p>
+
+      <div class="settings-section">
+        <h3>👀 Maine Standards</h3>
+        <label class="switch-row">
+          <span class="switch">
+            <input type="checkbox" id="set-standards">
+            <span class="slider"></span>
+          </span>
+          <span>Show which Maine standard each part of the page teaches</span>
+        </label>
+      </div>
+
+      <div class="settings-section">
+        <h3>💰 Starting Budget</h3>
+        <label>Students start the day with $
+          <input type="number" class="set-input" id="set-budget" min="0" max="999" step="1" style="width:120px; display:inline-block;">
+        </label>
+      </div>
+
+      <div class="settings-section">
+        <h3>🚆 Trains (Phase 1)</h3>
+        <div class="erows-scroll">
+          <div class="erow-head train"><span>Train name</span><span>Leaves Portland</span><span>Hours</span><span></span></div>
+          <div id="trains-rows"></div>
+        </div>
+        <button class="btn secondary small" id="add-train">+ Add train</button>
+      </div>
+
+      <div class="settings-section">
+        <h3>🎟️ Subway Passes (Phase 2)</h3>
+        <div class="erows-scroll">
+          <div class="erow-head pass"><span>Pass name</span><span>Cost $</span><span>Description</span><span></span></div>
+          <div id="passes-rows"></div>
+        </div>
+        <button class="btn secondary small" id="add-pass">+ Add pass</button>
+      </div>
+
+      <div class="settings-section">
+        <h3>🚇 Subway Route (Phase 2)</h3>
+        <div class="erow" style="grid-template-columns: 1fr 1fr; min-width:0;">
+          <label>From station<input type="text" class="set-input" id="set-from"></label>
+          <label>To station<input type="text" class="set-input" id="set-to"></label>
+        </div>
+        <div class="erow" style="grid-template-columns: 1fr 2fr; min-width:0; margin-top:8px;">
+          <label>Correct line
+            <select class="set-select" id="set-line"></select>
+          </label>
+          <label>Hint shown to students
+            <input type="text" class="set-input" id="set-hint">
+          </label>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3>🗺️ Destinations (Phase 3)</h3>
+        <div class="erows-scroll">
+          <div class="erow-head dest"><span>Emoji</span><span>Name</span><span>Category</span><span>Line</span><span>Cost $</span><span>Hours</span><span></span></div>
+          <div id="dests-rows"></div>
+        </div>
+        <button class="btn secondary small" id="add-dest">+ Add destination</button>
+      </div>
+
+      <div class="modal-foot">
+        <button class="btn danger small" id="reset-settings">↺ Reset to defaults</button>
+        <span class="spacer"></span>
+        <button class="btn secondary" id="cancel-settings">Cancel</button>
+        <button class="btn" id="save-settings">Save &amp; Restart</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="confetti" aria-hidden="true"></div>
+
   <script>
     /* =========================================================
-       === TEACHER-EDITABLE DATA ===
-       Change anything below to customize the lesson.
-       Keep all dollar amounts as whole dollars (no cents).
-       Keep all times rounded to the nearest 30 minutes.
-       Keep all durations in whole hours.
+       === DEFAULT LESSON DATA ===
+       This is the starting content. Teachers can change all of
+       it live from the ⚙️ Settings button (saved in the browser),
+       or edit these defaults directly in code for a permanent
+       change before hosting.
+
+       Rules that keep the math "friendly":
+         • Dollar amounts = whole dollars (no cents)
+         • Times = on the half hour
+         • Durations = whole hours
        ========================================================= */
+    const DEFAULT_CONFIG = {
+      // Day's spending money (whole dollars).
+      startingBudget: 50,
 
-    // ----- Phase 1: Downeaster train schedule -----
-    // Each train: id, depart time string, ride length in whole hours, friendly label.
-    const TRAINS = [
-      { id: 'A', depart: '8:00 AM',  durationHours: 3, label: 'Early Bird' },
-      { id: 'B', depart: '9:00 AM',  durationHours: 3, label: 'Morning Express' },
-      { id: 'C', depart: '10:00 AM', durationHours: 3, label: 'Late Morning' },
-    ];
+      // Phase 1 — morning trains from Portland.
+      trains: [
+        { id: 'A', label: 'Early Bird',      depart: '8:00 AM',  durationHours: 3 },
+        { id: 'B', label: 'Morning Express', depart: '9:00 AM',  durationHours: 3 },
+        { id: 'C', label: 'Late Morning',    depart: '10:00 AM', durationHours: 3 },
+      ],
 
-    // ----- Phase 2: Subway pass options -----
-    // The "correct" pass for a full day of riding is the Day Pass.
-    const PASSES = [
-      { id: 'single', label: 'Single Ride', cost: 3,  blurb: 'Just one ride.' },
-      { id: 'day',    label: 'Day Pass',    cost: 12, blurb: 'Unlimited rides today.' },
-      { id: 'week',   label: '7-Day Pass',  cost: 25, blurb: 'A whole week of riding.' },
-    ];
-    const CORRECT_PASS_ID = 'day';
+      // Phase 2 — subway pass options.
+      passes: [
+        { label: 'Single Ride', cost: 3,  blurb: 'Just one ride.' },
+        { label: 'Day Pass',    cost: 12, blurb: 'Unlimited rides today.' },
+        { label: '7-Day Pass',  cost: 25, blurb: 'A whole week of riding.' },
+      ],
 
-    // ----- Phase 2: Subway color matching -----
-    // The trip is North Station to Park Street, which uses the Green Line.
-    const SUBWAY_PROMPT = {
-      from: 'North Station',
-      to:   'Park Street',
-      correctLine: 'Green',
-      hint: 'Look for the Green Line — it connects North Station to Park Street.'
+      // Phase 2 — which colored line to choose.
+      subway: {
+        from: 'North Station',
+        to: 'Park Street',
+        correctLine: 'Green',
+        hint: 'Look for the Green Line — it connects North Station to Park Street.',
+      },
+
+      // Phase 3 — attractions menu.
+      destinations: [
+        { name: 'Museum of Science',               line: 'Green',  category: 'Science / Interactive',    cost: 29, hours: 3, emoji: '🔬' },
+        { name: 'New England Aquarium',            line: 'Blue',   category: 'Animals / Nature',         cost: 32, hours: 2, emoji: '🐠' },
+        { name: "Boston Children's Museum",        line: 'Red',    category: 'Interactive / Play',       cost: 20, hours: 2, emoji: '🧸' },
+        { name: 'Boston Tea Party Ships & Museum', line: 'Red',    category: 'History / Transportation', cost: 30, hours: 2, emoji: '⛵' },
+        { name: 'USS Constitution Museum & Ship',  line: 'Green',  category: 'History / Transportation', cost: 15, hours: 2, emoji: '⚓' },
+        { name: 'Fenway Park Tour',                line: 'Green',  category: 'Sports / Recreation',      cost: 25, hours: 1, emoji: '⚾' },
+        { name: 'Boston Common & Swan Boats',      line: 'Green',  category: 'Nature / Outdoor',         cost: 5,  hours: 2, emoji: '🦢' },
+        { name: 'Franklin Park Zoo',               line: 'Orange', category: 'Animals / Nature',         cost: 22, hours: 3, emoji: '🦁' },
+        { name: 'Legoland Discovery Center',       line: 'Orange', category: 'Interactive / Play',       cost: 25, hours: 2, emoji: '🧱' },
+        { name: 'Kings Dining & Bowling',          line: 'Green',  category: 'Recreation / Indoor',      cost: 18, hours: 2, emoji: '🎳' },
+      ],
+
+      // Show Maine standard tags throughout the page.
+      showStandards: false,
     };
 
-    // ----- Phase 3: Boston attractions menu -----
-    // Add, remove, or edit destinations here. The grid will rebuild itself.
-    const DESTINATIONS = [
-      { name: 'Museum of Science',               line: 'Green',  category: 'Science / Interactive',    cost: 29, hours: 3, emoji: '🔬' },
-      { name: 'New England Aquarium',            line: 'Blue',   category: 'Animals / Nature',         cost: 32, hours: 2, emoji: '🐠' },
-      { name: "Boston Children's Museum",        line: 'Red',    category: 'Interactive / Play',       cost: 20, hours: 2, emoji: '🧸' },
-      { name: 'Boston Tea Party Ships & Museum', line: 'Red',    category: 'History / Transportation', cost: 30, hours: 2, emoji: '⛵' },
-      { name: 'USS Constitution Museum & Ship',  line: 'Green',  category: 'History / Transportation', cost: 15, hours: 2, emoji: '⚓' },
-      { name: 'Fenway Park Tour',                line: 'Green',  category: 'Sports / Recreation',      cost: 25, hours: 1, emoji: '⚾' },
-      { name: 'Boston Common & Swan Boats',      line: 'Green',  category: 'Nature / Outdoor',         cost: 5,  hours: 2, emoji: '🦢' },
-      { name: 'Franklin Park Zoo',               line: 'Orange', category: 'Animals / Nature',         cost: 22, hours: 3, emoji: '🦁' },
-      { name: 'Legoland Discovery Center',       line: 'Orange', category: 'Interactive / Play',       cost: 25, hours: 2, emoji: '🧱' },
-      { name: 'Kings Dining & Bowling',          line: 'Green',  category: 'Recreation / Indoor',      cost: 18, hours: 2, emoji: '🎳' },
-    ];
-
-    // MBTA brand colors (used for chips and color buttons).
+    // Fixed MBTA brand colors (the four real rapid-transit lines).
     const LINE_COLORS = {
       Red:    '#DA291C',
       Green:  '#00843D',
@@ -572,25 +887,67 @@
       Orange: '#ED8B00',
     };
 
-    // The starting budget for the day (whole dollars).
-    const STARTING_BUDGET = 50;
-
     /* =========================================================
-       === APP STATE ===
+       === MAINE LEARNING RESULTS (math, grades 3-4) ===
+       Each interactive math element below is tagged with the
+       standard it practices. Toggle visibility in Settings.
        ========================================================= */
-    const state = {
-      phase: 1,                 // current phase: 1..4
-      budget: STARTING_BUDGET,  // dollars remaining
-      hoursAway: 0,             // running total of hours
-      train: null,              // chosen train object
-      arrivalTime: null,        // computed arrival, e.g. "11:00 AM"
-      pass: null,               // chosen pass object
-      destinations: [],         // exactly 2 destination objects when phase 3 is done
-      stamps: [],               // names of unlocked stamps
+    const STANDARDS = {
+      '3.MD.A.1': 'Grade 3 (3.MD.A.1): Tell and write time to the nearest minute and measure time intervals in minutes; solve problems about elapsed time, using a number line.',
+      '4.MD.A.2': 'Grade 4 (4.MD.A.2): Use the four operations to solve word problems involving money and intervals of time.',
+      '3.NBT.A.2': 'Grade 3 (3.NBT.A.2): Fluently add and subtract within 1000 using place-value strategies.',
     };
 
     /* =========================================================
-       === SOUND HELPERS (Web Audio — no external files) ===
+       === CONFIG PERSISTENCE (localStorage) ===
+       ========================================================= */
+    const CONFIG_KEY = 'bta-config-v1';
+    function cloneDefaults() { return JSON.parse(JSON.stringify(DEFAULT_CONFIG)); }
+    function loadConfig() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(CONFIG_KEY));
+        if (saved && typeof saved === 'object') {
+          return Object.assign(cloneDefaults(), saved);
+        }
+      } catch (e) { /* ignore corrupt storage */ }
+      return cloneDefaults();
+    }
+    function saveConfig() {
+      try { localStorage.setItem(CONFIG_KEY, JSON.stringify(config)); } catch (e) { /* ignore */ }
+    }
+
+    let config = loadConfig();
+
+    /* =========================================================
+       === APP STATE (the student's current trip) ===
+       ========================================================= */
+    const state = {
+      phase: 1,
+      budget: config.startingBudget,
+      hoursAway: 0,
+      train: null,
+      arrivalTime: null,
+      pass: null,
+      destinations: [],
+      stamps: [],
+    };
+
+    function resetTrip() {
+      state.phase = 1;
+      state.budget = config.startingBudget;
+      state.hoursAway = 0;
+      state.train = null;
+      state.arrivalTime = null;
+      state.pass = null;
+      state.destinations = [];
+      state.stamps = [];
+      document.querySelectorAll('.stamp').forEach(s => s.classList.remove('unlocked'));
+      updateTrackers();
+      renderApp();
+    }
+
+    /* =========================================================
+       === SOUND (Web Audio — no external files) ===
        ========================================================= */
     let audioCtx = null;
     function getAudio() {
@@ -603,7 +960,6 @@
       const ctx = getAudio();
       if (!ctx) return;
       const now = ctx.currentTime;
-      // Friendly success: ascending C-E-G triad. Gentle hint: soft single tone.
       const notes = (kind === 'ok') ? [523.25, 659.25, 783.99] : [349.23];
       notes.forEach((freq, i) => {
         const osc = ctx.createOscillator();
@@ -621,11 +977,29 @@
     }
 
     /* =========================================================
+       === CONFETTI (gentle, respects reduced motion) ===
+       ========================================================= */
+    function confetti() {
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const host = document.getElementById('confetti');
+      const colors = [LINE_COLORS.Red, LINE_COLORS.Green, LINE_COLORS.Blue, LINE_COLORS.Orange, '#F4B400', '#FF5C8A'];
+      for (let i = 0; i < 36; i++) {
+        const bit = document.createElement('div');
+        bit.className = 'confetti-bit';
+        bit.style.left = Math.random() * 100 + 'vw';
+        bit.style.background = colors[i % colors.length];
+        bit.style.animationDelay = (Math.random() * 0.35) + 's';
+        bit.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
+        host.appendChild(bit);
+        setTimeout(() => bit.remove(), 2700);
+      }
+    }
+
+    /* =========================================================
        === GENERIC HELPERS ===
        ========================================================= */
-    // Parse a "8:00 AM" string into minutes since midnight.
     function parseTime(str) {
-      const m = str.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+      const m = String(str).match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
       if (!m) return 0;
       let h = parseInt(m[1], 10);
       const min = parseInt(m[2], 10);
@@ -634,38 +1008,55 @@
       if (period === 'AM' && h === 12) h = 0;
       return h * 60 + min;
     }
-    // Format minutes since midnight as "9:30 AM".
     function formatTime(mins) {
       mins = ((mins % 1440) + 1440) % 1440;
       const h24 = Math.floor(mins / 60);
-      const m   = mins % 60;
+      const m = mins % 60;
       const period = h24 >= 12 ? 'PM' : 'AM';
       let h = h24 % 12; if (h === 0) h = 12;
-      return `${h}:${String(m).padStart(2, '0')} ${period}`;
+      return h + ':' + String(m).padStart(2, '0') + ' ' + period;
+    }
+    function escAttr(s) {
+      return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
     }
 
-    // Live header trackers
+    // Standards badge HTML (hidden unless standards mode is on).
+    function stdBadgeHTML() {
+      const codes = Array.prototype.slice.call(arguments);
+      const tip = codes.map(c => STANDARDS[c]).join('\n\n');
+      return '<span class="std-badge" title="' + escAttr(tip) + '">📐 ' + codes.join(' · ') + '</span>';
+    }
+    function skillBadgeHTML(text) {
+      return '<span class="std-badge skill" title="' + escAttr(text) + '">🧭 Thinking skill</span>';
+    }
+
     function updateTrackers() {
       document.getElementById('budget-value').textContent = '$' + state.budget;
-      document.getElementById('time-value').textContent   = state.hoursAway + ' hr';
+      document.getElementById('time-value').textContent = state.hoursAway + ' hr';
     }
 
-    // Unlock a passport stamp
+    function updateJourney() {
+      document.querySelectorAll('.journey-step').forEach((el) => {
+        const step = parseInt(el.dataset.step, 10);
+        el.classList.toggle('done', step < state.phase);
+        el.classList.toggle('active', step === state.phase);
+      });
+    }
+
     function awardStamp(name) {
       if (state.stamps.includes(name)) return;
       state.stamps.push(name);
-      const el = document.querySelector(`.stamp[data-stamp="${name}"]`);
+      const el = document.querySelector('.stamp[data-stamp="' + name + '"]');
       if (el) el.classList.add('unlocked');
       playChime('ok');
+      confetti();
     }
 
-    // Show feedback message inside a feedback box.
     function showFeedback(box, kind, msg) {
       box.className = 'feedback ' + kind;
       box.textContent = msg;
     }
 
-    // Build a colored chip for a subway line.
     function lineChip(line) {
       const span = document.createElement('span');
       span.className = 'chip';
@@ -677,75 +1068,79 @@
       return span;
     }
 
+    function shuffle(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const t = a[i]; a[i] = a[j]; a[j] = t;
+      }
+      return a;
+    }
+
     /* =========================================================
        === PHASE 1: DOWNEASTER DEPARTURE ===
+       Skills: 3.MD.A.1 (elapsed time on a number line), 4.MD.A.2.
        ========================================================= */
     function renderPhase1() {
       const card = document.createElement('section');
       card.className = 'card phase-card';
-      card.innerHTML = `
-        <div class="phase-head">
-          <div class="phase-badge">1</div>
-          <h2 class="phase-title">The Downeaster Departure</h2>
-        </div>
-        <p class="phase-subtitle">Pick a morning train from Portland, Maine. Then figure out when it arrives in Boston.</p>
-        <div class="options" id="train-options" role="radiogroup" aria-label="Train choices"></div>
-        <div id="train-question" style="margin-top: 20px;"></div>
-        <div class="feedback" id="p1-feedback" role="status"></div>
-      `;
+      card.innerHTML =
+        '<div class="phase-head">' +
+          '<div class="phase-badge">1</div>' +
+          '<h2 class="phase-title">The Downeaster Departure</h2>' +
+        '</div>' +
+        '<p class="phase-subtitle">Pick a morning train from Portland, Maine. Then figure out when it arrives in Boston. ' +
+          stdBadgeHTML('3.MD.A.1', '4.MD.A.2') + '</p>' +
+        '<div class="options" id="train-options" role="radiogroup" aria-label="Train choices"></div>' +
+        '<div id="train-question" style="margin-top: 20px;"></div>' +
+        '<div class="feedback" id="p1-feedback" role="status"></div>';
 
       const opts = card.querySelector('#train-options');
-      TRAINS.forEach((t) => {
+      config.trains.forEach((t) => {
         const btn = document.createElement('button');
         btn.className = 'option';
         btn.setAttribute('role', 'radio');
         btn.setAttribute('aria-checked', 'false');
-        btn.innerHTML = `
-          <span class="opt-title">${t.label}</span>
-          <span class="opt-meta">Leaves Portland: <strong>${t.depart}</strong></span>
-          <span class="opt-meta">Ride: <strong>${t.durationHours} hours</strong></span>
-        `;
+        btn.innerHTML =
+          '<span class="opt-title">' + t.label + '</span>' +
+          '<span class="opt-meta">Leaves Portland: <strong>' + t.depart + '</strong></span>' +
+          '<span class="opt-meta">Ride: <strong>' + t.durationHours + ' hours</strong></span>';
         btn.addEventListener('click', () => selectTrain(t, card));
         opts.appendChild(btn);
       });
-
       return card;
     }
 
     function selectTrain(train, card) {
-      // Mark selected
       card.querySelectorAll('#train-options .option').forEach((b) => {
         const isThis = b.querySelector('.opt-title').textContent === train.label;
         b.classList.toggle('selected', isThis);
         b.setAttribute('aria-checked', isThis ? 'true' : 'false');
       });
 
-      // Compute the correct arrival and three friendly distractors (+/- 1 hour).
-      const departMin  = parseTime(train.depart);
-      const arriveMin  = departMin + train.durationHours * 60;
-      const correct    = formatTime(arriveMin);
+      const departMin = parseTime(train.depart);
+      const arriveMin = departMin + train.durationHours * 60;
+      const correct = formatTime(arriveMin);
       const distractors = [
         formatTime(arriveMin - 60),
         formatTime(arriveMin + 60),
         formatTime(arriveMin + 120),
       ];
-      const choices = shuffle([correct, ...distractors]);
+      const choices = shuffle([correct].concat(distractors));
 
       const qBox = card.querySelector('#train-question');
-      qBox.innerHTML = `
-        <p class="phase-subtitle" style="margin-top:8px;">
-          Your train leaves at <strong>${train.depart}</strong> and the ride takes
-          <strong>${train.durationHours} hours</strong>.
-          What time will you arrive at Boston North Station?
-        </p>
-        <div class="options" id="arrive-options" role="radiogroup" aria-label="Arrival time choices"></div>
-      `;
+      qBox.innerHTML =
+        '<p class="phase-subtitle" style="margin-top:8px;">' +
+          'Your train leaves at <strong>' + train.depart + '</strong> and the ride takes ' +
+          '<strong>' + train.durationHours + ' hours</strong>. ' +
+          'What time will you arrive at Boston North Station?</p>' +
+        '<div class="options" id="arrive-options" role="radiogroup" aria-label="Arrival time choices"></div>';
       const aopts = qBox.querySelector('#arrive-options');
       choices.forEach((c) => {
         const b = document.createElement('button');
         b.className = 'option';
         b.setAttribute('role', 'radio');
-        b.innerHTML = `<span class="opt-title">${c}</span>`;
+        b.innerHTML = '<span class="opt-title">' + c + '</span>';
         b.addEventListener('click', () => checkArrival(c, correct, b, card, train));
         aopts.appendChild(b);
       });
@@ -755,16 +1150,14 @@
       const fb = card.querySelector('#p1-feedback');
       if (picked === correct) {
         btn.classList.add('correct');
-        showFeedback(fb, 'ok', `✓ Great job! You arrive at ${correct}.`);
+        showFeedback(fb, 'ok', '✓ Great job! You arrive at ' + correct + '.');
         state.train = train;
         state.arrivalTime = correct;
         state.hoursAway += train.durationHours;
         updateTrackers();
         awardStamp('Train Conductor');
-        // Disable further answers
         card.querySelectorAll('#arrive-options .option').forEach(b => b.disabled = true);
-        // Unlock next phase after a short beat
-        setTimeout(() => { state.phase = 2; renderApp(); }, 900);
+        setTimeout(() => { state.phase = 2; renderApp(); }, 950);
       } else {
         btn.classList.add('wrong');
         btn.disabled = true;
@@ -775,83 +1168,68 @@
 
     /* =========================================================
        === PHASE 2: SUBWAY CONNECTION ===
-       (Step A: pick a pass → confirm subtraction.
-        Step B: pick the correct color line.)
+       Step A skill: 3.NBT.A.2 + 4.MD.A.2 (subtract money).
+       Step B: map-reading / logical reasoning (thinking skill).
        ========================================================= */
     function renderPhase2() {
+      const sub = config.subway;
       const card = document.createElement('section');
       card.className = 'card phase-card';
-      card.innerHTML = `
-        <div class="phase-head">
-          <div class="phase-badge">2</div>
-          <h2 class="phase-title">The Subway Connection</h2>
-        </div>
-        <p class="phase-subtitle">Buy a subway pass, then pick the right colored line.</p>
+      card.innerHTML =
+        '<div class="phase-head">' +
+          '<div class="phase-badge">2</div>' +
+          '<h2 class="phase-title">The Subway Connection</h2>' +
+        '</div>' +
+        '<p class="phase-subtitle">Buy a subway pass, then pick the right colored line.</p>' +
+        '<span class="step-label">Step A — Choose your pass</span> ' + stdBadgeHTML('3.NBT.A.2', '4.MD.A.2') +
+        '<div class="options" id="pass-options" role="radiogroup" aria-label="Pass choices" style="margin-top:8px;"></div>' +
+        '<div id="pass-math" style="margin-top: 16px;"></div>' +
+        '<div id="step-b" style="margin-top: 24px; display: none;">' +
+          '<span class="step-label">Step B — Pick the right line</span> ' +
+            skillBadgeHTML('Map-reading and logical reasoning: matching a destination to the correct subway line.') +
+          '<p class="phase-subtitle" style="margin-top:8px;">' +
+            'You need to get from <strong>' + sub.from + '</strong> to <strong>' + sub.to + '</strong>. ' +
+            'Hint: ' + sub.hint + '</p>' +
+          '<div class="line-buttons" id="line-buttons"></div>' +
+        '</div>' +
+        '<div class="feedback" id="p2-feedback" role="status"></div>';
 
-        <h3 style="margin: 8px 0 6px;">Step A — Choose your pass</h3>
-        <div class="options" id="pass-options" role="radiogroup" aria-label="Pass choices"></div>
-        <div id="pass-math" style="margin-top: 16px;"></div>
-
-        <div id="step-b" style="margin-top: 24px; display: none;">
-          <h3 style="margin: 8px 0 6px;">Step B — Pick the right line</h3>
-          <p class="phase-subtitle">
-            You need to get from <strong>${SUBWAY_PROMPT.from}</strong>
-            to <strong>${SUBWAY_PROMPT.to}</strong>.
-            Hint: ${SUBWAY_PROMPT.hint}
-          </p>
-          <div class="line-buttons" id="line-buttons"></div>
-        </div>
-
-        <div class="feedback" id="p2-feedback" role="status"></div>
-      `;
-
-      // Step A — pass cards
       const opts = card.querySelector('#pass-options');
-      PASSES.forEach((p) => {
+      config.passes.forEach((p) => {
         const btn = document.createElement('button');
         btn.className = 'option';
         btn.setAttribute('role', 'radio');
-        btn.innerHTML = `
-          <span class="opt-title">${p.label}</span>
-          <span class="opt-meta">${p.blurb}</span>
-          <span class="opt-meta"><strong>$${p.cost}</strong></span>
-        `;
+        btn.innerHTML =
+          '<span class="opt-title">' + p.label + '</span>' +
+          '<span class="opt-meta">' + p.blurb + '</span>' +
+          '<span class="opt-meta"><strong>$' + p.cost + '</strong></span>';
         btn.addEventListener('click', () => selectPass(p, card));
         opts.appendChild(btn);
       });
-
       return card;
     }
 
     function selectPass(pass, card) {
-      // Highlight selection
       card.querySelectorAll('#pass-options .option').forEach((b) => {
         const isThis = b.querySelector('.opt-title').textContent === pass.label;
         b.classList.toggle('selected', isThis);
         b.setAttribute('aria-checked', isThis ? 'true' : 'false');
       });
 
-      // Subtraction prompt
       const correctRemaining = state.budget - pass.cost;
-      const choices = shuffle([
-        correctRemaining,
-        correctRemaining + 5,
-        correctRemaining - 5,
-      ]).map(n => `$${n}`);
+      const choices = shuffle([correctRemaining, correctRemaining + 5, correctRemaining - 5])
+        .map(n => '$' + n);
 
       const mathBox = card.querySelector('#pass-math');
-      mathBox.innerHTML = `
-        <p class="phase-subtitle">
-          You have <strong>$${state.budget}</strong>. The pass costs <strong>$${pass.cost}</strong>.
-          How much will you have left?
-        </p>
-        <div class="options" id="math-options" role="radiogroup" aria-label="Subtraction answers"></div>
-      `;
+      mathBox.innerHTML =
+        '<p class="phase-subtitle">You have <strong>$' + state.budget + '</strong>. The pass costs ' +
+        '<strong>$' + pass.cost + '</strong>. How much will you have left?</p>' +
+        '<div class="options" id="math-options" role="radiogroup" aria-label="Subtraction answers"></div>';
       const mopts = mathBox.querySelector('#math-options');
       choices.forEach((c) => {
         const b = document.createElement('button');
         b.className = 'option';
-        b.innerHTML = `<span class="opt-title">${c}</span>`;
+        b.innerHTML = '<span class="opt-title">' + c + '</span>';
         b.addEventListener('click', () => checkPassMath(c, '$' + correctRemaining, b, card, pass));
         mopts.appendChild(b);
       });
@@ -861,14 +1239,12 @@
       const fb = card.querySelector('#p2-feedback');
       if (picked === correct) {
         btn.classList.add('correct');
-        showFeedback(fb, 'ok', `✓ Yes! ${correct} left after buying the ${pass.label}.`);
+        showFeedback(fb, 'ok', '✓ Yes! ' + correct + ' left after buying the ' + pass.label + '.');
         state.pass = pass;
         state.budget -= pass.cost;
         updateTrackers();
         card.querySelectorAll('#math-options .option').forEach(b => b.disabled = true);
-        // Reveal Step B
-        const stepB = card.querySelector('#step-b');
-        stepB.style.display = 'block';
+        card.querySelector('#step-b').style.display = 'block';
         buildLineButtons(card);
       } else {
         btn.classList.add('wrong');
@@ -881,7 +1257,7 @@
     function buildLineButtons(card) {
       const wrap = card.querySelector('#line-buttons');
       wrap.innerHTML = '';
-      ['Red', 'Green', 'Blue', 'Orange'].forEach((name) => {
+      Object.keys(LINE_COLORS).forEach((name) => {
         const b = document.createElement('button');
         b.className = 'line-btn ' + name.toLowerCase();
         b.textContent = name + ' Line';
@@ -892,65 +1268,61 @@
     }
 
     function checkLine(name, btn, card) {
+      const sub = config.subway;
       const fb = card.querySelector('#p2-feedback');
-      if (name === SUBWAY_PROMPT.correctLine) {
+      if (name === sub.correctLine) {
         btn.classList.add('correct');
-        showFeedback(fb, 'ok', `✓ Perfect! The ${name} Line goes from ${SUBWAY_PROMPT.from} to ${SUBWAY_PROMPT.to}.`);
+        showFeedback(fb, 'ok', '✓ Perfect! The ' + name + ' Line goes from ' + sub.from + ' to ' + sub.to + '.');
         awardStamp('Subway Navigator');
         card.querySelectorAll('.line-btn').forEach(b => b.disabled = true);
         setTimeout(() => { state.phase = 3; renderApp(); }, 1000);
       } else {
         btn.classList.add('wrong');
         btn.disabled = true;
-        showFeedback(fb, 'hint', `🤔 Try a different color. ${SUBWAY_PROMPT.hint}`);
+        showFeedback(fb, 'hint', '🤔 Try a different color. ' + sub.hint);
         playChime('hint');
       }
     }
 
     /* =========================================================
        === PHASE 3: ATTRACTIONS MENU ===
+       Skills: 3.NBT.A.2 (add costs), 3.MD.A.1 (add hours),
+       4.MD.A.2 (money word problem / budget check).
        ========================================================= */
     function renderPhase3() {
       const card = document.createElement('section');
       card.className = 'card phase-card';
-      card.innerHTML = `
-        <div class="phase-head">
-          <div class="phase-badge">3</div>
-          <h2 class="phase-title">Pick Two Attractions</h2>
-        </div>
-        <p class="phase-subtitle">Choose <strong>two</strong> places to visit. Add up the cost and the hours!</p>
-        <div class="dest-grid" id="dest-grid"></div>
-        <div class="totals-bar" id="totals">
-          <span class="totals-item">Picked: <span class="v" id="t-picked">0/2</span></span>
-          <span class="totals-item">Cost: <span class="v" id="t-cost">$0</span></span>
-          <span class="totals-item">Hours: <span class="v" id="t-hours">0</span></span>
-          <span class="totals-item">Budget left: <span class="v" id="t-budget">$${state.budget}</span></span>
-        </div>
-        <div style="margin-top: 16px;">
-          <button class="btn" id="confirm-dest" disabled>Confirm My Picks</button>
-        </div>
-        <div class="feedback" id="p3-feedback" role="status"></div>
-      `;
+      card.innerHTML =
+        '<div class="phase-head">' +
+          '<div class="phase-badge">3</div>' +
+          '<h2 class="phase-title">Pick Two Attractions</h2>' +
+        '</div>' +
+        '<p class="phase-subtitle">Choose <strong>two</strong> places to visit. Add up the cost and the hours! ' +
+          stdBadgeHTML('3.NBT.A.2', '3.MD.A.1', '4.MD.A.2') + '</p>' +
+        '<div class="dest-grid" id="dest-grid"></div>' +
+        '<div class="totals-bar" id="totals">' +
+          '<span class="totals-item">Picked: <span class="v" id="t-picked">0/2</span></span>' +
+          '<span class="totals-item">Cost: <span class="v" id="t-cost">$0</span></span>' +
+          '<span class="totals-item">Hours: <span class="v" id="t-hours">0</span></span>' +
+          '<span class="totals-item">Budget left: <span class="v" id="t-budget">$' + state.budget + '</span></span>' +
+        '</div>' +
+        '<div style="margin-top: 16px;"><button class="btn" id="confirm-dest" disabled>Confirm My Picks ✨</button></div>' +
+        '<div class="feedback" id="p3-feedback" role="status"></div>';
 
       const grid = card.querySelector('#dest-grid');
-      const picks = []; // indexes
+      const picks = [];
 
-      DESTINATIONS.forEach((d, idx) => {
+      config.destinations.forEach((d, idx) => {
         const c = document.createElement('button');
         c.className = 'dest-card';
         c.setAttribute('aria-pressed', 'false');
-        c.innerHTML = `
-          <span class="emoji" aria-hidden="true">${d.emoji}</span>
-          <span class="name">${d.name}</span>
-          <span class="cat">${d.category}</span>
-          <span class="meta">
-            <span class="price">$${d.cost}</span>
-            <span class="hours">${d.hours} hr</span>
-          </span>
-        `;
-        // Add line chip with proper color dot
-        const metaRow = c.querySelector('.meta');
-        metaRow.appendChild(lineChip(d.line));
+        c.innerHTML =
+          '<span class="emoji" aria-hidden="true">' + d.emoji + '</span>' +
+          '<span class="name">' + d.name + '</span>' +
+          '<span class="cat">' + d.category + '</span>' +
+          '<span class="meta"><span class="price">$' + d.cost + '</span>' +
+          '<span class="hours">' + d.hours + ' hr</span></span>';
+        c.querySelector('.meta').appendChild(lineChip(d.line));
 
         c.addEventListener('click', () => {
           const i = picks.indexOf(idx);
@@ -970,7 +1342,6 @@
           }
           updateTotals(picks, card);
         });
-
         grid.appendChild(c);
       });
 
@@ -979,12 +1350,12 @@
     }
 
     function updateTotals(picks, card) {
-      const chosen = picks.map(i => DESTINATIONS[i]);
-      const totalCost  = chosen.reduce((s, d) => s + d.cost,  0);
+      const chosen = picks.map(i => config.destinations[i]);
+      const totalCost = chosen.reduce((s, d) => s + d.cost, 0);
       const totalHours = chosen.reduce((s, d) => s + d.hours, 0);
       card.querySelector('#t-picked').textContent = picks.length + '/2';
-      card.querySelector('#t-cost').textContent   = '$' + totalCost;
-      card.querySelector('#t-hours').textContent  = totalHours;
+      card.querySelector('#t-cost').textContent = '$' + totalCost;
+      card.querySelector('#t-hours').textContent = totalHours;
       card.querySelector('#t-budget').textContent = '$' + state.budget;
 
       const btn = card.querySelector('#confirm-dest');
@@ -992,122 +1363,104 @@
       btn.disabled = (picks.length !== 2) || overBudget;
       const fb = card.querySelector('#p3-feedback');
       if (overBudget) {
-        showFeedback(fb, 'hint', `🤔 That's $${totalCost}, but you only have $${state.budget}. Try picking a cheaper combo.`);
+        showFeedback(fb, 'hint', "🤔 That's $" + totalCost + ', but you only have $' + state.budget + '. Try a cheaper combo.');
       } else {
         fb.className = 'feedback'; fb.textContent = '';
       }
     }
 
     function confirmDests(picks, card) {
-      const chosen = picks.map(i => DESTINATIONS[i]);
-      const totalCost  = chosen.reduce((s, d) => s + d.cost,  0);
+      const chosen = picks.map(i => config.destinations[i]);
+      const totalCost = chosen.reduce((s, d) => s + d.cost, 0);
       const totalHours = chosen.reduce((s, d) => s + d.hours, 0);
       state.destinations = chosen;
-      state.budget    -= totalCost;
+      state.budget -= totalCost;
       state.hoursAway += totalHours;
       updateTrackers();
       awardStamp('Boston Explorer');
       showFeedback(card.querySelector('#p3-feedback'), 'ok',
-        `✓ Great picks! $${totalCost} spent, ${totalHours} hours of fun.`);
+        '✓ Great picks! $' + totalCost + ' spent, ' + totalHours + ' hours of fun.');
       setTimeout(() => { state.phase = 4; renderApp(); }, 1000);
     }
 
     /* =========================================================
        === PHASE 4: ITINERARY SUMMARY ===
+       Reviews money + time totals (4.MD.A.2).
        ========================================================= */
     function renderPhase4() {
+      const sub = config.subway;
       const card = document.createElement('section');
       card.className = 'card phase-card';
 
-      const totalSpent     = STARTING_BUDGET - state.budget;
+      const totalSpent = config.startingBudget - state.budget;
       const totalDestHours = state.destinations.reduce((s, d) => s + d.hours, 0);
-      // +1 hour buffer covers subway rides and walking between attractions
       const returnTrainMin = parseTime(state.arrivalTime) + (totalDestHours * 60) + 60;
-      const returnRounded  = Math.round(returnTrainMin / 30) * 30;
-      const returnHomeMin  = returnRounded + (state.train.durationHours * 60);
-      // Full round-trip time away from home
+      const returnRounded = Math.round(returnTrainMin / 30) * 30;
+      const returnHomeMin = returnRounded + (state.train.durationHours * 60);
       const totalHoursAway = (state.train.durationHours * 2) + totalDestHours + 1;
 
-      card.innerHTML = `
-        <div class="phase-head">
-          <div class="phase-badge">4</div>
-          <h2 class="phase-title">Your Trip Itinerary</h2>
-        </div>
-        <p class="phase-subtitle">Here is your full day in Boston!</p>
-
-        <div style="background:#FAFCFF; border:2px solid #D2D8E8; border-radius:12px; padding:18px;">
-          <h3 style="margin-top:0;">🚆 Train to Boston</h3>
-          <p>You took the <strong>${state.train.label}</strong> train.</p>
-          <p>Left Portland at <strong>${state.train.depart}</strong>.</p>
-          <p>Arrived at Boston North Station at <strong>${state.arrivalTime}</strong>.</p>
-
-          <h3>🚇 Subway</h3>
-          <p>Bought a <strong>${state.pass.label}</strong> for <strong>$${state.pass.cost}</strong>.</p>
-          <p>Took the <strong>${SUBWAY_PROMPT.correctLine} Line</strong> from ${SUBWAY_PROMPT.from} to ${SUBWAY_PROMPT.to}.</p>
-
-          <h3>🗺️ Attractions</h3>
-          <ul id="dest-summary" style="padding-left: 20px; margin: 0 0 12px;"></ul>
-
-          <h3>📊 Trip Totals</h3>
-          <p>Total spent today: <strong>$${totalSpent}</strong> of $${STARTING_BUDGET}.</p>
-          <p>Money left over: <strong>$${state.budget}</strong>.</p>
-          <p>Hours away from home: <strong>${totalHoursAway} hours</strong>
-             <span style="color: var(--ink-soft); font-size: 15px;">(${state.train.durationHours} hr train + ${totalDestHours} hr attractions + 1 hr subway/walk + ${state.train.durationHours} hr train home)</span>
-          </p>
-
-          <h3>🏠 Heading Home</h3>
-          <p>Return train leaves Boston around <strong>${formatTime(returnRounded)}</strong>.</p>
-          <p>You'll be home in Portland by <strong>${formatTime(returnHomeMin)}</strong>.</p>
-        </div>
-
-        <div class="no-print" style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
-          <button class="btn" id="print-btn">🖨️ Print Itinerary</button>
-          <button class="btn secondary" id="restart-btn">↻ Start Over</button>
-        </div>
-      `;
+      card.innerHTML =
+        '<div class="phase-head">' +
+          '<div class="phase-badge">4</div>' +
+          '<h2 class="phase-title">Your Trip Itinerary</h2>' +
+        '</div>' +
+        '<p class="phase-subtitle">You did it! Here is your full day in Boston. ' + stdBadgeHTML('4.MD.A.2') + '</p>' +
+        '<div class="summary-box">' +
+          '<h3>🚆 Train to Boston</h3>' +
+          '<p>You took the <strong>' + state.train.label + '</strong> train.</p>' +
+          '<p>Left Portland at <strong>' + state.train.depart + '</strong>.</p>' +
+          '<p>Arrived at Boston North Station at <strong>' + state.arrivalTime + '</strong>.</p>' +
+          '<h3>🚇 Subway</h3>' +
+          '<p>Bought a <strong>' + state.pass.label + '</strong> for <strong>$' + state.pass.cost + '</strong>.</p>' +
+          '<p>Took the <strong>' + sub.correctLine + ' Line</strong> from ' + sub.from + ' to ' + sub.to + '.</p>' +
+          '<h3>🗺️ Attractions</h3>' +
+          '<ul id="dest-summary" style="padding-left: 20px; margin: 0 0 12px;"></ul>' +
+          '<h3>📊 Trip Totals</h3>' +
+          '<p>Total spent today: <strong>$' + totalSpent + '</strong> of $' + config.startingBudget + '.</p>' +
+          '<p>Money left over: <strong>$' + state.budget + '</strong>.</p>' +
+          '<p>Hours away from home: <strong>' + totalHoursAway + ' hours</strong> ' +
+            '<span style="color: var(--ink-soft); font-size: 15px;">(' + state.train.durationHours +
+            ' hr train + ' + totalDestHours + ' hr attractions + 1 hr subway/walk + ' +
+            state.train.durationHours + ' hr train home)</span></p>' +
+          '<h3>🏠 Heading Home</h3>' +
+          '<p>Return train leaves Boston around <strong>' + formatTime(returnRounded) + '</strong>.</p>' +
+          "<p>You'll be home in Portland by <strong>" + formatTime(returnHomeMin) + '</strong>.</p>' +
+        '</div>' +
+        '<div class="no-print" style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">' +
+          '<button class="btn" id="print-btn">🖨️ Print Itinerary</button>' +
+          '<button class="btn secondary" id="restart-btn">↻ Start Over</button>' +
+        '</div>';
 
       const ul = card.querySelector('#dest-summary');
       state.destinations.forEach(d => {
         const li = document.createElement('li');
         li.style.marginBottom = '6px';
-        li.innerHTML = `${d.emoji} <strong>${d.name}</strong> — $${d.cost}, ${d.hours} hr `;
+        li.innerHTML = d.emoji + ' <strong>' + d.name + '</strong> — $' + d.cost + ', ' + d.hours + ' hr ';
         li.appendChild(lineChip(d.line));
         ul.appendChild(li);
       });
 
       card.querySelector('#print-btn').addEventListener('click', () => window.print());
-      card.querySelector('#restart-btn').addEventListener('click', () => {
-        // Reset all state and re-render
-        state.phase = 1;
-        state.budget = STARTING_BUDGET;
-        state.hoursAway = 0;
-        state.train = null;
-        state.arrivalTime = null;
-        state.pass = null;
-        state.destinations = [];
-        state.stamps = [];
-        document.querySelectorAll('.stamp').forEach(s => s.classList.remove('unlocked'));
-        updateTrackers();
-        renderApp();
-      });
+      card.querySelector('#restart-btn').addEventListener('click', resetTrip);
 
+      // Celebrate finishing the whole trip.
+      setTimeout(confetti, 200);
       return card;
     }
 
     /* =========================================================
-       === LOCKED-PHASE PLACEHOLDERS ===
+       === LOCKED-PHASE PLACEHOLDER ===
        ========================================================= */
     function renderLocked(num, title) {
       const card = document.createElement('section');
       card.className = 'card phase-card phase-locked';
       card.setAttribute('aria-disabled', 'true');
-      card.innerHTML = `
-        <div class="phase-head">
-          <div class="phase-badge">${num}</div>
-          <h2 class="phase-title">${title}</h2>
-        </div>
-        <div class="lock-note">🔒 Finish Phase ${num - 1} to unlock this step.</div>
-      `;
+      card.innerHTML =
+        '<div class="phase-head">' +
+          '<div class="phase-badge">' + num + '</div>' +
+          '<h2 class="phase-title">' + title + '</h2>' +
+        '</div>' +
+        '<div class="lock-note">🔒 Finish Phase ' + (num - 1) + ' to unlock this step.</div>';
       return card;
     }
 
@@ -1129,44 +1482,39 @@
         if (p === state.phase) {
           root.appendChild(builders[p]());
         } else if (p < state.phase) {
-          // Show completed phases as a compact summary line
           const done = document.createElement('section');
-          done.className = 'card phase-card';
-          done.style.background = '#F0FFF4';
-          done.innerHTML = `
-            <div class="phase-head">
-              <div class="phase-badge" style="background: var(--green);">✓</div>
-              <h2 class="phase-title">Phase ${p} Complete: ${phaseTitles[p]}</h2>
-            </div>
-          `;
+          done.className = 'card phase-card phase-done-card';
+          done.innerHTML =
+            '<div class="phase-head">' +
+              '<div class="phase-badge">✓</div>' +
+              '<h2 class="phase-title">Phase ' + p + ' Complete: ' + phaseTitles[p] + '</h2>' +
+            '</div>';
           root.appendChild(done);
         } else {
           root.appendChild(renderLocked(p, phaseTitles[p]));
         }
       }
+      updateJourney();
     }
 
     /* =========================================================
-       === TIME HELPER (always-on sidebar tool) ===
+       === TIME HELPER ===
+       Practices 3.MD.A.1 (elapsed time on a number line).
        ========================================================= */
     function initTimeHelper() {
       const startSel = document.getElementById('th-start');
       const endRange = document.getElementById('th-end');
-      const ticks    = document.getElementById('th-ticks');
-      const out      = document.getElementById('th-out');
+      const ticks = document.getElementById('th-ticks');
+      const out = document.getElementById('th-out');
+      document.getElementById('th-std').title = STANDARDS['3.MD.A.1'];
 
-      // Start dropdown: 30-min steps from 6:00 AM to 8:00 PM
-      const startOptions = [];
-      for (let m = 6 * 60; m <= 20 * 60; m += 30) startOptions.push(m);
-      startOptions.forEach((m) => {
+      for (let m = 6 * 60; m <= 20 * 60; m += 30) {
         const opt = document.createElement('option');
         opt.value = m;
         opt.textContent = formatTime(m);
-        if (m === 8 * 60) opt.selected = true; // default to 8:00 AM
+        if (m === 8 * 60) opt.selected = true;
         startSel.appendChild(opt);
-      });
-
-      // Build 13 hour-tick blocks (covers 0-12 hours of duration)
+      }
       for (let i = 0; i < 13; i++) {
         const t = document.createElement('div');
         t.className = 'tick';
@@ -1176,43 +1524,214 @@
 
       function refresh() {
         const startMin = parseInt(startSel.value, 10);
-        // Slider step = 1 = 30 minutes
         const halfHours = parseInt(endRange.value, 10);
         const durationMin = halfHours * 30;
         const endMin = startMin + durationMin;
-        const hours = (durationMin / 60);
-        const hoursLabel = (hours === 1) ? '1 hour' : `${hours} hours`;
-        out.textContent = `From ${formatTime(startMin)} to ${formatTime(endMin)} = ${hoursLabel}`;
+        const hours = durationMin / 60;
+        const hoursLabel = (hours === 1) ? '1 hour' : hours + ' hours';
+        out.textContent = 'From ' + formatTime(startMin) + ' to ' + formatTime(endMin) + ' = ' + hoursLabel;
         endRange.setAttribute('aria-valuenow', halfHours);
         endRange.setAttribute('aria-valuetext', hoursLabel);
-        // Highlight ticks up to the whole-hour count
         const wholeHours = Math.floor(hours);
         document.querySelectorAll('#th-ticks .tick').forEach((el, idx) => {
           el.classList.toggle('active', idx > 0 && idx <= wholeHours);
         });
       }
-
       startSel.addEventListener('change', refresh);
       endRange.addEventListener('input', refresh);
       refresh();
     }
 
     /* =========================================================
-       === UTILITY: Fisher-Yates shuffle ===
+       === SETTINGS MODAL (teacher tools) ===
+       Builds editable rows from `config`, reads them back on Save.
        ========================================================= */
-    function shuffle(arr) {
-      const a = arr.slice();
-      for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
+    function lineOptionsHTML(selected) {
+      return Object.keys(LINE_COLORS)
+        .map(n => '<option value="' + n + '"' + (n === selected ? ' selected' : '') + '>' + n + '</option>')
+        .join('');
+    }
+    function departOptionsHTML(selected) {
+      let html = '';
+      for (let m = 5 * 60; m <= 12 * 60; m += 30) {
+        const t = formatTime(m);
+        html += '<option' + (t === selected ? ' selected' : '') + '>' + t + '</option>';
       }
-      return a;
+      return html;
+    }
+    function rowVal(row, sel) { return row.querySelector(sel).value.trim(); }
+    function rowInt(row, sel, fallback) {
+      const n = parseInt(row.querySelector(sel).value, 10);
+      return isNaN(n) ? fallback : n;
+    }
+
+    function buildTrainRow(t) {
+      t = t || { label: '', depart: '8:00 AM', durationHours: 3 };
+      const row = document.createElement('div');
+      row.className = 'erow train';
+      row.innerHTML =
+        '<input type="text" class="set-input f-label" value="' + escAttr(t.label) + '" placeholder="Train name">' +
+        '<select class="set-select f-depart">' + departOptionsHTML(t.depart) + '</select>' +
+        '<input type="number" class="set-input f-dur" min="1" max="12" step="1" value="' + (t.durationHours || 3) + '">' +
+        '<button type="button" class="row-del" aria-label="Remove train">✕</button>';
+      row.querySelector('.row-del').addEventListener('click', () => row.remove());
+      return row;
+    }
+    function buildPassRow(p) {
+      p = p || { label: '', cost: 0, blurb: '' };
+      const row = document.createElement('div');
+      row.className = 'erow pass';
+      row.innerHTML =
+        '<input type="text" class="set-input f-label" value="' + escAttr(p.label) + '" placeholder="Pass name">' +
+        '<input type="number" class="set-input f-cost" min="0" max="999" step="1" value="' + (p.cost || 0) + '">' +
+        '<input type="text" class="set-input f-blurb" value="' + escAttr(p.blurb || '') + '" placeholder="Short description">' +
+        '<button type="button" class="row-del" aria-label="Remove pass">✕</button>';
+      row.querySelector('.row-del').addEventListener('click', () => row.remove());
+      return row;
+    }
+    function buildDestRow(d) {
+      d = d || { emoji: '📍', name: '', category: '', line: 'Green', cost: 0, hours: 1 };
+      const row = document.createElement('div');
+      row.className = 'erow dest';
+      row.innerHTML =
+        '<input type="text" class="set-input f-emoji" value="' + escAttr(d.emoji) + '" maxlength="3">' +
+        '<input type="text" class="set-input f-name" value="' + escAttr(d.name) + '" placeholder="Place name">' +
+        '<input type="text" class="set-input f-cat" value="' + escAttr(d.category) + '" placeholder="Category">' +
+        '<select class="set-select f-line">' + lineOptionsHTML(d.line) + '</select>' +
+        '<input type="number" class="set-input f-cost" min="0" max="999" step="1" value="' + (d.cost || 0) + '">' +
+        '<input type="number" class="set-input f-hours" min="1" max="12" step="1" value="' + (d.hours || 1) + '">' +
+        '<button type="button" class="row-del" aria-label="Remove destination">✕</button>';
+      row.querySelector('.row-del').addEventListener('click', () => row.remove());
+      return row;
+    }
+
+    function populateSettingsForm() {
+      document.getElementById('set-standards').checked = !!config.showStandards;
+      document.getElementById('set-budget').value = config.startingBudget;
+
+      const trainsRows = document.getElementById('trains-rows');
+      trainsRows.innerHTML = '';
+      config.trains.forEach(t => trainsRows.appendChild(buildTrainRow(t)));
+
+      const passesRows = document.getElementById('passes-rows');
+      passesRows.innerHTML = '';
+      config.passes.forEach(p => passesRows.appendChild(buildPassRow(p)));
+
+      document.getElementById('set-from').value = config.subway.from;
+      document.getElementById('set-to').value = config.subway.to;
+      document.getElementById('set-line').innerHTML = lineOptionsHTML(config.subway.correctLine);
+      document.getElementById('set-hint').value = config.subway.hint;
+
+      const destsRows = document.getElementById('dests-rows');
+      destsRows.innerHTML = '';
+      config.destinations.forEach(d => destsRows.appendChild(buildDestRow(d)));
+    }
+
+    function readSettingsForm() {
+      const c = cloneDefaults();
+      c.showStandards = document.getElementById('set-standards').checked;
+      const b = parseInt(document.getElementById('set-budget').value, 10);
+      c.startingBudget = isNaN(b) ? 50 : Math.max(0, b);
+
+      c.trains = Array.prototype.map.call(
+        document.querySelectorAll('#trains-rows .erow'),
+        (r, i) => ({
+          id: String.fromCharCode(65 + i),
+          label: rowVal(r, '.f-label') || ('Train ' + (i + 1)),
+          depart: rowVal(r, '.f-depart') || '8:00 AM',
+          durationHours: Math.max(1, rowInt(r, '.f-dur', 3)),
+        })
+      );
+
+      c.passes = Array.prototype.map.call(
+        document.querySelectorAll('#passes-rows .erow'),
+        (r) => ({
+          label: rowVal(r, '.f-label') || 'Pass',
+          cost: Math.max(0, rowInt(r, '.f-cost', 0)),
+          blurb: rowVal(r, '.f-blurb'),
+        })
+      );
+
+      c.subway = {
+        from: document.getElementById('set-from').value.trim() || 'North Station',
+        to: document.getElementById('set-to').value.trim() || 'Park Street',
+        correctLine: document.getElementById('set-line').value,
+        hint: document.getElementById('set-hint').value.trim(),
+      };
+
+      c.destinations = Array.prototype.map.call(
+        document.querySelectorAll('#dests-rows .erow'),
+        (r) => ({
+          emoji: rowVal(r, '.f-emoji') || '📍',
+          name: rowVal(r, '.f-name') || 'Attraction',
+          category: rowVal(r, '.f-cat'),
+          line: r.querySelector('.f-line').value,
+          cost: Math.max(0, rowInt(r, '.f-cost', 0)),
+          hours: Math.max(1, rowInt(r, '.f-hours', 1)),
+        })
+      );
+
+      // Guard against empty critical lists.
+      if (c.trains.length === 0) c.trains = cloneDefaults().trains;
+      if (c.passes.length === 0) c.passes = cloneDefaults().passes;
+      if (c.destinations.length < 2) c.destinations = cloneDefaults().destinations;
+      return c;
+    }
+
+    function applyStandardsMode() {
+      document.body.classList.toggle('show-standards', !!config.showStandards);
+    }
+
+    function openSettings() {
+      populateSettingsForm();
+      document.getElementById('settings-overlay').classList.add('open');
+    }
+    function closeSettings() {
+      document.getElementById('settings-overlay').classList.remove('open');
+    }
+
+    function initSettings() {
+      document.getElementById('open-settings').addEventListener('click', openSettings);
+      document.getElementById('close-settings-x').addEventListener('click', closeSettings);
+      document.getElementById('cancel-settings').addEventListener('click', closeSettings);
+
+      document.getElementById('add-train').addEventListener('click', () =>
+        document.getElementById('trains-rows').appendChild(buildTrainRow()));
+      document.getElementById('add-pass').addEventListener('click', () =>
+        document.getElementById('passes-rows').appendChild(buildPassRow()));
+      document.getElementById('add-dest').addEventListener('click', () =>
+        document.getElementById('dests-rows').appendChild(buildDestRow()));
+
+      document.getElementById('save-settings').addEventListener('click', () => {
+        config = readSettingsForm();
+        saveConfig();
+        applyStandardsMode();
+        closeSettings();
+        resetTrip();
+      });
+
+      document.getElementById('reset-settings').addEventListener('click', () => {
+        config = cloneDefaults();
+        saveConfig();
+        populateSettingsForm();
+        applyStandardsMode();
+      });
+
+      // Close on overlay click (but not when clicking inside the modal) and on Escape.
+      document.getElementById('settings-overlay').addEventListener('click', (e) => {
+        if (e.target.id === 'settings-overlay') closeSettings();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeSettings();
+      });
     }
 
     /* =========================================================
        === INIT ===
        ========================================================= */
     document.addEventListener('DOMContentLoaded', () => {
+      applyStandardsMode();
+      initSettings();
       initTimeHelper();
       updateTrackers();
       renderApp();
