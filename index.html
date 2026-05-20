@@ -1,0 +1,1222 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Boston Transit Adventure</title>
+  <style>
+    /* =========================================================
+       1. RESET & CSS VARIABLES
+       ========================================================= */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    :root {
+      --cream:       #FFF8E7;
+      --paper:       #FFFFFF;
+      --ink:         #1F2A44;
+      --ink-soft:    #4A5570;
+      --navy:        #0B3D91;
+      --navy-dark:   #082B68;
+      --gold:        #F4B400;
+      --green:       #2E8B57;
+      --green-soft:  #C7EBD1;
+      --red-soft:    #FADADA;
+      --line-red:    #DA291C;
+      --line-green:  #00843D;
+      --line-blue:   #003DA5;
+      --line-orange: #ED8B00;
+      --shadow: 0 4px 12px rgba(0,0,0,0.08);
+      --radius: 14px;
+      --gap: 18px;
+    }
+
+    body {
+      font-family: 'Atkinson Hyperlegible', 'OpenDyslexic', 'Verdana', system-ui, sans-serif;
+      font-size: 19px;
+      line-height: 1.55;
+      color: var(--ink);
+      background: var(--cream);
+      min-height: 100vh;
+    }
+
+    /* =========================================================
+       2. LAYOUT
+       ========================================================= */
+    .app {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      grid-template-rows: auto 1fr;
+      grid-template-areas:
+        "header header"
+        "main   sidebar";
+      gap: var(--gap);
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: var(--gap);
+    }
+
+    @media (max-width: 900px) {
+      .app {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "header"
+          "main"
+          "sidebar";
+      }
+    }
+
+    header.app-header {
+      grid-area: header;
+      background: var(--navy);
+      color: white;
+      border-radius: var(--radius);
+      padding: 18px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow);
+    }
+    .app-title {
+      font-size: 28px;
+      font-weight: 800;
+      margin: 0;
+      flex: 1 1 auto;
+      letter-spacing: 0.3px;
+    }
+    .app-title .emoji { margin-right: 8px; }
+
+    .tracker {
+      background: white;
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 8px 18px;
+      font-weight: 700;
+      font-size: 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: inset 0 0 0 3px var(--gold);
+    }
+    .tracker .label { color: var(--ink-soft); font-weight: 600; font-size: 15px; }
+    .tracker .value { color: var(--navy-dark); font-size: 22px; }
+
+    main.phase-root { grid-area: main; min-width: 0; }
+    aside.sidebar  { grid-area: sidebar; display: flex; flex-direction: column; gap: var(--gap); }
+
+    /* =========================================================
+       3. PHASE CARDS, BUTTONS, CHIPS
+       ========================================================= */
+    .card {
+      background: var(--paper);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+    .phase-card { padding: 28px; }
+    .phase-card + .phase-card { margin-top: var(--gap); }
+
+    .phase-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .phase-badge {
+      background: var(--navy);
+      color: white;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .phase-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin: 0;
+      color: var(--ink);
+    }
+    .phase-subtitle {
+      margin: 0 0 18px;
+      color: var(--ink-soft);
+      font-size: 17px;
+    }
+
+    .phase-locked { opacity: 0.55; }
+    .phase-locked .phase-badge { background: #B6BCCB; }
+    .lock-note {
+      background: #F0F2F8;
+      color: var(--ink-soft);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 16px;
+    }
+
+    /* Generic option card (train/pass/answer) */
+    .options {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      margin-top: 6px;
+    }
+    .option {
+      background: var(--paper);
+      border: 3px solid #E2E6F0;
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      font-size: 18px;
+      text-align: left;
+      transition: transform 0.08s, border-color 0.15s, background 0.15s;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-family: inherit;
+      color: var(--ink);
+    }
+    .option:hover { border-color: var(--navy); transform: translateY(-1px); }
+    .option:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+    .option.selected { border-color: var(--navy); background: #EEF3FF; }
+    .option.correct  { border-color: var(--green); background: var(--green-soft); }
+    .option.wrong    { border-color: #C0392B; background: var(--red-soft); }
+    .option .opt-title { font-weight: 800; font-size: 19px; }
+    .option .opt-meta  { color: var(--ink-soft); font-size: 16px; }
+
+    /* Primary action button */
+    .btn {
+      background: var(--navy);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 14px 24px;
+      font-size: 19px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s, transform 0.08s;
+    }
+    .btn:hover:not(:disabled) { background: var(--navy-dark); }
+    .btn:active:not(:disabled) { transform: translateY(1px); }
+    .btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+    .btn:disabled { background: #B6BCCB; cursor: not-allowed; }
+    .btn.secondary { background: white; color: var(--navy); box-shadow: inset 0 0 0 3px var(--navy); }
+    .btn.secondary:hover:not(:disabled) { background: #EEF3FF; }
+
+    /* Subway color buttons */
+    .line-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .line-btn {
+      border: 4px solid var(--ink);
+      border-radius: 12px;
+      padding: 22px 16px;
+      font-size: 22px;
+      font-weight: 800;
+      color: white;
+      cursor: pointer;
+      font-family: inherit;
+      transition: transform 0.08s, box-shadow 0.15s;
+    }
+    .line-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+    .line-btn:focus-visible { outline: 4px solid var(--gold); outline-offset: 3px; }
+    .line-btn.red    { background: var(--line-red); }
+    .line-btn.green  { background: var(--line-green); }
+    .line-btn.blue   { background: var(--line-blue); }
+    .line-btn.orange { background: var(--line-orange); }
+    .line-btn.correct { box-shadow: 0 0 0 5px var(--green); }
+    .line-btn.wrong   { box-shadow: 0 0 0 5px #C0392B; opacity: 0.6; }
+
+    /* Line color chip (used in dest cards & summary) */
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #EEF3FF;
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 3px 12px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+    .chip .dot {
+      width: 14px; height: 14px; border-radius: 50%;
+      border: 2px solid white;
+      box-shadow: 0 0 0 1px var(--ink-soft);
+    }
+
+    /* Phase 3 destination grid */
+    .dest-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 10px;
+    }
+    .dest-card {
+      background: var(--paper);
+      border: 3px solid #E2E6F0;
+      border-radius: 14px;
+      padding: 16px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      text-align: left;
+      font-family: inherit;
+      color: var(--ink);
+      transition: border-color 0.15s, transform 0.08s, background 0.15s;
+    }
+    .dest-card:hover { border-color: var(--navy); transform: translateY(-2px); }
+    .dest-card:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+    .dest-card.selected { border-color: var(--green); background: var(--green-soft); }
+    .dest-card .emoji { font-size: 36px; line-height: 1; }
+    .dest-card .name  { font-weight: 800; font-size: 18px; line-height: 1.25; }
+    .dest-card .cat   { color: var(--ink-soft); font-size: 15px; }
+    .dest-card .meta  {
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+      margin-top: 4px;
+    }
+    .dest-card .price { font-weight: 800; }
+    .dest-card .hours { color: var(--ink-soft); }
+
+    .totals-bar {
+      margin-top: 18px;
+      padding: 14px 16px;
+      background: #F4F7FF;
+      border: 2px dashed var(--navy);
+      border-radius: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      font-size: 17px;
+      font-weight: 700;
+    }
+    .totals-bar .totals-item { color: var(--ink); }
+    .totals-bar .totals-item .v { color: var(--navy-dark); font-size: 20px; }
+
+    /* Feedback box */
+    .feedback {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 17px;
+      display: none;
+    }
+    .feedback.ok   { display: block; background: var(--green-soft); color: #155724; border: 2px solid var(--green); }
+    .feedback.hint { display: block; background: #FFF4D6; color: #6A4A00; border: 2px solid var(--gold); }
+
+    /* =========================================================
+       4. PASSPORT
+       ========================================================= */
+    .passport h2 {
+      margin: 0 0 12px;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .stamps {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .stamp {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 10px;
+      background: #F4F7FF;
+      border: 2px dashed #C8D0E4;
+      color: var(--ink-soft);
+    }
+    .stamp .seal {
+      width: 46px; height: 46px;
+      border-radius: 50%;
+      background: #D9DEEC;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .stamp .stamp-name { font-weight: 700; }
+    .stamp.unlocked {
+      background: var(--green-soft);
+      border: 2px solid var(--green);
+      color: var(--ink);
+      animation: stampIn 0.5s ease-out;
+    }
+    .stamp.unlocked .seal {
+      background: var(--green);
+      color: white;
+    }
+    @keyframes stampIn {
+      0%   { transform: scale(1.3) rotate(-8deg); opacity: 0; }
+      60%  { transform: scale(0.95) rotate(2deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0); }
+    }
+
+    /* =========================================================
+       5. TIME HELPER
+       ========================================================= */
+    .time-helper h2 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .time-helper p.help-text {
+      margin: 0 0 12px;
+      font-size: 15px;
+      color: var(--ink-soft);
+    }
+    .time-helper .row {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 10px; flex-wrap: wrap;
+    }
+    .time-helper label { font-weight: 700; font-size: 15px; }
+    .time-helper select, .time-helper input[type=range] {
+      font-family: inherit;
+      font-size: 16px;
+    }
+    .time-helper select {
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 2px solid #D2D8E8;
+      background: white;
+    }
+    .time-helper input[type=range] {
+      width: 100%;
+    }
+    .time-helper .ticks {
+      display: flex;
+      gap: 2px;
+      margin-top: 6px;
+    }
+    .time-helper .tick {
+      flex: 1;
+      height: 28px;
+      background: #ECEFF7;
+      border-radius: 4px;
+      font-size: 11px;
+      color: var(--ink-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+    .time-helper .tick.active { background: var(--green); color: white; }
+    .time-helper .duration-out {
+      margin-top: 10px;
+      padding: 10px 12px;
+      background: var(--navy);
+      color: white;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 17px;
+      text-align: center;
+    }
+
+    /* =========================================================
+       6. PRINT STYLES
+       ========================================================= */
+    @media print {
+      body { background: white; }
+      header.app-header, aside.sidebar, .no-print, .btn { display: none !important; }
+      .app {
+        display: block;
+        max-width: 100%;
+        padding: 0;
+      }
+      .card, .phase-card { box-shadow: none; border: 1px solid #999; }
+    }
+
+    /* =========================================================
+       7. REDUCED MOTION
+       ========================================================= */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Visually hidden but accessible to screen readers */
+    .sr-only {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+
+    <!-- ====== HEADER ====== -->
+    <header class="app-header" role="banner">
+      <h1 class="app-title"><span class="emoji" aria-hidden="true">🚆</span>Boston Transit Adventure</h1>
+      <div class="tracker" role="status" aria-live="polite" aria-label="Budget remaining">
+        <span class="label">Budget:</span>
+        <span class="value" id="budget-value">$50</span>
+      </div>
+      <div class="tracker" role="status" aria-live="polite" aria-label="Hours away from home">
+        <span class="label">Time Away:</span>
+        <span class="value" id="time-value">0 hr</span>
+      </div>
+    </header>
+
+    <!-- ====== MAIN PHASE PANEL ====== -->
+    <main class="phase-root" id="phase-root" aria-live="polite"></main>
+
+    <!-- ====== SIDEBAR ====== -->
+    <aside class="sidebar" aria-label="Passport and Time Helper">
+
+      <section class="card passport" aria-labelledby="passport-h">
+        <h2 id="passport-h"><span aria-hidden="true">🛂</span> My Passport</h2>
+        <div class="stamps" id="stamps">
+          <div class="stamp" data-stamp="Train Conductor">
+            <div class="seal" aria-hidden="true">🚂</div>
+            <div class="stamp-name">Train Conductor</div>
+          </div>
+          <div class="stamp" data-stamp="Subway Navigator">
+            <div class="seal" aria-hidden="true">🚇</div>
+            <div class="stamp-name">Subway Navigator</div>
+          </div>
+          <div class="stamp" data-stamp="Boston Explorer">
+            <div class="seal" aria-hidden="true">🗽</div>
+            <div class="stamp-name">Boston Explorer</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card time-helper" aria-labelledby="th-h">
+        <h2 id="th-h"><span aria-hidden="true">⏱️</span> Time Helper</h2>
+        <p class="help-text">Pick a start time. Slide to find the end time. Count the green blocks!</p>
+        <div class="row">
+          <label for="th-start">Start:</label>
+          <select id="th-start"></select>
+        </div>
+        <div class="row">
+          <label for="th-end" class="sr-only">End time slider</label>
+          <input id="th-end" type="range" min="0" max="24" step="1" value="6" aria-valuemin="0" aria-valuemax="24" aria-valuenow="6">
+        </div>
+        <div class="ticks" id="th-ticks" aria-hidden="true"></div>
+        <div class="duration-out" id="th-out">From 8:00 AM to 11:00 AM = 3 hours</div>
+      </section>
+
+    </aside>
+  </div>
+
+  <script>
+    /* =========================================================
+       === TEACHER-EDITABLE DATA ===
+       Change anything below to customize the lesson.
+       Keep all dollar amounts as whole dollars (no cents).
+       Keep all times rounded to the nearest 30 minutes.
+       Keep all durations in whole hours.
+       ========================================================= */
+
+    // ----- Phase 1: Downeaster train schedule -----
+    // Each train: id, depart time string, ride length in whole hours, friendly label.
+    const TRAINS = [
+      { id: 'A', depart: '8:00 AM',  durationHours: 3, label: 'Early Bird' },
+      { id: 'B', depart: '9:00 AM',  durationHours: 3, label: 'Morning Express' },
+      { id: 'C', depart: '10:00 AM', durationHours: 3, label: 'Late Morning' },
+    ];
+
+    // ----- Phase 2: Subway pass options -----
+    // The "correct" pass for a full day of riding is the Day Pass.
+    const PASSES = [
+      { id: 'single', label: 'Single Ride', cost: 3,  blurb: 'Just one ride.' },
+      { id: 'day',    label: 'Day Pass',    cost: 12, blurb: 'Unlimited rides today.' },
+      { id: 'week',   label: '7-Day Pass',  cost: 25, blurb: 'A whole week of riding.' },
+    ];
+    const CORRECT_PASS_ID = 'day';
+
+    // ----- Phase 2: Subway color matching -----
+    // The trip is North Station to Park Street, which uses the Green Line.
+    const SUBWAY_PROMPT = {
+      from: 'North Station',
+      to:   'Park Street',
+      correctLine: 'Green',
+      hint: 'Look for the Green Line — it connects North Station to Park Street.'
+    };
+
+    // ----- Phase 3: Boston attractions menu -----
+    // Add, remove, or edit destinations here. The grid will rebuild itself.
+    const DESTINATIONS = [
+      { name: 'Museum of Science',               line: 'Green',  category: 'Science / Interactive',    cost: 29, hours: 3, emoji: '🔬' },
+      { name: 'New England Aquarium',            line: 'Blue',   category: 'Animals / Nature',         cost: 32, hours: 2, emoji: '🐠' },
+      { name: "Boston Children's Museum",        line: 'Red',    category: 'Interactive / Play',       cost: 20, hours: 2, emoji: '🧸' },
+      { name: 'Boston Tea Party Ships & Museum', line: 'Red',    category: 'History / Transportation', cost: 30, hours: 2, emoji: '⛵' },
+      { name: 'USS Constitution Museum & Ship',  line: 'Green',  category: 'History / Transportation', cost: 15, hours: 2, emoji: '⚓' },
+      { name: 'Fenway Park Tour',                line: 'Green',  category: 'Sports / Recreation',      cost: 25, hours: 1, emoji: '⚾' },
+      { name: 'Boston Common & Swan Boats',      line: 'Green',  category: 'Nature / Outdoor',         cost: 5,  hours: 2, emoji: '🦢' },
+      { name: 'Franklin Park Zoo',               line: 'Orange', category: 'Animals / Nature',         cost: 22, hours: 3, emoji: '🦁' },
+      { name: 'Legoland Discovery Center',       line: 'Orange', category: 'Interactive / Play',       cost: 25, hours: 2, emoji: '🧱' },
+      { name: 'Kings Dining & Bowling',          line: 'Green',  category: 'Recreation / Indoor',      cost: 18, hours: 2, emoji: '🎳' },
+    ];
+
+    // MBTA brand colors (used for chips and color buttons).
+    const LINE_COLORS = {
+      Red:    '#DA291C',
+      Green:  '#00843D',
+      Blue:   '#003DA5',
+      Orange: '#ED8B00',
+    };
+
+    // The starting budget for the day (whole dollars).
+    const STARTING_BUDGET = 50;
+
+    /* =========================================================
+       === APP STATE ===
+       ========================================================= */
+    const state = {
+      phase: 1,                 // current phase: 1..4
+      budget: STARTING_BUDGET,  // dollars remaining
+      hoursAway: 0,             // running total of hours
+      train: null,              // chosen train object
+      arrivalTime: null,        // computed arrival, e.g. "11:00 AM"
+      pass: null,               // chosen pass object
+      destinations: [],         // exactly 2 destination objects when phase 3 is done
+      stamps: [],               // names of unlocked stamps
+    };
+
+    /* =========================================================
+       === SOUND HELPERS (Web Audio — no external files) ===
+       ========================================================= */
+    let audioCtx = null;
+    function getAudio() {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        return audioCtx;
+      } catch (e) { return null; }
+    }
+    function playChime(kind) {
+      const ctx = getAudio();
+      if (!ctx) return;
+      const now = ctx.currentTime;
+      // Friendly success: ascending C-E-G triad. Gentle hint: soft single tone.
+      const notes = (kind === 'ok') ? [523.25, 659.25, 783.99] : [349.23];
+      notes.forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        const start = now + i * 0.12;
+        gain.gain.setValueAtTime(0.0001, start);
+        gain.gain.exponentialRampToValueAtTime(0.18, start + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.32);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(start);
+        osc.stop(start + 0.4);
+      });
+    }
+
+    /* =========================================================
+       === GENERIC HELPERS ===
+       ========================================================= */
+    // Parse a "8:00 AM" string into minutes since midnight.
+    function parseTime(str) {
+      const m = str.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+      if (!m) return 0;
+      let h = parseInt(m[1], 10);
+      const min = parseInt(m[2], 10);
+      const period = m[3].toUpperCase();
+      if (period === 'PM' && h !== 12) h += 12;
+      if (period === 'AM' && h === 12) h = 0;
+      return h * 60 + min;
+    }
+    // Format minutes since midnight as "9:30 AM".
+    function formatTime(mins) {
+      mins = ((mins % 1440) + 1440) % 1440;
+      const h24 = Math.floor(mins / 60);
+      const m   = mins % 60;
+      const period = h24 >= 12 ? 'PM' : 'AM';
+      let h = h24 % 12; if (h === 0) h = 12;
+      return `${h}:${String(m).padStart(2, '0')} ${period}`;
+    }
+
+    // Live header trackers
+    function updateTrackers() {
+      document.getElementById('budget-value').textContent = '$' + state.budget;
+      document.getElementById('time-value').textContent   = state.hoursAway + ' hr';
+    }
+
+    // Unlock a passport stamp
+    function awardStamp(name) {
+      if (state.stamps.includes(name)) return;
+      state.stamps.push(name);
+      const el = document.querySelector(`.stamp[data-stamp="${name}"]`);
+      if (el) el.classList.add('unlocked');
+      playChime('ok');
+    }
+
+    // Show feedback message inside a feedback box.
+    function showFeedback(box, kind, msg) {
+      box.className = 'feedback ' + kind;
+      box.textContent = msg;
+    }
+
+    // Build a colored chip for a subway line.
+    function lineChip(line) {
+      const span = document.createElement('span');
+      span.className = 'chip';
+      const dot = document.createElement('span');
+      dot.className = 'dot';
+      dot.style.background = LINE_COLORS[line] || '#666';
+      span.appendChild(dot);
+      span.appendChild(document.createTextNode(line + ' Line'));
+      return span;
+    }
+
+    /* =========================================================
+       === PHASE 1: DOWNEASTER DEPARTURE ===
+       ========================================================= */
+    function renderPhase1() {
+      const card = document.createElement('section');
+      card.className = 'card phase-card';
+      card.innerHTML = `
+        <div class="phase-head">
+          <div class="phase-badge">1</div>
+          <h2 class="phase-title">The Downeaster Departure</h2>
+        </div>
+        <p class="phase-subtitle">Pick a morning train from Portland, Maine. Then figure out when it arrives in Boston.</p>
+        <div class="options" id="train-options" role="radiogroup" aria-label="Train choices"></div>
+        <div id="train-question" style="margin-top: 20px;"></div>
+        <div class="feedback" id="p1-feedback" role="status"></div>
+      `;
+
+      const opts = card.querySelector('#train-options');
+      TRAINS.forEach((t) => {
+        const btn = document.createElement('button');
+        btn.className = 'option';
+        btn.setAttribute('role', 'radio');
+        btn.setAttribute('aria-checked', 'false');
+        btn.innerHTML = `
+          <span class="opt-title">${t.label}</span>
+          <span class="opt-meta">Leaves Portland: <strong>${t.depart}</strong></span>
+          <span class="opt-meta">Ride: <strong>${t.durationHours} hours</strong></span>
+        `;
+        btn.addEventListener('click', () => selectTrain(t, card));
+        opts.appendChild(btn);
+      });
+
+      return card;
+    }
+
+    function selectTrain(train, card) {
+      // Mark selected
+      card.querySelectorAll('#train-options .option').forEach((b) => {
+        const isThis = b.querySelector('.opt-title').textContent === train.label;
+        b.classList.toggle('selected', isThis);
+        b.setAttribute('aria-checked', isThis ? 'true' : 'false');
+      });
+
+      // Compute the correct arrival and three friendly distractors (+/- 1 hour).
+      const departMin  = parseTime(train.depart);
+      const arriveMin  = departMin + train.durationHours * 60;
+      const correct    = formatTime(arriveMin);
+      const distractors = [
+        formatTime(arriveMin - 60),
+        formatTime(arriveMin + 60),
+        formatTime(arriveMin + 120),
+      ];
+      const choices = shuffle([correct, ...distractors]);
+
+      const qBox = card.querySelector('#train-question');
+      qBox.innerHTML = `
+        <p class="phase-subtitle" style="margin-top:8px;">
+          Your train leaves at <strong>${train.depart}</strong> and the ride takes
+          <strong>${train.durationHours} hours</strong>.
+          What time will you arrive at Boston North Station?
+        </p>
+        <div class="options" id="arrive-options" role="radiogroup" aria-label="Arrival time choices"></div>
+      `;
+      const aopts = qBox.querySelector('#arrive-options');
+      choices.forEach((c) => {
+        const b = document.createElement('button');
+        b.className = 'option';
+        b.setAttribute('role', 'radio');
+        b.innerHTML = `<span class="opt-title">${c}</span>`;
+        b.addEventListener('click', () => checkArrival(c, correct, b, card, train));
+        aopts.appendChild(b);
+      });
+    }
+
+    function checkArrival(picked, correct, btn, card, train) {
+      const fb = card.querySelector('#p1-feedback');
+      if (picked === correct) {
+        btn.classList.add('correct');
+        showFeedback(fb, 'ok', `✓ Great job! You arrive at ${correct}.`);
+        state.train = train;
+        state.arrivalTime = correct;
+        state.hoursAway += train.durationHours;
+        updateTrackers();
+        awardStamp('Train Conductor');
+        // Disable further answers
+        card.querySelectorAll('#arrive-options .option').forEach(b => b.disabled = true);
+        // Unlock next phase after a short beat
+        setTimeout(() => { state.phase = 2; renderApp(); }, 900);
+      } else {
+        btn.classList.add('wrong');
+        btn.disabled = true;
+        showFeedback(fb, 'hint', '🤔 Not quite. Try the Time Helper on the right to count the hours.');
+        playChime('hint');
+      }
+    }
+
+    /* =========================================================
+       === PHASE 2: SUBWAY CONNECTION ===
+       (Step A: pick a pass → confirm subtraction.
+        Step B: pick the correct color line.)
+       ========================================================= */
+    function renderPhase2() {
+      const card = document.createElement('section');
+      card.className = 'card phase-card';
+      card.innerHTML = `
+        <div class="phase-head">
+          <div class="phase-badge">2</div>
+          <h2 class="phase-title">The Subway Connection</h2>
+        </div>
+        <p class="phase-subtitle">Buy a subway pass, then pick the right colored line.</p>
+
+        <h3 style="margin: 8px 0 6px;">Step A — Choose your pass</h3>
+        <div class="options" id="pass-options" role="radiogroup" aria-label="Pass choices"></div>
+        <div id="pass-math" style="margin-top: 16px;"></div>
+
+        <div id="step-b" style="margin-top: 24px; display: none;">
+          <h3 style="margin: 8px 0 6px;">Step B — Pick the right line</h3>
+          <p class="phase-subtitle">
+            You need to get from <strong>${SUBWAY_PROMPT.from}</strong>
+            to <strong>${SUBWAY_PROMPT.to}</strong>.
+            Hint: ${SUBWAY_PROMPT.hint}
+          </p>
+          <div class="line-buttons" id="line-buttons"></div>
+        </div>
+
+        <div class="feedback" id="p2-feedback" role="status"></div>
+      `;
+
+      // Step A — pass cards
+      const opts = card.querySelector('#pass-options');
+      PASSES.forEach((p) => {
+        const btn = document.createElement('button');
+        btn.className = 'option';
+        btn.setAttribute('role', 'radio');
+        btn.innerHTML = `
+          <span class="opt-title">${p.label}</span>
+          <span class="opt-meta">${p.blurb}</span>
+          <span class="opt-meta"><strong>$${p.cost}</strong></span>
+        `;
+        btn.addEventListener('click', () => selectPass(p, card));
+        opts.appendChild(btn);
+      });
+
+      return card;
+    }
+
+    function selectPass(pass, card) {
+      // Highlight selection
+      card.querySelectorAll('#pass-options .option').forEach((b) => {
+        const isThis = b.querySelector('.opt-title').textContent === pass.label;
+        b.classList.toggle('selected', isThis);
+        b.setAttribute('aria-checked', isThis ? 'true' : 'false');
+      });
+
+      // Subtraction prompt
+      const correctRemaining = state.budget - pass.cost;
+      const choices = shuffle([
+        correctRemaining,
+        correctRemaining + 5,
+        correctRemaining - 5,
+      ]).map(n => `$${n}`);
+
+      const mathBox = card.querySelector('#pass-math');
+      mathBox.innerHTML = `
+        <p class="phase-subtitle">
+          You have <strong>$${state.budget}</strong>. The pass costs <strong>$${pass.cost}</strong>.
+          How much will you have left?
+        </p>
+        <div class="options" id="math-options" role="radiogroup" aria-label="Subtraction answers"></div>
+      `;
+      const mopts = mathBox.querySelector('#math-options');
+      choices.forEach((c) => {
+        const b = document.createElement('button');
+        b.className = 'option';
+        b.innerHTML = `<span class="opt-title">${c}</span>`;
+        b.addEventListener('click', () => checkPassMath(c, '$' + correctRemaining, b, card, pass));
+        mopts.appendChild(b);
+      });
+    }
+
+    function checkPassMath(picked, correct, btn, card, pass) {
+      const fb = card.querySelector('#p2-feedback');
+      if (picked === correct) {
+        btn.classList.add('correct');
+        showFeedback(fb, 'ok', `✓ Yes! ${correct} left after buying the ${pass.label}.`);
+        state.pass = pass;
+        state.budget -= pass.cost;
+        updateTrackers();
+        card.querySelectorAll('#math-options .option').forEach(b => b.disabled = true);
+        // Reveal Step B
+        const stepB = card.querySelector('#step-b');
+        stepB.style.display = 'block';
+        buildLineButtons(card);
+      } else {
+        btn.classList.add('wrong');
+        btn.disabled = true;
+        showFeedback(fb, 'hint', '🤔 Count down by 5s, or use the budget tracker in the header to help.');
+        playChime('hint');
+      }
+    }
+
+    function buildLineButtons(card) {
+      const wrap = card.querySelector('#line-buttons');
+      wrap.innerHTML = '';
+      ['Red', 'Green', 'Blue', 'Orange'].forEach((name) => {
+        const b = document.createElement('button');
+        b.className = 'line-btn ' + name.toLowerCase();
+        b.textContent = name + ' Line';
+        b.setAttribute('aria-label', name + ' Line');
+        b.addEventListener('click', () => checkLine(name, b, card));
+        wrap.appendChild(b);
+      });
+    }
+
+    function checkLine(name, btn, card) {
+      const fb = card.querySelector('#p2-feedback');
+      if (name === SUBWAY_PROMPT.correctLine) {
+        btn.classList.add('correct');
+        showFeedback(fb, 'ok', `✓ Perfect! The ${name} Line goes from ${SUBWAY_PROMPT.from} to ${SUBWAY_PROMPT.to}.`);
+        awardStamp('Subway Navigator');
+        card.querySelectorAll('.line-btn').forEach(b => b.disabled = true);
+        setTimeout(() => { state.phase = 3; renderApp(); }, 1000);
+      } else {
+        btn.classList.add('wrong');
+        btn.disabled = true;
+        showFeedback(fb, 'hint', `🤔 Try a different color. ${SUBWAY_PROMPT.hint}`);
+        playChime('hint');
+      }
+    }
+
+    /* =========================================================
+       === PHASE 3: ATTRACTIONS MENU ===
+       ========================================================= */
+    function renderPhase3() {
+      const card = document.createElement('section');
+      card.className = 'card phase-card';
+      card.innerHTML = `
+        <div class="phase-head">
+          <div class="phase-badge">3</div>
+          <h2 class="phase-title">Pick Two Attractions</h2>
+        </div>
+        <p class="phase-subtitle">Choose <strong>two</strong> places to visit. Add up the cost and the hours!</p>
+        <div class="dest-grid" id="dest-grid"></div>
+        <div class="totals-bar" id="totals">
+          <span class="totals-item">Picked: <span class="v" id="t-picked">0/2</span></span>
+          <span class="totals-item">Cost: <span class="v" id="t-cost">$0</span></span>
+          <span class="totals-item">Hours: <span class="v" id="t-hours">0</span></span>
+          <span class="totals-item">Budget left: <span class="v" id="t-budget">$${state.budget}</span></span>
+        </div>
+        <div style="margin-top: 16px;">
+          <button class="btn" id="confirm-dest" disabled>Confirm My Picks</button>
+        </div>
+        <div class="feedback" id="p3-feedback" role="status"></div>
+      `;
+
+      const grid = card.querySelector('#dest-grid');
+      const picks = []; // indexes
+
+      DESTINATIONS.forEach((d, idx) => {
+        const c = document.createElement('button');
+        c.className = 'dest-card';
+        c.setAttribute('aria-pressed', 'false');
+        c.innerHTML = `
+          <span class="emoji" aria-hidden="true">${d.emoji}</span>
+          <span class="name">${d.name}</span>
+          <span class="cat">${d.category}</span>
+          <span class="meta">
+            <span class="price">$${d.cost}</span>
+            <span class="hours">${d.hours} hr</span>
+          </span>
+        `;
+        // Add line chip with proper color dot
+        const metaRow = c.querySelector('.meta');
+        metaRow.appendChild(lineChip(d.line));
+
+        c.addEventListener('click', () => {
+          const i = picks.indexOf(idx);
+          if (i >= 0) {
+            picks.splice(i, 1);
+            c.classList.remove('selected');
+            c.setAttribute('aria-pressed', 'false');
+          } else {
+            if (picks.length >= 2) {
+              showFeedback(card.querySelector('#p3-feedback'), 'hint',
+                '🤔 You already picked 2. Tap one to unpick it first.');
+              return;
+            }
+            picks.push(idx);
+            c.classList.add('selected');
+            c.setAttribute('aria-pressed', 'true');
+          }
+          updateTotals(picks, card);
+        });
+
+        grid.appendChild(c);
+      });
+
+      card.querySelector('#confirm-dest').addEventListener('click', () => confirmDests(picks, card));
+      return card;
+    }
+
+    function updateTotals(picks, card) {
+      const chosen = picks.map(i => DESTINATIONS[i]);
+      const totalCost  = chosen.reduce((s, d) => s + d.cost,  0);
+      const totalHours = chosen.reduce((s, d) => s + d.hours, 0);
+      card.querySelector('#t-picked').textContent = picks.length + '/2';
+      card.querySelector('#t-cost').textContent   = '$' + totalCost;
+      card.querySelector('#t-hours').textContent  = totalHours;
+      card.querySelector('#t-budget').textContent = '$' + state.budget;
+
+      const btn = card.querySelector('#confirm-dest');
+      const overBudget = totalCost > state.budget;
+      btn.disabled = (picks.length !== 2) || overBudget;
+      const fb = card.querySelector('#p3-feedback');
+      if (overBudget) {
+        showFeedback(fb, 'hint', `🤔 That's $${totalCost}, but you only have $${state.budget}. Try picking a cheaper combo.`);
+      } else {
+        fb.className = 'feedback'; fb.textContent = '';
+      }
+    }
+
+    function confirmDests(picks, card) {
+      const chosen = picks.map(i => DESTINATIONS[i]);
+      const totalCost  = chosen.reduce((s, d) => s + d.cost,  0);
+      const totalHours = chosen.reduce((s, d) => s + d.hours, 0);
+      state.destinations = chosen;
+      state.budget    -= totalCost;
+      state.hoursAway += totalHours;
+      updateTrackers();
+      awardStamp('Boston Explorer');
+      showFeedback(card.querySelector('#p3-feedback'), 'ok',
+        `✓ Great picks! $${totalCost} spent, ${totalHours} hours of fun.`);
+      setTimeout(() => { state.phase = 4; renderApp(); }, 1000);
+    }
+
+    /* =========================================================
+       === PHASE 4: ITINERARY SUMMARY ===
+       ========================================================= */
+    function renderPhase4() {
+      const card = document.createElement('section');
+      card.className = 'card phase-card';
+
+      const totalSpent     = STARTING_BUDGET - state.budget;
+      const totalDestHours = state.destinations.reduce((s, d) => s + d.hours, 0);
+      // +1 hour buffer covers subway rides and walking between attractions
+      const returnTrainMin = parseTime(state.arrivalTime) + (totalDestHours * 60) + 60;
+      const returnRounded  = Math.round(returnTrainMin / 30) * 30;
+      const returnHomeMin  = returnRounded + (state.train.durationHours * 60);
+      // Full round-trip time away from home
+      const totalHoursAway = (state.train.durationHours * 2) + totalDestHours + 1;
+
+      card.innerHTML = `
+        <div class="phase-head">
+          <div class="phase-badge">4</div>
+          <h2 class="phase-title">Your Trip Itinerary</h2>
+        </div>
+        <p class="phase-subtitle">Here is your full day in Boston!</p>
+
+        <div style="background:#FAFCFF; border:2px solid #D2D8E8; border-radius:12px; padding:18px;">
+          <h3 style="margin-top:0;">🚆 Train to Boston</h3>
+          <p>You took the <strong>${state.train.label}</strong> train.</p>
+          <p>Left Portland at <strong>${state.train.depart}</strong>.</p>
+          <p>Arrived at Boston North Station at <strong>${state.arrivalTime}</strong>.</p>
+
+          <h3>🚇 Subway</h3>
+          <p>Bought a <strong>${state.pass.label}</strong> for <strong>$${state.pass.cost}</strong>.</p>
+          <p>Took the <strong>${SUBWAY_PROMPT.correctLine} Line</strong> from ${SUBWAY_PROMPT.from} to ${SUBWAY_PROMPT.to}.</p>
+
+          <h3>🗺️ Attractions</h3>
+          <ul id="dest-summary" style="padding-left: 20px; margin: 0 0 12px;"></ul>
+
+          <h3>📊 Trip Totals</h3>
+          <p>Total spent today: <strong>$${totalSpent}</strong> of $${STARTING_BUDGET}.</p>
+          <p>Money left over: <strong>$${state.budget}</strong>.</p>
+          <p>Hours away from home: <strong>${totalHoursAway} hours</strong>
+             <span style="color: var(--ink-soft); font-size: 15px;">(${state.train.durationHours} hr train + ${totalDestHours} hr attractions + 1 hr subway/walk + ${state.train.durationHours} hr train home)</span>
+          </p>
+
+          <h3>🏠 Heading Home</h3>
+          <p>Return train leaves Boston around <strong>${formatTime(returnRounded)}</strong>.</p>
+          <p>You'll be home in Portland by <strong>${formatTime(returnHomeMin)}</strong>.</p>
+        </div>
+
+        <div class="no-print" style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+          <button class="btn" id="print-btn">🖨️ Print Itinerary</button>
+          <button class="btn secondary" id="restart-btn">↻ Start Over</button>
+        </div>
+      `;
+
+      const ul = card.querySelector('#dest-summary');
+      state.destinations.forEach(d => {
+        const li = document.createElement('li');
+        li.style.marginBottom = '6px';
+        li.innerHTML = `${d.emoji} <strong>${d.name}</strong> — $${d.cost}, ${d.hours} hr `;
+        li.appendChild(lineChip(d.line));
+        ul.appendChild(li);
+      });
+
+      card.querySelector('#print-btn').addEventListener('click', () => window.print());
+      card.querySelector('#restart-btn').addEventListener('click', () => {
+        // Reset all state and re-render
+        state.phase = 1;
+        state.budget = STARTING_BUDGET;
+        state.hoursAway = 0;
+        state.train = null;
+        state.arrivalTime = null;
+        state.pass = null;
+        state.destinations = [];
+        state.stamps = [];
+        document.querySelectorAll('.stamp').forEach(s => s.classList.remove('unlocked'));
+        updateTrackers();
+        renderApp();
+      });
+
+      return card;
+    }
+
+    /* =========================================================
+       === LOCKED-PHASE PLACEHOLDERS ===
+       ========================================================= */
+    function renderLocked(num, title) {
+      const card = document.createElement('section');
+      card.className = 'card phase-card phase-locked';
+      card.setAttribute('aria-disabled', 'true');
+      card.innerHTML = `
+        <div class="phase-head">
+          <div class="phase-badge">${num}</div>
+          <h2 class="phase-title">${title}</h2>
+        </div>
+        <div class="lock-note">🔒 Finish Phase ${num - 1} to unlock this step.</div>
+      `;
+      return card;
+    }
+
+    /* =========================================================
+       === RENDER APP (orchestrator) ===
+       ========================================================= */
+    function renderApp() {
+      const root = document.getElementById('phase-root');
+      root.innerHTML = '';
+      const phaseTitles = {
+        1: 'The Downeaster Departure',
+        2: 'The Subway Connection',
+        3: 'Pick Two Attractions',
+        4: 'Your Trip Itinerary',
+      };
+      const builders = { 1: renderPhase1, 2: renderPhase2, 3: renderPhase3, 4: renderPhase4 };
+
+      for (let p = 1; p <= 4; p++) {
+        if (p === state.phase) {
+          root.appendChild(builders[p]());
+        } else if (p < state.phase) {
+          // Show completed phases as a compact summary line
+          const done = document.createElement('section');
+          done.className = 'card phase-card';
+          done.style.background = '#F0FFF4';
+          done.innerHTML = `
+            <div class="phase-head">
+              <div class="phase-badge" style="background: var(--green);">✓</div>
+              <h2 class="phase-title">Phase ${p} Complete: ${phaseTitles[p]}</h2>
+            </div>
+          `;
+          root.appendChild(done);
+        } else {
+          root.appendChild(renderLocked(p, phaseTitles[p]));
+        }
+      }
+    }
+
+    /* =========================================================
+       === TIME HELPER (always-on sidebar tool) ===
+       ========================================================= */
+    function initTimeHelper() {
+      const startSel = document.getElementById('th-start');
+      const endRange = document.getElementById('th-end');
+      const ticks    = document.getElementById('th-ticks');
+      const out      = document.getElementById('th-out');
+
+      // Start dropdown: 30-min steps from 6:00 AM to 8:00 PM
+      const startOptions = [];
+      for (let m = 6 * 60; m <= 20 * 60; m += 30) startOptions.push(m);
+      startOptions.forEach((m) => {
+        const opt = document.createElement('option');
+        opt.value = m;
+        opt.textContent = formatTime(m);
+        if (m === 8 * 60) opt.selected = true; // default to 8:00 AM
+        startSel.appendChild(opt);
+      });
+
+      // Build 13 hour-tick blocks (covers 0-12 hours of duration)
+      for (let i = 0; i < 13; i++) {
+        const t = document.createElement('div');
+        t.className = 'tick';
+        t.textContent = i;
+        ticks.appendChild(t);
+      }
+
+      function refresh() {
+        const startMin = parseInt(startSel.value, 10);
+        // Slider step = 1 = 30 minutes
+        const halfHours = parseInt(endRange.value, 10);
+        const durationMin = halfHours * 30;
+        const endMin = startMin + durationMin;
+        const hours = (durationMin / 60);
+        const hoursLabel = (hours === 1) ? '1 hour' : `${hours} hours`;
+        out.textContent = `From ${formatTime(startMin)} to ${formatTime(endMin)} = ${hoursLabel}`;
+        endRange.setAttribute('aria-valuenow', halfHours);
+        endRange.setAttribute('aria-valuetext', hoursLabel);
+        // Highlight ticks up to the whole-hour count
+        const wholeHours = Math.floor(hours);
+        document.querySelectorAll('#th-ticks .tick').forEach((el, idx) => {
+          el.classList.toggle('active', idx > 0 && idx <= wholeHours);
+        });
+      }
+
+      startSel.addEventListener('change', refresh);
+      endRange.addEventListener('input', refresh);
+      refresh();
+    }
+
+    /* =========================================================
+       === UTILITY: Fisher-Yates shuffle ===
+       ========================================================= */
+    function shuffle(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    /* =========================================================
+       === INIT ===
+       ========================================================= */
+    document.addEventListener('DOMContentLoaded', () => {
+      initTimeHelper();
+      updateTrackers();
+      renderApp();
+    });
+  </script>
+</body>
+</html>
