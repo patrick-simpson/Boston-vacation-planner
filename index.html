@@ -7,8 +7,8 @@
   <style>
     /* =========================================================
        1. RESET & DESIGN TOKENS
-       Fun, kid-friendly palette layered on top of an
-       accessible, high-contrast, dyslexia-friendly base.
+       Fun, kid-friendly palette on an accessible,
+       high-contrast, dyslexia-friendly base.
        ========================================================= */
     *, *::before, *::after { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; }
@@ -41,7 +41,6 @@
       font-size: 19px;
       line-height: 1.55;
       color: var(--ink);
-      /* Playful but soft background so dark text stays readable */
       background:
         radial-gradient(circle at 12% -10%, #DCEBFF 0%, transparent 45%),
         radial-gradient(circle at 92% 0%, #FFE9C7 0%, transparent 40%),
@@ -80,8 +79,7 @@
     /* ---- Header ---- */
     header.app-header {
       grid-area: header;
-      background:
-        linear-gradient(120deg, var(--navy) 0%, var(--sky) 60%, var(--grape) 100%);
+      background: linear-gradient(120deg, var(--navy) 0%, var(--sky) 60%, var(--grape) 100%);
       color: white;
       border-radius: var(--radius);
       padding: 18px 22px;
@@ -93,7 +91,6 @@
       position: relative;
       overflow: hidden;
     }
-    /* Decorative dotted "track" stripe */
     header.app-header::after {
       content: "";
       position: absolute;
@@ -127,7 +124,6 @@
     .tracker .label { color: var(--ink-soft); font-weight: 600; font-size: 15px; }
     .tracker .value { color: var(--navy-dark); font-size: 22px; }
 
-    /* Settings (teacher) gear button */
     .gear-btn {
       background: rgba(255,255,255,0.18);
       color: white;
@@ -171,7 +167,7 @@
       transition: background 0.2s, color 0.2s, transform 0.2s;
     }
     .journey-step .j-ico {
-      font-size: 26px;
+      font-size: 24px;
       filter: grayscale(0.7);
       opacity: 0.55;
       transition: filter 0.2s, opacity 0.2s, transform 0.2s;
@@ -182,7 +178,7 @@
       right: -6px; top: 50%;
       transform: translateY(-50%);
       color: #C8D0E4;
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 800;
     }
     .journey-step.done   { color: var(--green); }
@@ -210,61 +206,34 @@
     .phase-card { padding: 28px; position: relative; }
     .phase-card + .phase-card { margin-top: var(--gap); }
 
-    .phase-head {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 14px;
-    }
+    .phase-head { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
     .phase-badge {
       background: linear-gradient(135deg, var(--sky), var(--grape));
       color: white;
       width: 52px; height: 52px;
       border-radius: 16px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 26px;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 26px;
       flex-shrink: 0;
       box-shadow: var(--shadow);
       transform: rotate(-4deg);
     }
-    .phase-title {
-      font-size: 27px;
-      font-weight: 800;
-      margin: 0;
-      color: var(--ink);
-    }
-    .phase-subtitle {
-      margin: 0 0 18px;
-      color: var(--ink-soft);
-      font-size: 17px;
-    }
+    .phase-title { font-size: 27px; font-weight: 800; margin: 0; color: var(--ink); }
+    .phase-subtitle { margin: 0 0 18px; color: var(--ink-soft); font-size: 17px; }
     .step-label {
       display: inline-block;
-      background: var(--sun);
-      color: #5a4500;
-      font-weight: 800;
-      font-size: 14px;
-      padding: 3px 12px;
-      border-radius: 999px;
+      background: var(--sun); color: #5a4500;
+      font-weight: 800; font-size: 14px;
+      padding: 3px 12px; border-radius: 999px;
       margin: 6px 0;
     }
 
     .phase-locked { opacity: 0.5; }
     .phase-locked .phase-badge { background: #B6BCCB; transform: none; }
-    .lock-note {
-      background: #F0F2F8;
-      color: var(--ink-soft);
-      border-radius: 12px;
-      padding: 14px 16px;
-      font-size: 16px;
-    }
+    .lock-note { background: #F0F2F8; color: var(--ink-soft); border-radius: 12px; padding: 14px 16px; font-size: 16px; }
     .phase-done-card { background: linear-gradient(135deg, #F0FFF6, #E8FBEF); }
     .phase-done-card .phase-badge { background: var(--green); transform: none; }
 
-    /* Generic option card (train / pass / answer) */
     .options {
       display: grid;
       gap: 12px;
@@ -280,11 +249,8 @@
       font-size: 18px;
       text-align: left;
       transition: transform 0.1s, border-color 0.15s, background 0.15s, box-shadow 0.15s;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      font-family: inherit;
-      color: var(--ink);
+      display: flex; flex-direction: column; gap: 6px;
+      font-family: inherit; color: var(--ink);
     }
     .option:hover { border-color: var(--sky); transform: translateY(-2px); box-shadow: var(--shadow); }
     .option:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
@@ -294,18 +260,11 @@
     .option .opt-title { font-weight: 800; font-size: 19px; }
     .option .opt-meta  { color: var(--ink-soft); font-size: 16px; }
 
-    /* Primary action button */
     .btn {
       background: linear-gradient(135deg, var(--sky), var(--navy));
-      color: white;
-      border: none;
-      border-radius: 12px;
-      padding: 14px 26px;
-      font-size: 19px;
-      font-weight: 800;
-      cursor: pointer;
-      font-family: inherit;
-      box-shadow: var(--shadow);
+      color: white; border: none; border-radius: 12px;
+      padding: 14px 26px; font-size: 19px; font-weight: 800;
+      cursor: pointer; font-family: inherit; box-shadow: var(--shadow);
       transition: filter 0.15s, transform 0.08s;
     }
     .btn:hover:not(:disabled) { filter: brightness(1.08); transform: translateY(-2px); }
@@ -317,155 +276,112 @@
     .btn.small { padding: 8px 14px; font-size: 15px; border-radius: 10px; }
     .btn.danger { background: linear-gradient(135deg, #E2574C, #C0392B); }
 
-    /* Subway color buttons */
-    .line-buttons {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 12px;
-      margin-top: 12px;
-    }
+    .line-buttons { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 12px; }
     .line-btn {
-      border: 4px solid var(--ink);
-      border-radius: 14px;
-      padding: 24px 16px;
-      font-size: 22px;
-      font-weight: 800;
-      color: white;
-      cursor: pointer;
-      font-family: inherit;
-      box-shadow: var(--shadow);
+      border: 4px solid var(--ink); border-radius: 14px;
+      padding: 24px 16px; font-size: 22px; font-weight: 800;
+      color: white; cursor: pointer; font-family: inherit; box-shadow: var(--shadow);
       transition: transform 0.1s, box-shadow 0.15s;
     }
     .line-btn:hover { transform: translateY(-3px) scale(1.02); }
     .line-btn:focus-visible { outline: 4px solid var(--gold); outline-offset: 3px; }
-    .line-btn.red    { background: var(--line-red); }
-    .line-btn.green  { background: var(--line-green); }
-    .line-btn.blue   { background: var(--line-blue); }
+    .line-btn.red { background: var(--line-red); }
+    .line-btn.green { background: var(--line-green); }
+    .line-btn.blue { background: var(--line-blue); }
     .line-btn.orange { background: var(--line-orange); }
     .line-btn.correct { box-shadow: 0 0 0 6px var(--green); }
-    .line-btn.wrong   { box-shadow: 0 0 0 6px #C0392B; opacity: 0.55; }
+    .line-btn.wrong { box-shadow: 0 0 0 6px #C0392B; opacity: 0.55; }
 
-    /* Line color chip */
-    .chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #EEF3FF;
-      color: var(--ink);
-      border-radius: 999px;
-      padding: 3px 12px;
-      font-size: 15px;
-      font-weight: 700;
-    }
-    .chip .dot {
-      width: 14px; height: 14px; border-radius: 50%;
-      border: 2px solid white;
-      box-shadow: 0 0 0 1px var(--ink-soft);
-    }
+    .chip { display: inline-flex; align-items: center; gap: 6px; background: #EEF3FF; color: var(--ink); border-radius: 999px; padding: 3px 12px; font-size: 15px; font-weight: 700; }
+    .chip .dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 0 1px var(--ink-soft); }
 
-    /* Destination grid (Phase 3) */
-    .dest-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 14px;
-      margin-top: 10px;
-    }
-    .dest-card {
+    /* Selection card grids (attractions, foods, souvenirs) */
+    .pick-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; margin-top: 10px; }
+    .pick-card {
       background: var(--paper);
       border: 3px solid #E2E6F0;
       border-radius: 16px;
       padding: 16px;
       cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      text-align: left;
-      font-family: inherit;
-      color: var(--ink);
+      display: flex; flex-direction: column; gap: 6px;
+      text-align: left; font-family: inherit; color: var(--ink);
       transition: border-color 0.15s, transform 0.1s, background 0.15s, box-shadow 0.15s;
     }
-    .dest-card:hover { border-color: var(--sky); transform: translateY(-3px); box-shadow: var(--shadow); }
-    .dest-card:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
-    .dest-card.selected { border-color: var(--green); background: var(--green-soft); }
-    .dest-card .emoji { font-size: 40px; line-height: 1; }
-    .dest-card .name  { font-weight: 800; font-size: 18px; line-height: 1.25; }
-    .dest-card .cat   { color: var(--ink-soft); font-size: 15px; }
-    .dest-card .meta  { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 4px; }
-    .dest-card .price { font-weight: 800; }
-    .dest-card .hours { color: var(--ink-soft); }
+    .pick-card:hover { border-color: var(--sky); transform: translateY(-3px); box-shadow: var(--shadow); }
+    .pick-card:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+    .pick-card.selected { border-color: var(--green); background: var(--green-soft); }
+    .pick-card .emoji { font-size: 38px; line-height: 1; }
+    .pick-card .name { font-weight: 800; font-size: 18px; line-height: 1.25; }
+    .pick-card .cat { color: var(--ink-soft); font-size: 15px; }
+    .pick-card .fact { font-size: 14px; font-style: italic; color: #5B5070; }
+    .pick-card .meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 4px; }
+    .pick-card .price { font-weight: 800; }
+    .pick-card .hours { color: var(--ink-soft); }
 
     .totals-bar {
-      margin-top: 18px;
-      padding: 14px 16px;
+      margin-top: 18px; padding: 14px 16px;
       background: linear-gradient(135deg, #EEF4FF, #F7FBFF);
-      border: 2px dashed var(--sky);
-      border-radius: 14px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 18px;
-      align-items: center;
-      font-size: 17px;
-      font-weight: 700;
+      border: 2px dashed var(--sky); border-radius: 14px;
+      display: flex; flex-wrap: wrap; gap: 18px; align-items: center;
+      font-size: 17px; font-weight: 700;
     }
     .totals-bar .totals-item { color: var(--ink); }
     .totals-bar .totals-item .v { color: var(--navy-dark); font-size: 20px; }
 
-    /* Feedback box */
-    .feedback {
-      margin-top: 18px;
-      padding: 14px 16px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 17px;
-      display: none;
-    }
+    .feedback { margin-top: 18px; padding: 14px 16px; border-radius: 12px; font-weight: 700; font-size: 17px; display: none; }
     .feedback.ok   { display: block; background: var(--green-soft); color: #155724; border: 2px solid var(--green); }
     .feedback.hint { display: block; background: #FFF4D6; color: #6A4A00; border: 2px solid var(--gold); }
 
-    /* Itinerary summary */
-    .summary-box {
-      background: linear-gradient(180deg, #FAFCFF, #FFF8EE);
-      border: 2px solid #D2D8E8;
-      border-radius: 16px;
-      padding: 20px;
+    /* =========================================================
+       4. INTERACTIVE CLOCK
+       ========================================================= */
+    .clock { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 14px; }
+    .clock-face { width: 200px; height: 200px; max-width: 62vw; }
+    .clock-rim { fill: #fff; stroke: var(--navy); stroke-width: 4; }
+    .clock-cap { fill: var(--navy); }
+    .clock-tick { stroke: #9aa3bd; stroke-width: 2; }
+    .hand { stroke-linecap: round; }
+    .hand.hour { stroke: var(--navy); stroke-width: 6; }
+    .hand.minute { stroke: var(--sky); stroke-width: 4; }
+    .clock-controls { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; align-items: center; }
+    .stepper { display: flex; align-items: center; gap: 8px; font-weight: 800; }
+    .clock-readout {
+      font-size: 30px; font-weight: 800; color: var(--navy-dark);
+      background: #EAF2FF; border-radius: 12px; padding: 6px 18px;
     }
-    .summary-box h3 { margin: 18px 0 6px; font-size: 20px; }
-    .summary-box h3:first-child { margin-top: 0; }
+    .num-input { font-family: inherit; font-size: 22px; padding: 8px 10px; border: 2px solid #D2D8E8; border-radius: 10px; font-weight: 800; }
 
     /* =========================================================
-       4. PASSPORT (sidebar)
+       5. CERTIFICATE
        ========================================================= */
-    .passport h2 {
-      margin: 0 0 12px;
-      font-size: 22px;
-      display: flex; align-items: center; gap: 8px;
+    .certificate {
+      border: 6px double var(--gold);
+      border-radius: 18px;
+      padding: 26px;
+      background: linear-gradient(180deg, #FFFDF5, #FFF8E9);
+      text-align: center;
     }
+    .certificate h2 { font-size: 30px; margin: 0 0 4px; }
+    .cert-name { font-size: 26px; font-weight: 800; color: var(--navy); }
+    .cert-date { color: var(--ink-soft); margin-bottom: 8px; }
+    .cert-stamps { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 14px 0; }
+    .cert-stamp { background: var(--green-soft); border: 2px solid var(--green); border-radius: 999px; padding: 4px 12px; font-weight: 700; font-size: 15px; }
+    .cert-section { text-align: left; background: rgba(255,255,255,0.7); border-radius: 12px; padding: 14px 18px; margin-top: 14px; }
+    .cert-section h3 { margin: 14px 0 6px; font-size: 19px; }
+    .cert-section h3:first-child { margin-top: 0; }
+    .cert-section ul { margin: 0 0 8px; padding-left: 20px; }
+    .cert-section li { margin-bottom: 6px; }
+    .cert-fact { font-style: italic; color: #5B5070; font-size: 15px; }
+
+    /* =========================================================
+       6. PASSPORT (sidebar)
+       ========================================================= */
+    .passport h2 { margin: 0 0 12px; font-size: 22px; display: flex; align-items: center; gap: 8px; }
     .stamps { display: flex; flex-direction: column; gap: 10px; }
-    .stamp {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px;
-      border-radius: 12px;
-      background: #F4F7FF;
-      border: 2px dashed #C8D0E4;
-      color: var(--ink-soft);
-    }
-    .stamp .seal {
-      width: 48px; height: 48px;
-      border-radius: 50%;
-      background: #D9DEEC;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 24px;
-      flex-shrink: 0;
-    }
+    .stamp { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: #F4F7FF; border: 2px dashed #C8D0E4; color: var(--ink-soft); }
+    .stamp .seal { width: 48px; height: 48px; border-radius: 50%; background: #D9DEEC; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
     .stamp .stamp-name { font-weight: 700; }
-    .stamp.unlocked {
-      background: linear-gradient(135deg, #E8FBEF, var(--green-soft));
-      border: 2px solid var(--green);
-      color: var(--ink);
-      animation: stampIn 0.5s ease-out;
-    }
+    .stamp.unlocked { background: linear-gradient(135deg, #E8FBEF, var(--green-soft)); border: 2px solid var(--green); color: var(--ink); animation: stampIn 0.5s ease-out; }
     .stamp.unlocked .seal { background: var(--green); color: white; }
     @keyframes stampIn {
       0%   { transform: scale(1.4) rotate(-12deg); opacity: 0; }
@@ -474,13 +390,9 @@
     }
 
     /* =========================================================
-       5. TIME HELPER (sidebar)
+       7. TIME HELPER (sidebar)
        ========================================================= */
-    .time-helper h2 {
-      margin: 0 0 8px;
-      font-size: 22px;
-      display: flex; align-items: center; gap: 8px;
-    }
+    .time-helper h2 { margin: 0 0 8px; font-size: 22px; display: flex; align-items: center; gap: 8px; }
     .time-helper p.help-text { margin: 0 0 12px; font-size: 15px; color: var(--ink-soft); }
     .time-helper .row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
     .time-helper label { font-weight: 700; font-size: 15px; }
@@ -488,186 +400,85 @@
     .time-helper select { padding: 6px 10px; border-radius: 8px; border: 2px solid #D2D8E8; background: white; }
     .time-helper input[type=range] { width: 100%; accent-color: var(--green); }
     .time-helper .ticks { display: flex; gap: 2px; margin-top: 6px; }
-    .time-helper .tick {
-      flex: 1; height: 30px;
-      background: #ECEFF7;
-      border-radius: 4px;
-      font-size: 11px; color: var(--ink-soft);
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700;
-      transition: background 0.12s;
-    }
+    .time-helper .tick { flex: 1; height: 30px; background: #ECEFF7; border-radius: 4px; font-size: 11px; color: var(--ink-soft); display: flex; align-items: center; justify-content: center; font-weight: 700; transition: background 0.12s; }
     .time-helper .tick.active { background: var(--green); color: white; }
-    .time-helper .duration-out {
-      margin-top: 10px;
-      padding: 10px 12px;
-      background: linear-gradient(135deg, var(--sky), var(--navy));
-      color: white;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 17px;
-      text-align: center;
-    }
+    .time-helper .duration-out { margin-top: 10px; padding: 10px 12px; background: linear-gradient(135deg, var(--sky), var(--navy)); color: white; border-radius: 12px; font-weight: 700; font-size: 17px; text-align: center; }
 
     /* =========================================================
-       6. STANDARDS BADGES (toggle from Settings)
-       Hidden until <body> has .show-standards.
+       8. STANDARDS BADGES (toggle from Settings)
        ========================================================= */
     .std-badge {
-      display: none;
-      align-items: center;
-      gap: 4px;
-      vertical-align: middle;
-      background: #FBEEFF;
-      color: #5B2A86;
-      border: 1.5px solid #C99BE0;
-      border-radius: 999px;
-      padding: 2px 10px;
-      font-size: 13px;
-      font-weight: 800;
-      margin-left: 6px;
-      cursor: help;
-      white-space: nowrap;
+      display: none; align-items: center; gap: 4px; vertical-align: middle;
+      background: #FBEEFF; color: #5B2A86; border: 1.5px solid #C99BE0;
+      border-radius: 999px; padding: 2px 10px; font-size: 13px; font-weight: 800;
+      margin-left: 6px; cursor: help; white-space: nowrap;
     }
     .std-badge.skill { background: #E9F6FF; color: #14507A; border-color: #97C7E6; }
     body.show-standards .std-badge { display: inline-flex; }
 
     /* =========================================================
-       7. SETTINGS MODAL (teacher tools)
+       9. MODALS (Settings + Name)
        ========================================================= */
-    .modal-overlay {
-      position: fixed; inset: 0;
-      background: rgba(15, 23, 42, 0.55);
-      display: none;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 24px;
-      overflow: auto;
-      z-index: 50;
-    }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.55); display: none; align-items: flex-start; justify-content: center; padding: 24px; overflow: auto; z-index: 50; }
     .modal-overlay.open { display: flex; }
-    .modal {
-      background: var(--paper);
-      border-radius: 20px;
-      max-width: 820px;
-      width: 100%;
-      padding: 24px 26px;
-      box-shadow: var(--shadow-lg);
-    }
-    .modal-head {
-      display: flex; align-items: center; gap: 12px;
-      margin-bottom: 8px;
-    }
+    .modal { background: var(--paper); border-radius: 20px; max-width: 860px; width: 100%; padding: 24px 26px; box-shadow: var(--shadow-lg); }
+    .modal.narrow { max-width: 480px; }
+    .modal-head { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
     .modal-head h2 { margin: 0; font-size: 26px; flex: 1; }
     .modal-intro { color: var(--ink-soft); font-size: 15px; margin: 0 0 18px; }
-    .settings-section {
-      border: 2px solid #ECEFF7;
-      border-radius: 14px;
-      padding: 16px;
-      margin-bottom: 16px;
-    }
+    .settings-section { border: 2px solid #ECEFF7; border-radius: 14px; padding: 16px; margin-bottom: 16px; }
     .settings-section h3 { margin: 0 0 12px; font-size: 19px; display: flex; align-items: center; gap: 8px; }
-    .set-input, .set-select {
-      font-family: inherit;
-      font-size: 16px;
-      padding: 8px 10px;
-      border: 2px solid #D2D8E8;
-      border-radius: 8px;
-      width: 100%;
-      background: white;
-      color: var(--ink);
-    }
+    .set-input, .set-select { font-family: inherit; font-size: 16px; padding: 8px 10px; border: 2px solid #D2D8E8; border-radius: 8px; width: 100%; background: white; color: var(--ink); }
     .erows-scroll { overflow-x: auto; }
-    .erow-head, .erow {
-      display: grid;
-      gap: 8px;
-      align-items: center;
-      min-width: 520px;
-    }
+    .erow-head, .erow { display: grid; gap: 8px; align-items: center; }
     .erow-head { font-size: 13px; font-weight: 800; color: var(--ink-soft); margin-bottom: 6px; }
     .erow { margin-bottom: 8px; }
-    .erow.train     { grid-template-columns: 1.4fr 1.1fr 90px 44px; }
-    .erow-head.train{ grid-template-columns: 1.4fr 1.1fr 90px 44px; }
-    .erow.pass      { grid-template-columns: 1.2fr 90px 1.6fr 44px; }
-    .erow-head.pass { grid-template-columns: 1.2fr 90px 1.6fr 44px; }
-    .erow.dest      { grid-template-columns: 64px 1.6fr 1.3fr 110px 80px 80px 44px; }
-    .erow-head.dest { grid-template-columns: 64px 1.6fr 1.3fr 110px 80px 80px 44px; min-width: 760px; }
-    .erow.dest      { min-width: 760px; }
-    .row-del {
-      background: #FCE9E7; color: #C0392B;
-      border: 2px solid #F1B8B1; border-radius: 8px;
-      font-size: 18px; font-weight: 800; cursor: pointer;
-      height: 40px;
-    }
+    .erow.train,      .erow-head.train      { grid-template-columns: 1.4fr 1.1fr 90px 44px; min-width: 520px; }
+    .erow.pass,       .erow-head.pass       { grid-template-columns: 1.2fr 90px 1.6fr 44px; min-width: 520px; }
+    .erow.dest,       .erow-head.dest       { grid-template-columns: 64px 1.5fr 1.1fr 100px 76px 64px 1.8fr 44px; min-width: 900px; }
+    .erow.food,       .erow-head.food       { grid-template-columns: 64px 1.5fr 80px 64px 1.8fr 44px; min-width: 740px; }
+    .erow.souvenir,   .erow-head.souvenir   { grid-template-columns: 64px 1.6fr 90px 44px; min-width: 460px; }
+    .row-del { background: #FCE9E7; color: #C0392B; border: 2px solid #F1B8B1; border-radius: 8px; font-size: 18px; font-weight: 800; cursor: pointer; height: 40px; }
     .row-del:hover { background: #F8D7D2; }
     .switch-row { display: flex; align-items: center; gap: 14px; font-weight: 700; }
-    .switch {
-      position: relative; width: 60px; height: 32px; flex-shrink: 0;
-      display: inline-block;
-    }
+    .switch { position: relative; width: 60px; height: 32px; flex-shrink: 0; display: inline-block; }
     .switch input { opacity: 0; width: 0; height: 0; }
-    .switch .slider {
-      position: absolute; inset: 0;
-      background: #C8D0E4; border-radius: 999px;
-      transition: background 0.2s;
-    }
-    .switch .slider::before {
-      content: ""; position: absolute;
-      width: 24px; height: 24px; left: 4px; top: 4px;
-      background: white; border-radius: 50%;
-      transition: transform 0.2s;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-    }
+    .switch .slider { position: absolute; inset: 0; background: #C8D0E4; border-radius: 999px; transition: background 0.2s; }
+    .switch .slider::before { content: ""; position: absolute; width: 24px; height: 24px; left: 4px; top: 4px; background: white; border-radius: 50%; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
     .switch input:checked + .slider { background: var(--green); }
     .switch input:checked + .slider::before { transform: translateX(28px); }
     .switch input:focus-visible + .slider { outline: 3px solid var(--gold); outline-offset: 2px; }
-    .modal-foot {
-      display: flex; gap: 10px; flex-wrap: wrap;
-      justify-content: flex-end;
-      margin-top: 8px;
-    }
+    .modal-foot { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; margin-top: 8px; }
     .modal-foot .spacer { flex: 1; }
+    .field-label { display: block; font-weight: 700; font-size: 15px; margin-bottom: 4px; }
 
     /* =========================================================
-       8. CONFETTI
+       10. CONFETTI
        ========================================================= */
     #confetti { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 60; }
-    .confetti-bit {
-      position: absolute; top: -24px;
-      width: 12px; height: 14px; border-radius: 3px;
-      animation: fall 2.3s linear forwards;
-    }
-    @keyframes fall {
-      0%   { opacity: 1; }
-      100% { transform: translateY(108vh) rotate(720deg); opacity: 0.9; }
-    }
+    .confetti-bit { position: absolute; top: -24px; width: 12px; height: 14px; border-radius: 3px; animation: fall 2.3s linear forwards; }
+    @keyframes fall { 0% { opacity: 1; } 100% { transform: translateY(108vh) rotate(720deg); opacity: 0.9; } }
 
     /* =========================================================
-       9. PRINT
+       11. PRINT (certificate only)
        ========================================================= */
     @media print {
       body { background: white; }
       header.app-header, aside.sidebar, .journey, .no-print, .btn, .gear-btn { display: none !important; }
       .app { display: block; max-width: 100%; padding: 0; }
-      .card, .phase-card { box-shadow: none; border: 1px solid #999; }
-      body.show-standards .std-badge { display: inline-flex; } /* keep tags on printout for grading */
+      .card, .phase-card { box-shadow: none; border: none; }
+      .phase-done-card { display: none; }
+      body.show-standards .std-badge { display: inline-flex; }
     }
 
     /* =========================================================
-       10. REDUCED MOTION
+       12. REDUCED MOTION
        ========================================================= */
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
-      }
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     }
 
-    .sr-only {
-      position: absolute; width: 1px; height: 1px;
-      padding: 0; margin: -1px; overflow: hidden;
-      clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
-    }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
   </style>
 </head>
 <body>
@@ -678,7 +489,7 @@
       <h1 class="app-title"><span class="emoji" aria-hidden="true">🚆</span>Boston Transit Adventure</h1>
       <div class="tracker" role="status" aria-live="polite" aria-label="Budget remaining">
         <span class="label">Budget:</span>
-        <span class="value" id="budget-value">$50</span>
+        <span class="value" id="budget-value">$75</span>
       </div>
       <div class="tracker" role="status" aria-live="polite" aria-label="Hours away from home">
         <span class="label">Time Away:</span>
@@ -687,13 +498,8 @@
       <button class="gear-btn" id="open-settings" aria-label="Open teacher settings" title="Teacher settings">⚙️</button>
     </header>
 
-    <!-- ====== JOURNEY PROGRESS MAP ====== -->
-    <div class="journey" id="journey" aria-label="Trip progress">
-      <div class="journey-step" data-step="1"><span class="j-ico" aria-hidden="true">🚆</span><span>Train</span></div>
-      <div class="journey-step" data-step="2"><span class="j-ico" aria-hidden="true">🚇</span><span>Subway</span></div>
-      <div class="journey-step" data-step="3"><span class="j-ico" aria-hidden="true">🎡</span><span>Explore</span></div>
-      <div class="journey-step" data-step="4"><span class="j-ico" aria-hidden="true">🏆</span><span>Finish</span></div>
-    </div>
+    <!-- ====== JOURNEY PROGRESS MAP (rendered by JS from PHASES) ====== -->
+    <div class="journey" id="journey" aria-label="Trip progress"></div>
 
     <!-- ====== MAIN PHASE PANEL ====== -->
     <main class="phase-root" id="phase-root" aria-live="polite"></main>
@@ -702,20 +508,7 @@
     <aside class="sidebar" aria-label="Passport and Time Helper">
       <section class="card passport" aria-labelledby="passport-h">
         <h2 id="passport-h"><span aria-hidden="true">🛂</span> My Passport</h2>
-        <div class="stamps" id="stamps">
-          <div class="stamp" data-stamp="Train Conductor">
-            <div class="seal" aria-hidden="true">🚂</div>
-            <div class="stamp-name">Train Conductor</div>
-          </div>
-          <div class="stamp" data-stamp="Subway Navigator">
-            <div class="seal" aria-hidden="true">🚇</div>
-            <div class="stamp-name">Subway Navigator</div>
-          </div>
-          <div class="stamp" data-stamp="Boston Explorer">
-            <div class="seal" aria-hidden="true">🗽</div>
-            <div class="stamp-name">Boston Explorer</div>
-          </div>
-        </div>
+        <div class="stamps" id="stamps"></div>
       </section>
 
       <section class="card time-helper" aria-labelledby="th-h">
@@ -737,6 +530,20 @@
     </aside>
   </div>
 
+  <!-- ====== NAME OVERLAY ====== -->
+  <div class="modal-overlay" id="name-overlay" role="dialog" aria-modal="true" aria-labelledby="name-title">
+    <div class="modal narrow">
+      <div class="modal-head"><h2 id="name-title">👋 Welcome aboard!</h2></div>
+      <p class="modal-intro">Type your first name to start your Boston adventure. Your name will go on your passport and certificate.</p>
+      <label class="field-label" for="name-input">Your first name</label>
+      <input type="text" class="set-input" id="name-input" maxlength="20" placeholder="e.g., Alex" autocomplete="off">
+      <div class="modal-foot" style="margin-top:18px;">
+        <button class="btn secondary" id="name-skip">Skip</button>
+        <button class="btn" id="name-start">Start the trip 🚆</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ====== SETTINGS MODAL (teacher tools) ====== -->
   <div class="modal-overlay" id="settings-overlay" role="dialog" aria-modal="true" aria-labelledby="settings-title">
     <div class="modal">
@@ -751,21 +558,24 @@
       </p>
 
       <div class="settings-section">
-        <h3>👀 Maine Standards</h3>
-        <label class="switch-row">
-          <span class="switch">
-            <input type="checkbox" id="set-standards">
-            <span class="slider"></span>
-          </span>
+        <h3>🎚️ Difficulty &amp; Standards</h3>
+        <label class="field-label" for="set-difficulty">Difficulty level</label>
+        <select class="set-select" id="set-difficulty" style="max-width:320px;">
+          <option value="friendly">Friendly — multiple choice, 30-minute clock steps</option>
+          <option value="challenge">Challenge — type the money, 5-minute clock steps</option>
+        </select>
+        <label class="switch-row" style="margin-top:14px;">
+          <span class="switch"><input type="checkbox" id="set-standards"><span class="slider"></span></span>
           <span>Show which Maine standard each part of the page teaches</span>
         </label>
       </div>
 
       <div class="settings-section">
-        <h3>💰 Starting Budget</h3>
-        <label>Students start the day with $
-          <input type="number" class="set-input" id="set-budget" min="0" max="999" step="1" style="width:120px; display:inline-block;">
-        </label>
+        <h3>🧑‍🎓 Student &amp; Budget</h3>
+        <label class="field-label" for="set-name">Student name (optional)</label>
+        <input type="text" class="set-input" id="set-name" maxlength="20" style="max-width:320px;">
+        <label class="field-label" for="set-budget" style="margin-top:12px;">Starting budget $</label>
+        <input type="number" class="set-input" id="set-budget" min="0" max="999" step="1" style="width:120px;">
       </div>
 
       <div class="settings-section">
@@ -789,26 +599,40 @@
       <div class="settings-section">
         <h3>🚇 Subway Route (Phase 2)</h3>
         <div class="erow" style="grid-template-columns: 1fr 1fr; min-width:0;">
-          <label>From station<input type="text" class="set-input" id="set-from"></label>
-          <label>To station<input type="text" class="set-input" id="set-to"></label>
+          <label class="field-label">From station<input type="text" class="set-input" id="set-from"></label>
+          <label class="field-label">To station<input type="text" class="set-input" id="set-to"></label>
         </div>
         <div class="erow" style="grid-template-columns: 1fr 2fr; min-width:0; margin-top:8px;">
-          <label>Correct line
-            <select class="set-select" id="set-line"></select>
-          </label>
-          <label>Hint shown to students
-            <input type="text" class="set-input" id="set-hint">
-          </label>
+          <label class="field-label">Correct line<select class="set-select" id="set-line"></select></label>
+          <label class="field-label">Hint shown to students<input type="text" class="set-input" id="set-hint"></label>
         </div>
       </div>
 
       <div class="settings-section">
-        <h3>🗺️ Destinations (Phase 3)</h3>
+        <h3>🗺️ Attractions (Phase 3)</h3>
         <div class="erows-scroll">
-          <div class="erow-head dest"><span>Emoji</span><span>Name</span><span>Category</span><span>Line</span><span>Cost $</span><span>Hours</span><span></span></div>
+          <div class="erow-head dest"><span>Emoji</span><span>Name</span><span>Category</span><span>Line</span><span>Cost $</span><span>Hours</span><span>Fun fact</span><span></span></div>
           <div id="dests-rows"></div>
         </div>
-        <button class="btn secondary small" id="add-dest">+ Add destination</button>
+        <button class="btn secondary small" id="add-dest">+ Add attraction</button>
+      </div>
+
+      <div class="settings-section">
+        <h3>🍽️ Lunch Options (Phase 4)</h3>
+        <div class="erows-scroll">
+          <div class="erow-head food"><span>Emoji</span><span>Food</span><span>Cost $</span><span>Hours</span><span>Fun fact</span><span></span></div>
+          <div id="foods-rows"></div>
+        </div>
+        <button class="btn secondary small" id="add-food">+ Add lunch</button>
+      </div>
+
+      <div class="settings-section">
+        <h3>🎁 Souvenirs (Phase 5)</h3>
+        <div class="erows-scroll">
+          <div class="erow-head souvenir"><span>Emoji</span><span>Souvenir</span><span>Cost $</span><span></span></div>
+          <div id="souvenirs-rows"></div>
+        </div>
+        <button class="btn secondary small" id="add-souvenir">+ Add souvenir</button>
       </div>
 
       <div class="modal-foot">
@@ -825,19 +649,21 @@
   <script>
     /* =========================================================
        === DEFAULT LESSON DATA ===
-       This is the starting content. Teachers can change all of
-       it live from the ⚙️ Settings button (saved in the browser),
-       or edit these defaults directly in code for a permanent
-       change before hosting.
+       Teachers can change all of this from the ⚙️ Settings
+       button (saved in the browser), or edit these defaults in
+       code for a permanent change before hosting.
 
-       Rules that keep the math "friendly":
-         • Dollar amounts = whole dollars (no cents)
-         • Times = on the half hour
-         • Durations = whole hours
+       Friendly-number rules: whole dollars, half-hour times,
+       whole-hour durations.
        ========================================================= */
     const DEFAULT_CONFIG = {
-      // Day's spending money (whole dollars).
-      startingBudget: 50,
+      // 'friendly' = multiple-choice money + 30-min clock steps.
+      // 'challenge' = typed money + 5-min clock steps.
+      difficulty: 'friendly',
+
+      // Day's spending money (whole dollars). Roomy enough for a
+      // pass + two attractions + lunch + souvenirs.
+      startingBudget: 75,
 
       // Phase 1 — morning trains from Portland.
       trains: [
@@ -861,36 +687,70 @@
         hint: 'Look for the Green Line — it connects North Station to Park Street.',
       },
 
-      // Phase 3 — attractions menu.
+      // Phase 3 — attractions menu (each has a "Did you know?" fact).
       destinations: [
-        { name: 'Museum of Science',               line: 'Green',  category: 'Science / Interactive',    cost: 29, hours: 3, emoji: '🔬' },
-        { name: 'New England Aquarium',            line: 'Blue',   category: 'Animals / Nature',         cost: 32, hours: 2, emoji: '🐠' },
-        { name: "Boston Children's Museum",        line: 'Red',    category: 'Interactive / Play',       cost: 20, hours: 2, emoji: '🧸' },
-        { name: 'Boston Tea Party Ships & Museum', line: 'Red',    category: 'History / Transportation', cost: 30, hours: 2, emoji: '⛵' },
-        { name: 'USS Constitution Museum & Ship',  line: 'Green',  category: 'History / Transportation', cost: 15, hours: 2, emoji: '⚓' },
-        { name: 'Fenway Park Tour',                line: 'Green',  category: 'Sports / Recreation',      cost: 25, hours: 1, emoji: '⚾' },
-        { name: 'Boston Common & Swan Boats',      line: 'Green',  category: 'Nature / Outdoor',         cost: 5,  hours: 2, emoji: '🦢' },
-        { name: 'Franklin Park Zoo',               line: 'Orange', category: 'Animals / Nature',         cost: 22, hours: 3, emoji: '🦁' },
-        { name: 'Legoland Discovery Center',       line: 'Orange', category: 'Interactive / Play',       cost: 25, hours: 2, emoji: '🧱' },
-        { name: 'Kings Dining & Bowling',          line: 'Green',  category: 'Recreation / Indoor',      cost: 18, hours: 2, emoji: '🎳' },
+        { name: 'Museum of Science',               line: 'Green',  category: 'Science / Interactive',    cost: 29, hours: 3, emoji: '🔬', fact: 'It has a giant lightning show with real electricity!' },
+        { name: 'New England Aquarium',            line: 'Blue',   category: 'Animals / Nature',         cost: 32, hours: 2, emoji: '🐠', fact: 'Its giant ocean tank holds 200,000 gallons of water.' },
+        { name: "Boston Children's Museum",        line: 'Red',    category: 'Interactive / Play',       cost: 20, hours: 2, emoji: '🧸', fact: 'It is one of the oldest children’s museums in the world.' },
+        { name: 'Boston Tea Party Ships & Museum', line: 'Red',    category: 'History / Transportation', cost: 30, hours: 2, emoji: '⛵', fact: 'You can toss "tea" into the harbor like the colonists did in 1773.' },
+        { name: 'USS Constitution Museum & Ship',  line: 'Green',  category: 'History / Transportation', cost: 15, hours: 2, emoji: '⚓', fact: 'USS Constitution is the oldest warship still afloat in the world.' },
+        { name: 'Fenway Park Tour',                line: 'Green',  category: 'Sports / Recreation',      cost: 25, hours: 1, emoji: '⚾', fact: 'Fenway opened in 1912 and has a wall called the "Green Monster."' },
+        { name: 'Boston Common & Swan Boats',      line: 'Green',  category: 'Nature / Outdoor',         cost: 5,  hours: 2, emoji: '🦢', fact: 'Boston Common is the oldest public park in the United States.' },
+        { name: 'Franklin Park Zoo',               line: 'Orange', category: 'Animals / Nature',         cost: 22, hours: 3, emoji: '🦁', fact: 'It is home to gorillas, lions, and a tropical rainforest.' },
+        { name: 'Legoland Discovery Center',       line: 'Orange', category: 'Interactive / Play',       cost: 25, hours: 2, emoji: '🧱', fact: 'It has a model of Boston built from millions of LEGO bricks.' },
+        { name: 'Kings Dining & Bowling',          line: 'Green',  category: 'Recreation / Indoor',      cost: 18, hours: 2, emoji: '🎳', fact: 'You can bowl and play games all in one spot.' },
+        { name: 'Harvard University Tour',         line: 'Red',    category: 'Education / History',      cost: 10, hours: 2, emoji: '🎓', fact: 'Harvard opened in 1636 — the oldest college in the U.S.' },
+        { name: 'Skywalk Observatory',             line: 'Green',  category: 'Views / Indoor',           cost: 23, hours: 1, emoji: '🏙️', fact: 'See the whole city from 50 floors up!' },
+        { name: 'Boston Public Library',           line: 'Green',  category: 'Reading / History',        cost: 0,  hours: 1, emoji: '📚', fact: 'It opened in 1848 and is free for everyone to visit.' },
+        { name: 'Harvard Museum of Natural History', line: 'Red',  category: 'Science / Nature',         cost: 15, hours: 2, emoji: '🦕', fact: 'See real dinosaur fossils and famous glass flowers.' },
+        { name: 'Old North Church',                line: 'Orange', category: 'History / Landmark',       cost: 5,  hours: 1, emoji: '🔔', fact: '"One if by land, two if by sea" — the 1775 signal lanterns hung here.' },
+      ],
+
+      // Phase 4 — lunch choices (cheapest stays affordable for everyone).
+      foods: [
+        { label: 'Pretzel Cart Snack', cost: 3,  hours: 1, emoji: '🥨', fact: 'Street carts have sold snacks in Boston for over 100 years.' },
+        { label: 'Pizza Slice',        cost: 6,  hours: 1, emoji: '🍕', fact: 'The North End is Boston’s famous Italian neighborhood.' },
+        { label: 'Clam Chowder Bowl',  cost: 9,  hours: 1, emoji: '🥣', fact: 'Clam chowder is a New England favorite.' },
+        { label: 'Burger & Fries',     cost: 11, hours: 1, emoji: '🍔', fact: 'Boston has many classic diners.' },
+        { label: 'Sit-Down Lunch',     cost: 14, hours: 1, emoji: '🍝', fact: 'A sit-down meal takes longer than a quick snack.' },
+      ],
+
+      // Phase 5 — souvenirs (optional spending).
+      souvenirs: [
+        { label: 'Postcard',     cost: 1,  emoji: '✉️' },
+        { label: 'Sticker',      cost: 2,  emoji: '🏷️' },
+        { label: 'Keychain',     cost: 4,  emoji: '🔑' },
+        { label: 'T-Shirt',      cost: 12, emoji: '👕' },
+        { label: 'Plush Animal', cost: 15, emoji: '🧸' },
+        { label: 'Baseball Cap', cost: 18, emoji: '🧢' },
       ],
 
       // Show Maine standard tags throughout the page.
       showStandards: false,
     };
 
-    // Fixed MBTA brand colors (the four real rapid-transit lines).
-    const LINE_COLORS = {
-      Red:    '#DA291C',
-      Green:  '#00843D',
-      Blue:   '#003DA5',
-      Orange: '#ED8B00',
-    };
+    const LINE_COLORS = { Red: '#DA291C', Green: '#00843D', Blue: '#003DA5', Orange: '#ED8B00' };
+
+    // Phase descriptors drive the journey map, titles, and the render loop.
+    const PHASES = [
+      { n: 1, icon: '🚆', short: 'Train',   title: 'The Downeaster Departure' },
+      { n: 2, icon: '🚇', short: 'Subway',  title: 'The Subway Connection' },
+      { n: 3, icon: '🎡', short: 'Explore', title: 'Pick Two Attractions' },
+      { n: 4, icon: '🍽️', short: 'Lunch',   title: 'Lunchtime in Boston' },
+      { n: 5, icon: '🎁', short: 'Gifts',   title: 'The Souvenir Shop' },
+      { n: 6, icon: '🏆', short: 'Home',    title: 'Heading Home' },
+    ];
+
+    const STAMP_DEFS = [
+      { name: 'Train Conductor',  seal: '🚂' },
+      { name: 'Subway Navigator', seal: '🚇' },
+      { name: 'Boston Explorer',  seal: '🗽' },
+      { name: 'Foodie',           seal: '🍽️' },
+      { name: 'Souvenir Shopper', seal: '🎁' },
+    ];
 
     /* =========================================================
        === MAINE LEARNING RESULTS (math, grades 3-4) ===
-       Each interactive math element below is tagged with the
-       standard it practices. Toggle visibility in Settings.
        ========================================================= */
     const STANDARDS = {
       '3.MD.A.1': 'Grade 3 (3.MD.A.1): Tell and write time to the nearest minute and measure time intervals in minutes; solve problems about elapsed time, using a number line.',
@@ -899,36 +759,39 @@
     };
 
     /* =========================================================
-       === CONFIG PERSISTENCE (localStorage) ===
+       === PERSISTENCE ===
        ========================================================= */
-    const CONFIG_KEY = 'bta-config-v1';
+    const CONFIG_KEY = 'bta-config-v2';
+    const NAME_KEY = 'bta-name';
     function cloneDefaults() { return JSON.parse(JSON.stringify(DEFAULT_CONFIG)); }
     function loadConfig() {
       try {
         const saved = JSON.parse(localStorage.getItem(CONFIG_KEY));
-        if (saved && typeof saved === 'object') {
-          return Object.assign(cloneDefaults(), saved);
-        }
-      } catch (e) { /* ignore corrupt storage */ }
+        if (saved && typeof saved === 'object') return Object.assign(cloneDefaults(), saved);
+      } catch (e) {}
       return cloneDefaults();
     }
-    function saveConfig() {
-      try { localStorage.setItem(CONFIG_KEY, JSON.stringify(config)); } catch (e) { /* ignore */ }
-    }
+    function saveConfig() { try { localStorage.setItem(CONFIG_KEY, JSON.stringify(config)); } catch (e) {} }
+    function loadName() { try { return localStorage.getItem(NAME_KEY) || ''; } catch (e) { return ''; } }
+    function saveName(n) { try { localStorage.setItem(NAME_KEY, n); } catch (e) {} }
 
     let config = loadConfig();
 
     /* =========================================================
-       === APP STATE (the student's current trip) ===
+       === STATE ===
        ========================================================= */
     const state = {
       phase: 1,
       budget: config.startingBudget,
       hoursAway: 0,
+      name: loadName() || 'Explorer',
       train: null,
       arrivalTime: null,
       pass: null,
       destinations: [],
+      lunch: null,
+      souvenirs: [],
+      homeTime: null,
       stamps: [],
     };
 
@@ -940,6 +803,9 @@
       state.arrivalTime = null;
       state.pass = null;
       state.destinations = [];
+      state.lunch = null;
+      state.souvenirs = [];
+      state.homeTime = null;
       state.stamps = [];
       document.querySelectorAll('.stamp').forEach(s => s.classList.remove('unlocked'));
       updateTrackers();
@@ -947,38 +813,28 @@
     }
 
     /* =========================================================
-       === SOUND (Web Audio — no external files) ===
+       === SOUND + CONFETTI ===
        ========================================================= */
     let audioCtx = null;
     function getAudio() {
-      try {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        return audioCtx;
-      } catch (e) { return null; }
+      try { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); return audioCtx; }
+      catch (e) { return null; }
     }
     function playChime(kind) {
-      const ctx = getAudio();
-      if (!ctx) return;
+      const ctx = getAudio(); if (!ctx) return;
       const now = ctx.currentTime;
       const notes = (kind === 'ok') ? [523.25, 659.25, 783.99] : [349.23];
       notes.forEach((freq, i) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.value = freq;
+        const osc = ctx.createOscillator(); const gain = ctx.createGain();
+        osc.type = 'sine'; osc.frequency.value = freq;
         const start = now + i * 0.12;
         gain.gain.setValueAtTime(0.0001, start);
         gain.gain.exponentialRampToValueAtTime(0.18, start + 0.02);
         gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.32);
         osc.connect(gain).connect(ctx.destination);
-        osc.start(start);
-        osc.stop(start + 0.4);
+        osc.start(start); osc.stop(start + 0.4);
       });
     }
-
-    /* =========================================================
-       === CONFETTI (gentle, respects reduced motion) ===
-       ========================================================= */
     function confetti() {
       if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       const host = document.getElementById('confetti');
@@ -1001,40 +857,30 @@
     function parseTime(str) {
       const m = String(str).match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
       if (!m) return 0;
-      let h = parseInt(m[1], 10);
-      const min = parseInt(m[2], 10);
-      const period = m[3].toUpperCase();
+      let h = parseInt(m[1], 10); const min = parseInt(m[2], 10); const period = m[3].toUpperCase();
       if (period === 'PM' && h !== 12) h += 12;
       if (period === 'AM' && h === 12) h = 0;
       return h * 60 + min;
     }
     function formatTime(mins) {
       mins = ((mins % 1440) + 1440) % 1440;
-      const h24 = Math.floor(mins / 60);
-      const m = mins % 60;
+      const h24 = Math.floor(mins / 60); const m = mins % 60;
       const period = h24 >= 12 ? 'PM' : 'AM';
       let h = h24 % 12; if (h === 0) h = 12;
       return h + ':' + String(m).padStart(2, '0') + ' ' + period;
     }
-    function escAttr(s) {
-      return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
-    }
-
-    // Standards badge HTML (hidden unless standards mode is on).
+    function escAttr(s) { return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
     function stdBadgeHTML() {
       const codes = Array.prototype.slice.call(arguments);
       const tip = codes.map(c => STANDARDS[c]).join('\n\n');
       return '<span class="std-badge" title="' + escAttr(tip) + '">📐 ' + codes.join(' · ') + '</span>';
     }
-    function skillBadgeHTML(text) {
-      return '<span class="std-badge skill" title="' + escAttr(text) + '">🧭 Thinking skill</span>';
-    }
+    function skillBadgeHTML(text) { return '<span class="std-badge skill" title="' + escAttr(text) + '">🧭 Thinking skill</span>'; }
 
     function updateTrackers() {
       document.getElementById('budget-value').textContent = '$' + state.budget;
       document.getElementById('time-value').textContent = state.hoursAway + ' hr';
     }
-
     function updateJourney() {
       document.querySelectorAll('.journey-step').forEach((el) => {
         const step = parseInt(el.dataset.step, 10);
@@ -1042,54 +888,168 @@
         el.classList.toggle('active', step === state.phase);
       });
     }
-
     function awardStamp(name) {
       if (state.stamps.includes(name)) return;
       state.stamps.push(name);
       const el = document.querySelector('.stamp[data-stamp="' + name + '"]');
       if (el) el.classList.add('unlocked');
-      playChime('ok');
-      confetti();
+      playChime('ok'); confetti();
     }
-
-    function showFeedback(box, kind, msg) {
-      box.className = 'feedback ' + kind;
-      box.textContent = msg;
-    }
-
+    function showFeedback(box, kind, msg) { box.className = 'feedback ' + kind; box.textContent = msg; }
     function lineChip(line) {
-      const span = document.createElement('span');
-      span.className = 'chip';
-      const dot = document.createElement('span');
-      dot.className = 'dot';
+      const span = document.createElement('span'); span.className = 'chip';
+      const dot = document.createElement('span'); dot.className = 'dot';
       dot.style.background = LINE_COLORS[line] || '#666';
-      span.appendChild(dot);
-      span.appendChild(document.createTextNode(line + ' Line'));
+      span.appendChild(dot); span.appendChild(document.createTextNode(line + ' Line'));
       return span;
     }
-
     function shuffle(arr) {
       const a = arr.slice();
-      for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        const t = a[i]; a[i] = a[j]; a[j] = t;
-      }
+      for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; }
       return a;
+    }
+    function minFoodCost() { return Math.min.apply(null, config.foods.map(f => f.cost)); }
+
+    /* =========================================================
+       === INTERACTIVE CLOCK WIDGET ===
+       Returns a DOM element. Validates the set time against
+       correctMins. Reuses parseTime/formatTime + feedback.
+       ========================================================= */
+    function buildClock(correctMins, onCorrect, feedbackBox) {
+      const step = (config.difficulty === 'challenge') ? 5 : 30;
+      let cur = 12 * 60; // start at 12:00 PM (neutral)
+
+      const wrap = document.createElement('div');
+      wrap.className = 'clock';
+      wrap.innerHTML =
+        '<svg viewBox="0 0 200 200" class="clock-face" aria-hidden="true">' +
+          '<circle cx="100" cy="100" r="94" class="clock-rim"></circle>' +
+          '<line class="hand hour" x1="100" y1="100" x2="100" y2="58"></line>' +
+          '<line class="hand minute" x1="100" y1="100" x2="100" y2="32"></line>' +
+          '<circle cx="100" cy="100" r="5" class="clock-cap"></circle>' +
+        '</svg>' +
+        '<div class="clock-controls">' +
+          '<div class="stepper"><button type="button" class="btn small" data-act="h-" aria-label="One hour earlier">−</button><span>Hour</span><button type="button" class="btn small" data-act="h+" aria-label="One hour later">+</button></div>' +
+          '<div class="stepper"><button type="button" class="btn small" data-act="m-" aria-label="' + step + ' minutes earlier">−</button><span>Min</span><button type="button" class="btn small" data-act="m+" aria-label="' + step + ' minutes later">+</button></div>' +
+          '<button type="button" class="btn secondary small" data-act="ap" aria-label="Switch between morning and afternoon">AM / PM</button>' +
+        '</div>' +
+        '<div class="clock-readout" aria-live="polite">12:00 PM</div>' +
+        '<button type="button" class="btn" data-act="check">Check my time ✓</button>';
+
+      // Hour ticks
+      const svg = wrap.querySelector('svg');
+      for (let i = 0; i < 12; i++) {
+        const ang = (i * 30) * Math.PI / 180;
+        const x1 = 100 + Math.sin(ang) * 84, y1 = 100 - Math.cos(ang) * 84;
+        const x2 = 100 + Math.sin(ang) * 92, y2 = 100 - Math.cos(ang) * 92;
+        const ln = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        ln.setAttribute('x1', x1); ln.setAttribute('y1', y1);
+        ln.setAttribute('x2', x2); ln.setAttribute('y2', y2);
+        ln.setAttribute('class', 'clock-tick');
+        svg.insertBefore(ln, svg.querySelector('.hand'));
+      }
+
+      const hourHand = wrap.querySelector('.hand.hour');
+      const minHand = wrap.querySelector('.hand.minute');
+      const readout = wrap.querySelector('.clock-readout');
+
+      function render() {
+        readout.textContent = formatTime(cur);
+        const m = cur % 60, h = Math.floor(cur / 60);
+        hourHand.setAttribute('transform', 'rotate(' + (((h % 12) + m / 60) * 30) + ' 100 100)');
+        minHand.setAttribute('transform', 'rotate(' + (m * 6) + ' 100 100)');
+      }
+      wrap.addEventListener('click', (e) => {
+        const act = e.target.getAttribute && e.target.getAttribute('data-act');
+        if (!act) return;
+        const h = Math.floor(cur / 60), m = cur % 60;
+        if (act === 'h+') cur = ((h + 1) % 24) * 60 + m;
+        else if (act === 'h-') cur = ((h + 23) % 24) * 60 + m;
+        else if (act === 'm+') cur = h * 60 + ((m + step) % 60);
+        else if (act === 'm-') cur = h * 60 + ((m - step + 60) % 60);
+        else if (act === 'ap') cur = (cur + 720) % 1440;
+        else if (act === 'check') {
+          if (cur === correctMins) { showFeedback(feedbackBox, 'ok', '✓ That’s right — ' + formatTime(correctMins) + '!'); onCorrect(); }
+          else { showFeedback(feedbackBox, 'hint', '🤔 Not yet. Set the clock and try again — the Time Helper can help you count.'); playChime('hint'); }
+          return;
+        }
+        render();
+      });
+      render();
+      return wrap;
+    }
+
+    /* =========================================================
+       === MONEY ANSWER (MC in Friendly, typed in Challenge) ===
+       ========================================================= */
+    function buildMoneyAnswer(container, currentBudget, cost, itemLabel, onCorrect, feedbackBox) {
+      const correct = currentBudget - cost;
+      container.innerHTML =
+        '<p class="phase-subtitle">You have <strong>$' + currentBudget + '</strong>. ' + itemLabel +
+        ' costs <strong>$' + cost + '</strong>. How much will you have left?</p>';
+
+      if (config.difficulty === 'challenge') {
+        const wrap = document.createElement('div');
+        wrap.style.display = 'flex'; wrap.style.gap = '10px'; wrap.style.alignItems = 'center'; wrap.style.flexWrap = 'wrap';
+        wrap.innerHTML =
+          '<span style="font-weight:800;font-size:24px;">$</span>' +
+          '<input type="number" class="num-input" min="0" step="1" aria-label="Money left over" style="width:130px;">' +
+          '<button class="btn" type="button">Check ✓</button>';
+        const input = wrap.querySelector('input');
+        const checkIt = () => {
+          const v = parseInt(input.value, 10);
+          if (v === correct) { showFeedback(feedbackBox, 'ok', '✓ Yes! $' + correct + ' left.'); input.disabled = true; onCorrect(); }
+          else { showFeedback(feedbackBox, 'hint', '🤔 Not yet. Try $' + currentBudget + ' − $' + cost + '. Count down to check.'); playChime('hint'); }
+        };
+        wrap.querySelector('button').addEventListener('click', checkIt);
+        input.addEventListener('keydown', (e) => { if (e.key === 'Enter') checkIt(); });
+        container.appendChild(wrap);
+      } else {
+        const distract = (correct >= 5) ? [correct, correct + 5, correct - 5] : [correct, correct + 5, correct + 10];
+        const opts = document.createElement('div'); opts.className = 'options';
+        shuffle(distract).forEach((n) => {
+          const b = document.createElement('button'); b.className = 'option';
+          b.innerHTML = '<span class="opt-title">$' + n + '</span>';
+          b.addEventListener('click', () => {
+            if (n === correct) {
+              b.classList.add('correct'); showFeedback(feedbackBox, 'ok', '✓ Yes! $' + correct + ' left.');
+              opts.querySelectorAll('.option').forEach(x => x.disabled = true); onCorrect();
+            } else {
+              b.classList.add('wrong'); b.disabled = true;
+              showFeedback(feedbackBox, 'hint', '🤔 Count down by 5s, or check the budget tracker up top.');
+              playChime('hint');
+            }
+          });
+          opts.appendChild(b);
+        });
+        container.appendChild(opts);
+      }
+    }
+
+    /* =========================================================
+       === TRIP MATH (shared by Phase 6 + certificate) ===
+       ========================================================= */
+    function computeTrip() {
+      const destHours = state.destinations.reduce((s, d) => s + d.hours, 0);
+      const lunchHours = state.lunch ? state.lunch.hours : 0;
+      const bostonHours = destHours + lunchHours;
+      const arrivalMins = parseTime(state.arrivalTime);
+      const leaveMins = Math.round((arrivalMins + bostonHours * 60 + 60) / 30) * 30; // +1 hr buffer for subway/walking
+      const homeMins = leaveMins + state.train.durationHours * 60;
+      const totalSpent = config.startingBudget - state.budget;
+      const hoursAway = state.train.durationHours * 2 + bostonHours + 1;
+      return { destHours, lunchHours, bostonHours, arrivalMins, leaveMins, homeMins, totalSpent, hoursAway };
     }
 
     /* =========================================================
        === PHASE 1: DOWNEASTER DEPARTURE ===
-       Skills: 3.MD.A.1 (elapsed time on a number line), 4.MD.A.2.
        ========================================================= */
     function renderPhase1() {
       const card = document.createElement('section');
       card.className = 'card phase-card';
       card.innerHTML =
-        '<div class="phase-head">' +
-          '<div class="phase-badge">1</div>' +
-          '<h2 class="phase-title">The Downeaster Departure</h2>' +
-        '</div>' +
-        '<p class="phase-subtitle">Pick a morning train from Portland, Maine. Then figure out when it arrives in Boston. ' +
+        '<div class="phase-head"><div class="phase-badge">1</div><h2 class="phase-title">The Downeaster Departure</h2></div>' +
+        '<p class="phase-subtitle">Pick a morning train from Portland, Maine. Then set the clock to its arrival time in Boston. ' +
           stdBadgeHTML('3.MD.A.1', '4.MD.A.2') + '</p>' +
         '<div class="options" id="train-options" role="radiogroup" aria-label="Train choices"></div>' +
         '<div id="train-question" style="margin-top: 20px;"></div>' +
@@ -1098,9 +1058,7 @@
       const opts = card.querySelector('#train-options');
       config.trains.forEach((t) => {
         const btn = document.createElement('button');
-        btn.className = 'option';
-        btn.setAttribute('role', 'radio');
-        btn.setAttribute('aria-checked', 'false');
+        btn.className = 'option'; btn.setAttribute('role', 'radio'); btn.setAttribute('aria-checked', 'false');
         btn.innerHTML =
           '<span class="opt-title">' + t.label + '</span>' +
           '<span class="opt-meta">Leaves Portland: <strong>' + t.depart + '</strong></span>' +
@@ -1110,76 +1068,37 @@
       });
       return card;
     }
-
     function selectTrain(train, card) {
       card.querySelectorAll('#train-options .option').forEach((b) => {
         const isThis = b.querySelector('.opt-title').textContent === train.label;
         b.classList.toggle('selected', isThis);
         b.setAttribute('aria-checked', isThis ? 'true' : 'false');
       });
-
-      const departMin = parseTime(train.depart);
-      const arriveMin = departMin + train.durationHours * 60;
-      const correct = formatTime(arriveMin);
-      const distractors = [
-        formatTime(arriveMin - 60),
-        formatTime(arriveMin + 60),
-        formatTime(arriveMin + 120),
-      ];
-      const choices = shuffle([correct].concat(distractors));
-
+      const arriveMins = parseTime(train.depart) + train.durationHours * 60;
       const qBox = card.querySelector('#train-question');
       qBox.innerHTML =
-        '<p class="phase-subtitle" style="margin-top:8px;">' +
-          'Your train leaves at <strong>' + train.depart + '</strong> and the ride takes ' +
-          '<strong>' + train.durationHours + ' hours</strong>. ' +
-          'What time will you arrive at Boston North Station?</p>' +
-        '<div class="options" id="arrive-options" role="radiogroup" aria-label="Arrival time choices"></div>';
-      const aopts = qBox.querySelector('#arrive-options');
-      choices.forEach((c) => {
-        const b = document.createElement('button');
-        b.className = 'option';
-        b.setAttribute('role', 'radio');
-        b.innerHTML = '<span class="opt-title">' + c + '</span>';
-        b.addEventListener('click', () => checkArrival(c, correct, b, card, train));
-        aopts.appendChild(b);
-      });
-    }
-
-    function checkArrival(picked, correct, btn, card, train) {
+        '<p class="phase-subtitle" style="margin-top:8px;">Your train leaves at <strong>' + train.depart +
+        '</strong> and the ride takes <strong>' + train.durationHours + ' hours</strong>. ' +
+        'Set the clock to your arrival time at Boston North Station.</p>';
       const fb = card.querySelector('#p1-feedback');
-      if (picked === correct) {
-        btn.classList.add('correct');
-        showFeedback(fb, 'ok', '✓ Great job! You arrive at ' + correct + '.');
-        state.train = train;
-        state.arrivalTime = correct;
-        state.hoursAway += train.durationHours;
-        updateTrackers();
+      const clock = buildClock(arriveMins, () => {
+        state.train = train; state.arrivalTime = formatTime(arriveMins);
+        state.hoursAway += train.durationHours; updateTrackers();
         awardStamp('Train Conductor');
-        card.querySelectorAll('#arrive-options .option').forEach(b => b.disabled = true);
         setTimeout(() => { state.phase = 2; renderApp(); }, 950);
-      } else {
-        btn.classList.add('wrong');
-        btn.disabled = true;
-        showFeedback(fb, 'hint', '🤔 Not quite. Try the Time Helper on the right to count the hours.');
-        playChime('hint');
-      }
+      }, fb);
+      qBox.appendChild(clock);
     }
 
     /* =========================================================
        === PHASE 2: SUBWAY CONNECTION ===
-       Step A skill: 3.NBT.A.2 + 4.MD.A.2 (subtract money).
-       Step B: map-reading / logical reasoning (thinking skill).
        ========================================================= */
     function renderPhase2() {
       const sub = config.subway;
       const card = document.createElement('section');
       card.className = 'card phase-card';
       card.innerHTML =
-        '<div class="phase-head">' +
-          '<div class="phase-badge">2</div>' +
-          '<h2 class="phase-title">The Subway Connection</h2>' +
-        '</div>' +
+        '<div class="phase-head"><div class="phase-badge">2</div><h2 class="phase-title">The Subway Connection</h2></div>' +
         '<p class="phase-subtitle">Buy a subway pass, then pick the right colored line.</p>' +
         '<span class="step-label">Step A — Choose your pass</span> ' + stdBadgeHTML('3.NBT.A.2', '4.MD.A.2') +
         '<div class="options" id="pass-options" role="radiogroup" aria-label="Pass choices" style="margin-top:8px;"></div>' +
@@ -1187,9 +1106,8 @@
         '<div id="step-b" style="margin-top: 24px; display: none;">' +
           '<span class="step-label">Step B — Pick the right line</span> ' +
             skillBadgeHTML('Map-reading and logical reasoning: matching a destination to the correct subway line.') +
-          '<p class="phase-subtitle" style="margin-top:8px;">' +
-            'You need to get from <strong>' + sub.from + '</strong> to <strong>' + sub.to + '</strong>. ' +
-            'Hint: ' + sub.hint + '</p>' +
+          '<p class="phase-subtitle" style="margin-top:8px;">You need to get from <strong>' + sub.from +
+            '</strong> to <strong>' + sub.to + '</strong>. Hint: ' + sub.hint + '</p>' +
           '<div class="line-buttons" id="line-buttons"></div>' +
         '</div>' +
         '<div class="feedback" id="p2-feedback" role="status"></div>';
@@ -1197,8 +1115,7 @@
       const opts = card.querySelector('#pass-options');
       config.passes.forEach((p) => {
         const btn = document.createElement('button');
-        btn.className = 'option';
-        btn.setAttribute('role', 'radio');
+        btn.className = 'option'; btn.setAttribute('role', 'radio');
         btn.innerHTML =
           '<span class="opt-title">' + p.label + '</span>' +
           '<span class="opt-meta">' + p.blurb + '</span>' +
@@ -1208,68 +1125,31 @@
       });
       return card;
     }
-
     function selectPass(pass, card) {
       card.querySelectorAll('#pass-options .option').forEach((b) => {
         const isThis = b.querySelector('.opt-title').textContent === pass.label;
         b.classList.toggle('selected', isThis);
         b.setAttribute('aria-checked', isThis ? 'true' : 'false');
       });
-
-      const correctRemaining = state.budget - pass.cost;
-      const choices = shuffle([correctRemaining, correctRemaining + 5, correctRemaining - 5])
-        .map(n => '$' + n);
-
-      const mathBox = card.querySelector('#pass-math');
-      mathBox.innerHTML =
-        '<p class="phase-subtitle">You have <strong>$' + state.budget + '</strong>. The pass costs ' +
-        '<strong>$' + pass.cost + '</strong>. How much will you have left?</p>' +
-        '<div class="options" id="math-options" role="radiogroup" aria-label="Subtraction answers"></div>';
-      const mopts = mathBox.querySelector('#math-options');
-      choices.forEach((c) => {
-        const b = document.createElement('button');
-        b.className = 'option';
-        b.innerHTML = '<span class="opt-title">' + c + '</span>';
-        b.addEventListener('click', () => checkPassMath(c, '$' + correctRemaining, b, card, pass));
-        mopts.appendChild(b);
-      });
-    }
-
-    function checkPassMath(picked, correct, btn, card, pass) {
       const fb = card.querySelector('#p2-feedback');
-      if (picked === correct) {
-        btn.classList.add('correct');
-        showFeedback(fb, 'ok', '✓ Yes! ' + correct + ' left after buying the ' + pass.label + '.');
-        state.pass = pass;
-        state.budget -= pass.cost;
-        updateTrackers();
-        card.querySelectorAll('#math-options .option').forEach(b => b.disabled = true);
+      buildMoneyAnswer(card.querySelector('#pass-math'), state.budget, pass.cost, 'The pass', () => {
+        state.pass = pass; state.budget -= pass.cost; updateTrackers();
         card.querySelector('#step-b').style.display = 'block';
         buildLineButtons(card);
-      } else {
-        btn.classList.add('wrong');
-        btn.disabled = true;
-        showFeedback(fb, 'hint', '🤔 Count down by 5s, or use the budget tracker in the header to help.');
-        playChime('hint');
-      }
+      }, fb);
     }
-
     function buildLineButtons(card) {
-      const wrap = card.querySelector('#line-buttons');
-      wrap.innerHTML = '';
+      const wrap = card.querySelector('#line-buttons'); wrap.innerHTML = '';
       Object.keys(LINE_COLORS).forEach((name) => {
         const b = document.createElement('button');
         b.className = 'line-btn ' + name.toLowerCase();
-        b.textContent = name + ' Line';
-        b.setAttribute('aria-label', name + ' Line');
+        b.textContent = name + ' Line'; b.setAttribute('aria-label', name + ' Line');
         b.addEventListener('click', () => checkLine(name, b, card));
         wrap.appendChild(b);
       });
     }
-
     function checkLine(name, btn, card) {
-      const sub = config.subway;
-      const fb = card.querySelector('#p2-feedback');
+      const sub = config.subway; const fb = card.querySelector('#p2-feedback');
       if (name === sub.correctLine) {
         btn.classList.add('correct');
         showFeedback(fb, 'ok', '✓ Perfect! The ' + name + ' Line goes from ' + sub.from + ' to ' + sub.to + '.');
@@ -1277,29 +1157,23 @@
         card.querySelectorAll('.line-btn').forEach(b => b.disabled = true);
         setTimeout(() => { state.phase = 3; renderApp(); }, 1000);
       } else {
-        btn.classList.add('wrong');
-        btn.disabled = true;
-        showFeedback(fb, 'hint', '🤔 Try a different color. ' + sub.hint);
-        playChime('hint');
+        btn.classList.add('wrong'); btn.disabled = true;
+        showFeedback(fb, 'hint', '🤔 Try a different color. ' + sub.hint); playChime('hint');
       }
     }
 
     /* =========================================================
        === PHASE 3: ATTRACTIONS MENU ===
-       Skills: 3.NBT.A.2 (add costs), 3.MD.A.1 (add hours),
-       4.MD.A.2 (money word problem / budget check).
        ========================================================= */
     function renderPhase3() {
+      const reserve = minFoodCost();
       const card = document.createElement('section');
       card.className = 'card phase-card';
       card.innerHTML =
-        '<div class="phase-head">' +
-          '<div class="phase-badge">3</div>' +
-          '<h2 class="phase-title">Pick Two Attractions</h2>' +
-        '</div>' +
-        '<p class="phase-subtitle">Choose <strong>two</strong> places to visit. Add up the cost and the hours! ' +
+        '<div class="phase-head"><div class="phase-badge">3</div><h2 class="phase-title">Pick Two Attractions</h2></div>' +
+        '<p class="phase-subtitle">Choose <strong>two</strong> places to visit. Add up the cost and the hours — and remember to leave at least <strong>$' + reserve + '</strong> for lunch! ' +
           stdBadgeHTML('3.NBT.A.2', '3.MD.A.1', '4.MD.A.2') + '</p>' +
-        '<div class="dest-grid" id="dest-grid"></div>' +
+        '<div class="pick-grid" id="dest-grid"></div>' +
         '<div class="totals-bar" id="totals">' +
           '<span class="totals-item">Picked: <span class="v" id="t-picked">0/2</span></span>' +
           '<span class="totals-item">Cost: <span class="v" id="t-cost">$0</span></span>' +
@@ -1311,45 +1185,32 @@
 
       const grid = card.querySelector('#dest-grid');
       const picks = [];
-
       config.destinations.forEach((d, idx) => {
         const c = document.createElement('button');
-        c.className = 'dest-card';
-        c.setAttribute('aria-pressed', 'false');
+        c.className = 'pick-card'; c.setAttribute('aria-pressed', 'false');
         c.innerHTML =
           '<span class="emoji" aria-hidden="true">' + d.emoji + '</span>' +
           '<span class="name">' + d.name + '</span>' +
           '<span class="cat">' + d.category + '</span>' +
-          '<span class="meta"><span class="price">$' + d.cost + '</span>' +
-          '<span class="hours">' + d.hours + ' hr</span></span>';
+          (d.fact ? '<span class="fact">💡 ' + d.fact + '</span>' : '') +
+          '<span class="meta"><span class="price">$' + d.cost + '</span><span class="hours">' + d.hours + ' hr</span></span>';
         c.querySelector('.meta').appendChild(lineChip(d.line));
-
         c.addEventListener('click', () => {
           const i = picks.indexOf(idx);
-          if (i >= 0) {
-            picks.splice(i, 1);
-            c.classList.remove('selected');
-            c.setAttribute('aria-pressed', 'false');
-          } else {
-            if (picks.length >= 2) {
-              showFeedback(card.querySelector('#p3-feedback'), 'hint',
-                '🤔 You already picked 2. Tap one to unpick it first.');
-              return;
-            }
-            picks.push(idx);
-            c.classList.add('selected');
-            c.setAttribute('aria-pressed', 'true');
+          if (i >= 0) { picks.splice(i, 1); c.classList.remove('selected'); c.setAttribute('aria-pressed', 'false'); }
+          else {
+            if (picks.length >= 2) { showFeedback(card.querySelector('#p3-feedback'), 'hint', '🤔 You already picked 2. Tap one to unpick it first.'); return; }
+            picks.push(idx); c.classList.add('selected'); c.setAttribute('aria-pressed', 'true');
           }
-          updateTotals(picks, card);
+          updateDestTotals(picks, card);
         });
         grid.appendChild(c);
       });
-
       card.querySelector('#confirm-dest').addEventListener('click', () => confirmDests(picks, card));
       return card;
     }
-
-    function updateTotals(picks, card) {
+    function updateDestTotals(picks, card) {
+      const reserve = minFoodCost();
       const chosen = picks.map(i => config.destinations[i]);
       const totalCost = chosen.reduce((s, d) => s + d.cost, 0);
       const totalHours = chosen.reduce((s, d) => s + d.hours, 0);
@@ -1357,149 +1218,252 @@
       card.querySelector('#t-cost').textContent = '$' + totalCost;
       card.querySelector('#t-hours').textContent = totalHours;
       card.querySelector('#t-budget').textContent = '$' + state.budget;
-
+      const fb = card.querySelector('#p3-feedback');
       const btn = card.querySelector('#confirm-dest');
       const overBudget = totalCost > state.budget;
-      btn.disabled = (picks.length !== 2) || overBudget;
-      const fb = card.querySelector('#p3-feedback');
-      if (overBudget) {
-        showFeedback(fb, 'hint', "🤔 That's $" + totalCost + ', but you only have $' + state.budget + '. Try a cheaper combo.');
-      } else {
-        fb.className = 'feedback'; fb.textContent = '';
-      }
+      const overReserve = totalCost > state.budget - reserve;
+      btn.disabled = (picks.length !== 2) || overReserve;
+      if (overBudget) showFeedback(fb, 'hint', "🤔 That's $" + totalCost + ', but you only have $' + state.budget + '. Try a cheaper combo.');
+      else if (overReserve) showFeedback(fb, 'hint', '🤔 Save at least $' + reserve + ' for lunch! Pick a cheaper combo.');
+      else { fb.className = 'feedback'; fb.textContent = ''; }
     }
-
     function confirmDests(picks, card) {
       const chosen = picks.map(i => config.destinations[i]);
       const totalCost = chosen.reduce((s, d) => s + d.cost, 0);
       const totalHours = chosen.reduce((s, d) => s + d.hours, 0);
-      state.destinations = chosen;
-      state.budget -= totalCost;
-      state.hoursAway += totalHours;
-      updateTrackers();
-      awardStamp('Boston Explorer');
-      showFeedback(card.querySelector('#p3-feedback'), 'ok',
-        '✓ Great picks! $' + totalCost + ' spent, ' + totalHours + ' hours of fun.');
+      state.destinations = chosen; state.budget -= totalCost; state.hoursAway += totalHours;
+      updateTrackers(); awardStamp('Boston Explorer');
+      showFeedback(card.querySelector('#p3-feedback'), 'ok', '✓ Great picks! $' + totalCost + ' spent, ' + totalHours + ' hours of fun.');
       setTimeout(() => { state.phase = 4; renderApp(); }, 1000);
     }
 
     /* =========================================================
-       === PHASE 4: ITINERARY SUMMARY ===
-       Reviews money + time totals (4.MD.A.2).
+       === PHASE 4: LUNCH ===
        ========================================================= */
     function renderPhase4() {
-      const sub = config.subway;
       const card = document.createElement('section');
       card.className = 'card phase-card';
+      card.innerHTML =
+        '<div class="phase-head"><div class="phase-badge">4</div><h2 class="phase-title">Lunchtime in Boston</h2></div>' +
+        '<p class="phase-subtitle">Pick a lunch you can afford. Then work out how much money is left. ' +
+          stdBadgeHTML('3.NBT.A.2', '4.MD.A.2') + '</p>' +
+        '<div class="pick-grid" id="food-grid"></div>' +
+        '<div id="food-math" style="margin-top: 16px;"></div>' +
+        '<div class="feedback" id="p4-feedback" role="status"></div>';
 
-      const totalSpent = config.startingBudget - state.budget;
-      const totalDestHours = state.destinations.reduce((s, d) => s + d.hours, 0);
-      const returnTrainMin = parseTime(state.arrivalTime) + (totalDestHours * 60) + 60;
-      const returnRounded = Math.round(returnTrainMin / 30) * 30;
-      const returnHomeMin = returnRounded + (state.train.durationHours * 60);
-      const totalHoursAway = (state.train.durationHours * 2) + totalDestHours + 1;
+      const grid = card.querySelector('#food-grid');
+      config.foods.forEach((f) => {
+        const c = document.createElement('button');
+        c.className = 'pick-card'; c.setAttribute('aria-pressed', 'false');
+        const tooPricey = f.cost > state.budget;
+        c.innerHTML =
+          '<span class="emoji" aria-hidden="true">' + f.emoji + '</span>' +
+          '<span class="name">' + f.label + '</span>' +
+          (f.fact ? '<span class="fact">💡 ' + f.fact + '</span>' : '') +
+          '<span class="meta"><span class="price">$' + f.cost + '</span><span class="hours">' + f.hours + ' hr</span></span>';
+        if (tooPricey) { c.disabled = true; c.style.opacity = '0.5'; c.title = 'Too expensive — you have $' + state.budget; }
+        c.addEventListener('click', () => selectFood(f, card));
+        grid.appendChild(c);
+      });
+      return card;
+    }
+    function selectFood(food, card) {
+      card.querySelectorAll('#food-grid .pick-card').forEach((b) => {
+        const isThis = b.querySelector('.name').textContent === food.label;
+        b.classList.toggle('selected', isThis); b.setAttribute('aria-pressed', isThis ? 'true' : 'false');
+      });
+      const fb = card.querySelector('#p4-feedback');
+      buildMoneyAnswer(card.querySelector('#food-math'), state.budget, food.cost, 'Lunch', () => {
+        state.lunch = food; state.budget -= food.cost; state.hoursAway += food.hours; updateTrackers();
+        awardStamp('Foodie');
+        setTimeout(() => { state.phase = 5; renderApp(); }, 950);
+      }, fb);
+    }
+
+    /* =========================================================
+       === PHASE 5: SOUVENIR SHOP ===
+       ========================================================= */
+    function renderPhase5() {
+      const card = document.createElement('section');
+      card.className = 'card phase-card';
+      card.innerHTML =
+        '<div class="phase-head"><div class="phase-badge">5</div><h2 class="phase-title">The Souvenir Shop</h2></div>' +
+        '<p class="phase-subtitle">Spend your leftover money on gifts — or press Confirm to buy nothing and save it. ' +
+          stdBadgeHTML('3.NBT.A.2', '4.MD.A.2') + '</p>' +
+        '<div class="pick-grid" id="souvenir-grid"></div>' +
+        '<div class="totals-bar" id="souvenir-totals">' +
+          '<span class="totals-item">Gifts cost: <span class="v" id="s-cost">$0</span></span>' +
+          '<span class="totals-item">Money left: <span class="v" id="s-left">$' + state.budget + '</span></span>' +
+        '</div>' +
+        '<div style="margin-top: 16px;"><button class="btn" id="confirm-souvenirs">Confirm Gifts 🎁</button></div>' +
+        '<div class="feedback" id="p5-feedback" role="status"></div>';
+
+      const grid = card.querySelector('#souvenir-grid');
+      const picks = [];
+      config.souvenirs.forEach((s, idx) => {
+        const c = document.createElement('button');
+        c.className = 'pick-card'; c.setAttribute('aria-pressed', 'false');
+        c.innerHTML =
+          '<span class="emoji" aria-hidden="true">' + s.emoji + '</span>' +
+          '<span class="name">' + s.label + '</span>' +
+          '<span class="meta"><span class="price">$' + s.cost + '</span></span>';
+        c.addEventListener('click', () => {
+          const i = picks.indexOf(idx);
+          if (i >= 0) { picks.splice(i, 1); c.classList.remove('selected'); c.setAttribute('aria-pressed', 'false'); }
+          else {
+            const spent = picks.reduce((sum, k) => sum + config.souvenirs[k].cost, 0);
+            if (spent + s.cost > state.budget) { showFeedback(card.querySelector('#p5-feedback'), 'hint', "🤔 That costs more than you have left. Pick something cheaper."); return; }
+            picks.push(idx); c.classList.add('selected'); c.setAttribute('aria-pressed', 'true');
+          }
+          updateSouvenirTotals(picks, card);
+        });
+        grid.appendChild(c);
+      });
+      card.querySelector('#confirm-souvenirs').addEventListener('click', () => confirmSouvenirs(picks, card));
+      return card;
+    }
+    function updateSouvenirTotals(picks, card) {
+      const spent = picks.reduce((sum, k) => sum + config.souvenirs[k].cost, 0);
+      card.querySelector('#s-cost').textContent = '$' + spent;
+      card.querySelector('#s-left').textContent = '$' + (state.budget - spent);
+      const fb = card.querySelector('#p5-feedback');
+      if (fb.classList.contains('hint')) { fb.className = 'feedback'; fb.textContent = ''; }
+    }
+    function confirmSouvenirs(picks, card) {
+      const chosen = picks.map(i => config.souvenirs[i]);
+      const spent = chosen.reduce((s, d) => s + d.cost, 0);
+      state.souvenirs = chosen; state.budget -= spent; updateTrackers();
+      awardStamp('Souvenir Shopper');
+      const msg = chosen.length ? ('✓ Nice! You bought ' + chosen.length + ' gift' + (chosen.length > 1 ? 's' : '') + ' for $' + spent + '.') : '✓ You saved all your money for next time!';
+      showFeedback(card.querySelector('#p5-feedback'), 'ok', msg);
+      setTimeout(() => { state.phase = 6; renderApp(); }, 1000);
+    }
+
+    /* =========================================================
+       === PHASE 6: HEADING HOME + CERTIFICATE ===
+       ========================================================= */
+    function renderPhase6() {
+      const trip = computeTrip();
+      const card = document.createElement('section');
+      card.className = 'card phase-card';
+      card.innerHTML =
+        '<div class="phase-head"><div class="phase-badge">6</div><h2 class="phase-title">Heading Home</h2></div>' +
+        '<p class="phase-subtitle">Your return train leaves Boston at <strong>' + formatTime(trip.leaveMins) +
+        '</strong> and the ride takes <strong>' + state.train.durationHours + ' hours</strong>. ' +
+        'Set the clock to the time you get home to Portland. ' + stdBadgeHTML('3.MD.A.1', '4.MD.A.2') + '</p>' +
+        '<div id="home-question"></div>' +
+        '<div class="feedback" id="p6-feedback" role="status"></div>';
+
+      const fb = card.querySelector('#p6-feedback');
+      const clock = buildClock(trip.homeMins, () => {
+        state.homeTime = formatTime(trip.homeMins);
+        confetti();
+        setTimeout(() => showCertificate(card, trip), 600);
+      }, fb);
+      card.querySelector('#home-question').appendChild(clock);
+      return card;
+    }
+
+    function showCertificate(card, trip) {
+      const dateStr = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+      const destItems = state.destinations.map(d =>
+        '<li>' + d.emoji + ' <strong>' + d.name + '</strong> — $' + d.cost + ', ' + d.hours + ' hr' +
+        (d.fact ? '<br><span class="cert-fact">💡 ' + d.fact + '</span>' : '') + '</li>').join('');
+      const souvList = state.souvenirs.length
+        ? state.souvenirs.map(s => s.emoji + ' ' + s.label + ' ($' + s.cost + ')').join(', ')
+        : 'None — saved the money!';
+      const stampList = state.stamps.map(n => '<span class="cert-stamp">✓ ' + n + '</span>').join('');
 
       card.innerHTML =
-        '<div class="phase-head">' +
-          '<div class="phase-badge">4</div>' +
-          '<h2 class="phase-title">Your Trip Itinerary</h2>' +
-        '</div>' +
-        '<p class="phase-subtitle">You did it! Here is your full day in Boston. ' + stdBadgeHTML('4.MD.A.2') + '</p>' +
-        '<div class="summary-box">' +
-          '<h3>🚆 Train to Boston</h3>' +
-          '<p>You took the <strong>' + state.train.label + '</strong> train.</p>' +
-          '<p>Left Portland at <strong>' + state.train.depart + '</strong>.</p>' +
-          '<p>Arrived at Boston North Station at <strong>' + state.arrivalTime + '</strong>.</p>' +
-          '<h3>🚇 Subway</h3>' +
-          '<p>Bought a <strong>' + state.pass.label + '</strong> for <strong>$' + state.pass.cost + '</strong>.</p>' +
-          '<p>Took the <strong>' + sub.correctLine + ' Line</strong> from ' + sub.from + ' to ' + sub.to + '.</p>' +
-          '<h3>🗺️ Attractions</h3>' +
-          '<ul id="dest-summary" style="padding-left: 20px; margin: 0 0 12px;"></ul>' +
-          '<h3>📊 Trip Totals</h3>' +
-          '<p>Total spent today: <strong>$' + totalSpent + '</strong> of $' + config.startingBudget + '.</p>' +
-          '<p>Money left over: <strong>$' + state.budget + '</strong>.</p>' +
-          '<p>Hours away from home: <strong>' + totalHoursAway + ' hours</strong> ' +
-            '<span style="color: var(--ink-soft); font-size: 15px;">(' + state.train.durationHours +
-            ' hr train + ' + totalDestHours + ' hr attractions + 1 hr subway/walk + ' +
-            state.train.durationHours + ' hr train home)</span></p>' +
-          '<h3>🏠 Heading Home</h3>' +
-          '<p>Return train leaves Boston around <strong>' + formatTime(returnRounded) + '</strong>.</p>' +
-          "<p>You'll be home in Portland by <strong>" + formatTime(returnHomeMin) + '</strong>.</p>' +
+        '<div class="certificate">' +
+          '<h2>🏆 Certificate of Completion</h2>' +
+          '<div class="cert-name">' + escAttr(state.name) + '’s Boston Adventure</div>' +
+          '<div class="cert-date">' + dateStr + '</div>' +
+          '<div class="cert-stamps">' + stampList + '</div>' +
+
+          '<div class="cert-section">' +
+            '<h3>🚆 Train</h3>' +
+            '<p>Took the <strong>' + state.train.label + '</strong> from Portland at <strong>' + state.train.depart +
+              '</strong>, arriving Boston North Station at <strong>' + state.arrivalTime + '</strong>.</p>' +
+            '<h3>🚇 Subway</h3>' +
+            '<p>Bought a <strong>' + state.pass.label + '</strong> ($' + state.pass.cost + ') and rode the <strong>' +
+              config.subway.correctLine + ' Line</strong> from ' + config.subway.from + ' to ' + config.subway.to + '.</p>' +
+            '<h3>🗺️ Attractions</h3>' +
+            '<ul>' + destItems + '</ul>' +
+            '<h3>🍽️ Lunch</h3>' +
+            '<p>' + (state.lunch ? (state.lunch.emoji + ' <strong>' + state.lunch.label + '</strong> ($' + state.lunch.cost + ')') : 'Skipped') + '</p>' +
+            '<h3>🎁 Souvenirs</h3>' +
+            '<p>' + souvList + '</p>' +
+            '<h3>📊 Trip Totals</h3>' +
+            '<p>Spent <strong>$' + trip.totalSpent + '</strong> of $' + config.startingBudget +
+              '. Money left: <strong>$' + state.budget + '</strong>.</p>' +
+            '<p>Home in Portland by <strong>' + state.homeTime + '</strong>. Hours away: <strong>' + trip.hoursAway + ' hours</strong>.</p>' +
+          '</div>' +
         '</div>' +
         '<div class="no-print" style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">' +
-          '<button class="btn" id="print-btn">🖨️ Print Itinerary</button>' +
+          '<button class="btn" id="print-btn">🖨️ Print Certificate</button>' +
           '<button class="btn secondary" id="restart-btn">↻ Start Over</button>' +
         '</div>';
 
-      const ul = card.querySelector('#dest-summary');
-      state.destinations.forEach(d => {
-        const li = document.createElement('li');
-        li.style.marginBottom = '6px';
-        li.innerHTML = d.emoji + ' <strong>' + d.name + '</strong> — $' + d.cost + ', ' + d.hours + ' hr ';
-        li.appendChild(lineChip(d.line));
-        ul.appendChild(li);
-      });
-
       card.querySelector('#print-btn').addEventListener('click', () => window.print());
       card.querySelector('#restart-btn').addEventListener('click', resetTrip);
-
-      // Celebrate finishing the whole trip.
-      setTimeout(confetti, 200);
-      return card;
     }
 
     /* =========================================================
-       === LOCKED-PHASE PLACEHOLDER ===
+       === LOCKED PLACEHOLDER + ORCHESTRATOR ===
        ========================================================= */
     function renderLocked(num, title) {
       const card = document.createElement('section');
-      card.className = 'card phase-card phase-locked';
-      card.setAttribute('aria-disabled', 'true');
+      card.className = 'card phase-card phase-locked'; card.setAttribute('aria-disabled', 'true');
       card.innerHTML =
-        '<div class="phase-head">' +
-          '<div class="phase-badge">' + num + '</div>' +
-          '<h2 class="phase-title">' + title + '</h2>' +
-        '</div>' +
+        '<div class="phase-head"><div class="phase-badge">' + num + '</div><h2 class="phase-title">' + title + '</h2></div>' +
         '<div class="lock-note">🔒 Finish Phase ' + (num - 1) + ' to unlock this step.</div>';
       return card;
     }
-
-    /* =========================================================
-       === RENDER APP (orchestrator) ===
-       ========================================================= */
+    const PHASE_BUILDERS = { 1: renderPhase1, 2: renderPhase2, 3: renderPhase3, 4: renderPhase4, 5: renderPhase5, 6: renderPhase6 };
     function renderApp() {
-      const root = document.getElementById('phase-root');
-      root.innerHTML = '';
-      const phaseTitles = {
-        1: 'The Downeaster Departure',
-        2: 'The Subway Connection',
-        3: 'Pick Two Attractions',
-        4: 'Your Trip Itinerary',
-      };
-      const builders = { 1: renderPhase1, 2: renderPhase2, 3: renderPhase3, 4: renderPhase4 };
-
-      for (let p = 1; p <= 4; p++) {
-        if (p === state.phase) {
-          root.appendChild(builders[p]());
-        } else if (p < state.phase) {
+      const root = document.getElementById('phase-root'); root.innerHTML = '';
+      PHASES.forEach((ph) => {
+        const p = ph.n;
+        if (p === state.phase) root.appendChild(PHASE_BUILDERS[p]());
+        else if (p < state.phase) {
           const done = document.createElement('section');
           done.className = 'card phase-card phase-done-card';
-          done.innerHTML =
-            '<div class="phase-head">' +
-              '<div class="phase-badge">✓</div>' +
-              '<h2 class="phase-title">Phase ' + p + ' Complete: ' + phaseTitles[p] + '</h2>' +
-            '</div>';
+          done.innerHTML = '<div class="phase-head"><div class="phase-badge">✓</div><h2 class="phase-title">Phase ' + p + ' Complete: ' + ph.title + '</h2></div>';
           root.appendChild(done);
-        } else {
-          root.appendChild(renderLocked(p, phaseTitles[p]));
-        }
-      }
+        } else root.appendChild(renderLocked(p, ph.title));
+      });
       updateJourney();
     }
 
     /* =========================================================
+       === JOURNEY + PASSPORT (rendered from descriptors) ===
+       ========================================================= */
+    function initJourney() {
+      const j = document.getElementById('journey'); j.innerHTML = '';
+      PHASES.forEach((p) => {
+        const step = document.createElement('div'); step.className = 'journey-step'; step.dataset.step = p.n;
+        step.innerHTML = '<span class="j-ico" aria-hidden="true">' + p.icon + '</span><span>' + p.short + '</span>';
+        j.appendChild(step);
+      });
+    }
+    function initPassport() {
+      const s = document.getElementById('stamps'); s.innerHTML = '';
+      STAMP_DEFS.forEach((d) => {
+        const el = document.createElement('div'); el.className = 'stamp'; el.dataset.stamp = d.name;
+        el.innerHTML = '<div class="seal" aria-hidden="true">' + d.seal + '</div><div class="stamp-name">' + d.name + '</div>';
+        if (state.stamps.includes(d.name)) el.classList.add('unlocked');
+        s.appendChild(el);
+      });
+    }
+    function updatePassportName() {
+      const h = document.getElementById('passport-h');
+      const nm = (state.name && state.name !== 'Explorer') ? (escAttr(state.name) + '’s') : 'My';
+      h.innerHTML = '<span aria-hidden="true">🛂</span> ' + nm + ' Passport';
+    }
+
+    /* =========================================================
        === TIME HELPER ===
-       Practices 3.MD.A.1 (elapsed time on a number line).
        ========================================================= */
     function initTimeHelper() {
       const startSel = document.getElementById('th-start');
@@ -1507,21 +1471,11 @@
       const ticks = document.getElementById('th-ticks');
       const out = document.getElementById('th-out');
       document.getElementById('th-std').title = STANDARDS['3.MD.A.1'];
-
       for (let m = 6 * 60; m <= 20 * 60; m += 30) {
-        const opt = document.createElement('option');
-        opt.value = m;
-        opt.textContent = formatTime(m);
-        if (m === 8 * 60) opt.selected = true;
-        startSel.appendChild(opt);
+        const opt = document.createElement('option'); opt.value = m; opt.textContent = formatTime(m);
+        if (m === 8 * 60) opt.selected = true; startSel.appendChild(opt);
       }
-      for (let i = 0; i < 13; i++) {
-        const t = document.createElement('div');
-        t.className = 'tick';
-        t.textContent = i;
-        ticks.appendChild(t);
-      }
-
+      for (let i = 0; i < 13; i++) { const t = document.createElement('div'); t.className = 'tick'; t.textContent = i; ticks.appendChild(t); }
       function refresh() {
         const startMin = parseInt(startSel.value, 10);
         const halfHours = parseInt(endRange.value, 10);
@@ -1533,9 +1487,7 @@
         endRange.setAttribute('aria-valuenow', halfHours);
         endRange.setAttribute('aria-valuetext', hoursLabel);
         const wholeHours = Math.floor(hours);
-        document.querySelectorAll('#th-ticks .tick').forEach((el, idx) => {
-          el.classList.toggle('active', idx > 0 && idx <= wholeHours);
-        });
+        document.querySelectorAll('#th-ticks .tick').forEach((el, idx) => { el.classList.toggle('active', idx > 0 && idx <= wholeHours); });
       }
       startSel.addEventListener('change', refresh);
       endRange.addEventListener('input', refresh);
@@ -1543,32 +1495,22 @@
     }
 
     /* =========================================================
-       === SETTINGS MODAL (teacher tools) ===
-       Builds editable rows from `config`, reads them back on Save.
+       === SETTINGS MODAL ===
        ========================================================= */
     function lineOptionsHTML(selected) {
-      return Object.keys(LINE_COLORS)
-        .map(n => '<option value="' + n + '"' + (n === selected ? ' selected' : '') + '>' + n + '</option>')
-        .join('');
+      return Object.keys(LINE_COLORS).map(n => '<option value="' + n + '"' + (n === selected ? ' selected' : '') + '>' + n + '</option>').join('');
     }
     function departOptionsHTML(selected) {
       let html = '';
-      for (let m = 5 * 60; m <= 12 * 60; m += 30) {
-        const t = formatTime(m);
-        html += '<option' + (t === selected ? ' selected' : '') + '>' + t + '</option>';
-      }
+      for (let m = 5 * 60; m <= 12 * 60; m += 30) { const t = formatTime(m); html += '<option' + (t === selected ? ' selected' : '') + '>' + t + '</option>'; }
       return html;
     }
     function rowVal(row, sel) { return row.querySelector(sel).value.trim(); }
-    function rowInt(row, sel, fallback) {
-      const n = parseInt(row.querySelector(sel).value, 10);
-      return isNaN(n) ? fallback : n;
-    }
+    function rowInt(row, sel, fallback) { const n = parseInt(row.querySelector(sel).value, 10); return isNaN(n) ? fallback : n; }
 
     function buildTrainRow(t) {
       t = t || { label: '', depart: '8:00 AM', durationHours: 3 };
-      const row = document.createElement('div');
-      row.className = 'erow train';
+      const row = document.createElement('div'); row.className = 'erow train';
       row.innerHTML =
         '<input type="text" class="set-input f-label" value="' + escAttr(t.label) + '" placeholder="Train name">' +
         '<select class="set-select f-depart">' + departOptionsHTML(t.depart) + '</select>' +
@@ -1579,8 +1521,7 @@
     }
     function buildPassRow(p) {
       p = p || { label: '', cost: 0, blurb: '' };
-      const row = document.createElement('div');
-      row.className = 'erow pass';
+      const row = document.createElement('div'); row.className = 'erow pass';
       row.innerHTML =
         '<input type="text" class="set-input f-label" value="' + escAttr(p.label) + '" placeholder="Pass name">' +
         '<input type="number" class="set-input f-cost" min="0" max="999" step="1" value="' + (p.cost || 0) + '">' +
@@ -1590,9 +1531,8 @@
       return row;
     }
     function buildDestRow(d) {
-      d = d || { emoji: '📍', name: '', category: '', line: 'Green', cost: 0, hours: 1 };
-      const row = document.createElement('div');
-      row.className = 'erow dest';
+      d = d || { emoji: '📍', name: '', category: '', line: 'Green', cost: 0, hours: 1, fact: '' };
+      const row = document.createElement('div'); row.className = 'erow dest';
       row.innerHTML =
         '<input type="text" class="set-input f-emoji" value="' + escAttr(d.emoji) + '" maxlength="3">' +
         '<input type="text" class="set-input f-name" value="' + escAttr(d.name) + '" placeholder="Place name">' +
@@ -1600,138 +1540,154 @@
         '<select class="set-select f-line">' + lineOptionsHTML(d.line) + '</select>' +
         '<input type="number" class="set-input f-cost" min="0" max="999" step="1" value="' + (d.cost || 0) + '">' +
         '<input type="number" class="set-input f-hours" min="1" max="12" step="1" value="' + (d.hours || 1) + '">' +
-        '<button type="button" class="row-del" aria-label="Remove destination">✕</button>';
+        '<input type="text" class="set-input f-fact" value="' + escAttr(d.fact || '') + '" placeholder="Did you know?">' +
+        '<button type="button" class="row-del" aria-label="Remove attraction">✕</button>';
+      row.querySelector('.row-del').addEventListener('click', () => row.remove());
+      return row;
+    }
+    function buildFoodRow(f) {
+      f = f || { emoji: '🍽️', label: '', cost: 0, hours: 1, fact: '' };
+      const row = document.createElement('div'); row.className = 'erow food';
+      row.innerHTML =
+        '<input type="text" class="set-input f-emoji" value="' + escAttr(f.emoji) + '" maxlength="3">' +
+        '<input type="text" class="set-input f-label" value="' + escAttr(f.label) + '" placeholder="Food name">' +
+        '<input type="number" class="set-input f-cost" min="0" max="999" step="1" value="' + (f.cost || 0) + '">' +
+        '<input type="number" class="set-input f-hours" min="1" max="12" step="1" value="' + (f.hours || 1) + '">' +
+        '<input type="text" class="set-input f-fact" value="' + escAttr(f.fact || '') + '" placeholder="Did you know?">' +
+        '<button type="button" class="row-del" aria-label="Remove lunch">✕</button>';
+      row.querySelector('.row-del').addEventListener('click', () => row.remove());
+      return row;
+    }
+    function buildSouvenirRow(s) {
+      s = s || { emoji: '🎁', label: '', cost: 0 };
+      const row = document.createElement('div'); row.className = 'erow souvenir';
+      row.innerHTML =
+        '<input type="text" class="set-input f-emoji" value="' + escAttr(s.emoji) + '" maxlength="3">' +
+        '<input type="text" class="set-input f-label" value="' + escAttr(s.label) + '" placeholder="Souvenir name">' +
+        '<input type="number" class="set-input f-cost" min="0" max="999" step="1" value="' + (s.cost || 0) + '">' +
+        '<button type="button" class="row-del" aria-label="Remove souvenir">✕</button>';
       row.querySelector('.row-del').addEventListener('click', () => row.remove());
       return row;
     }
 
+    function fillRows(containerId, items, builder) {
+      const box = document.getElementById(containerId); box.innerHTML = '';
+      items.forEach(it => box.appendChild(builder(it)));
+    }
     function populateSettingsForm() {
+      document.getElementById('set-difficulty').value = config.difficulty || 'friendly';
       document.getElementById('set-standards').checked = !!config.showStandards;
+      document.getElementById('set-name').value = (state.name === 'Explorer') ? '' : state.name;
       document.getElementById('set-budget').value = config.startingBudget;
-
-      const trainsRows = document.getElementById('trains-rows');
-      trainsRows.innerHTML = '';
-      config.trains.forEach(t => trainsRows.appendChild(buildTrainRow(t)));
-
-      const passesRows = document.getElementById('passes-rows');
-      passesRows.innerHTML = '';
-      config.passes.forEach(p => passesRows.appendChild(buildPassRow(p)));
-
+      fillRows('trains-rows', config.trains, buildTrainRow);
+      fillRows('passes-rows', config.passes, buildPassRow);
       document.getElementById('set-from').value = config.subway.from;
       document.getElementById('set-to').value = config.subway.to;
       document.getElementById('set-line').innerHTML = lineOptionsHTML(config.subway.correctLine);
       document.getElementById('set-hint').value = config.subway.hint;
-
-      const destsRows = document.getElementById('dests-rows');
-      destsRows.innerHTML = '';
-      config.destinations.forEach(d => destsRows.appendChild(buildDestRow(d)));
+      fillRows('dests-rows', config.destinations, buildDestRow);
+      fillRows('foods-rows', config.foods, buildFoodRow);
+      fillRows('souvenirs-rows', config.souvenirs, buildSouvenirRow);
     }
-
     function readSettingsForm() {
       const c = cloneDefaults();
+      c.difficulty = document.getElementById('set-difficulty').value === 'challenge' ? 'challenge' : 'friendly';
       c.showStandards = document.getElementById('set-standards').checked;
       const b = parseInt(document.getElementById('set-budget').value, 10);
-      c.startingBudget = isNaN(b) ? 50 : Math.max(0, b);
+      c.startingBudget = isNaN(b) ? 75 : Math.max(0, b);
 
-      c.trains = Array.prototype.map.call(
-        document.querySelectorAll('#trains-rows .erow'),
-        (r, i) => ({
-          id: String.fromCharCode(65 + i),
-          label: rowVal(r, '.f-label') || ('Train ' + (i + 1)),
-          depart: rowVal(r, '.f-depart') || '8:00 AM',
-          durationHours: Math.max(1, rowInt(r, '.f-dur', 3)),
-        })
-      );
-
-      c.passes = Array.prototype.map.call(
-        document.querySelectorAll('#passes-rows .erow'),
-        (r) => ({
-          label: rowVal(r, '.f-label') || 'Pass',
-          cost: Math.max(0, rowInt(r, '.f-cost', 0)),
-          blurb: rowVal(r, '.f-blurb'),
-        })
-      );
-
+      c.trains = Array.prototype.map.call(document.querySelectorAll('#trains-rows .erow'), (r, i) => ({
+        id: String.fromCharCode(65 + i),
+        label: rowVal(r, '.f-label') || ('Train ' + (i + 1)),
+        depart: rowVal(r, '.f-depart') || '8:00 AM',
+        durationHours: Math.max(1, rowInt(r, '.f-dur', 3)),
+      }));
+      c.passes = Array.prototype.map.call(document.querySelectorAll('#passes-rows .erow'), (r) => ({
+        label: rowVal(r, '.f-label') || 'Pass', cost: Math.max(0, rowInt(r, '.f-cost', 0)), blurb: rowVal(r, '.f-blurb'),
+      }));
       c.subway = {
         from: document.getElementById('set-from').value.trim() || 'North Station',
         to: document.getElementById('set-to').value.trim() || 'Park Street',
         correctLine: document.getElementById('set-line').value,
         hint: document.getElementById('set-hint').value.trim(),
       };
+      c.destinations = Array.prototype.map.call(document.querySelectorAll('#dests-rows .erow'), (r) => ({
+        emoji: rowVal(r, '.f-emoji') || '📍', name: rowVal(r, '.f-name') || 'Attraction',
+        category: rowVal(r, '.f-cat'), line: r.querySelector('.f-line').value,
+        cost: Math.max(0, rowInt(r, '.f-cost', 0)), hours: Math.max(1, rowInt(r, '.f-hours', 1)),
+        fact: rowVal(r, '.f-fact'),
+      }));
+      c.foods = Array.prototype.map.call(document.querySelectorAll('#foods-rows .erow'), (r) => ({
+        emoji: rowVal(r, '.f-emoji') || '🍽️', label: rowVal(r, '.f-label') || 'Lunch',
+        cost: Math.max(0, rowInt(r, '.f-cost', 0)), hours: Math.max(1, rowInt(r, '.f-hours', 1)), fact: rowVal(r, '.f-fact'),
+      }));
+      c.souvenirs = Array.prototype.map.call(document.querySelectorAll('#souvenirs-rows .erow'), (r) => ({
+        emoji: rowVal(r, '.f-emoji') || '🎁', label: rowVal(r, '.f-label') || 'Souvenir', cost: Math.max(0, rowInt(r, '.f-cost', 0)),
+      }));
 
-      c.destinations = Array.prototype.map.call(
-        document.querySelectorAll('#dests-rows .erow'),
-        (r) => ({
-          emoji: rowVal(r, '.f-emoji') || '📍',
-          name: rowVal(r, '.f-name') || 'Attraction',
-          category: rowVal(r, '.f-cat'),
-          line: r.querySelector('.f-line').value,
-          cost: Math.max(0, rowInt(r, '.f-cost', 0)),
-          hours: Math.max(1, rowInt(r, '.f-hours', 1)),
-        })
-      );
-
-      // Guard against empty critical lists.
+      // Guards so a phase can never be empty / impossible.
       if (c.trains.length === 0) c.trains = cloneDefaults().trains;
       if (c.passes.length === 0) c.passes = cloneDefaults().passes;
       if (c.destinations.length < 2) c.destinations = cloneDefaults().destinations;
+      if (c.foods.length === 0) c.foods = cloneDefaults().foods;
+      if (c.souvenirs.length === 0) c.souvenirs = cloneDefaults().souvenirs;
       return c;
     }
-
-    function applyStandardsMode() {
-      document.body.classList.toggle('show-standards', !!config.showStandards);
-    }
-
-    function openSettings() {
-      populateSettingsForm();
-      document.getElementById('settings-overlay').classList.add('open');
-    }
-    function closeSettings() {
-      document.getElementById('settings-overlay').classList.remove('open');
-    }
+    function applyStandardsMode() { document.body.classList.toggle('show-standards', !!config.showStandards); }
+    function openSettings() { populateSettingsForm(); document.getElementById('settings-overlay').classList.add('open'); }
+    function closeSettings() { document.getElementById('settings-overlay').classList.remove('open'); }
 
     function initSettings() {
       document.getElementById('open-settings').addEventListener('click', openSettings);
       document.getElementById('close-settings-x').addEventListener('click', closeSettings);
       document.getElementById('cancel-settings').addEventListener('click', closeSettings);
-
-      document.getElementById('add-train').addEventListener('click', () =>
-        document.getElementById('trains-rows').appendChild(buildTrainRow()));
-      document.getElementById('add-pass').addEventListener('click', () =>
-        document.getElementById('passes-rows').appendChild(buildPassRow()));
-      document.getElementById('add-dest').addEventListener('click', () =>
-        document.getElementById('dests-rows').appendChild(buildDestRow()));
+      document.getElementById('add-train').addEventListener('click', () => document.getElementById('trains-rows').appendChild(buildTrainRow()));
+      document.getElementById('add-pass').addEventListener('click', () => document.getElementById('passes-rows').appendChild(buildPassRow()));
+      document.getElementById('add-dest').addEventListener('click', () => document.getElementById('dests-rows').appendChild(buildDestRow()));
+      document.getElementById('add-food').addEventListener('click', () => document.getElementById('foods-rows').appendChild(buildFoodRow()));
+      document.getElementById('add-souvenir').addEventListener('click', () => document.getElementById('souvenirs-rows').appendChild(buildSouvenirRow()));
 
       document.getElementById('save-settings').addEventListener('click', () => {
-        config = readSettingsForm();
-        saveConfig();
-        applyStandardsMode();
-        closeSettings();
-        resetTrip();
+        config = readSettingsForm(); saveConfig();
+        const nm = document.getElementById('set-name').value.trim();
+        state.name = nm || 'Explorer'; saveName(state.name === 'Explorer' ? '' : state.name);
+        applyStandardsMode(); updatePassportName(); closeSettings(); resetTrip();
       });
-
       document.getElementById('reset-settings').addEventListener('click', () => {
-        config = cloneDefaults();
-        saveConfig();
-        populateSettingsForm();
-        applyStandardsMode();
+        config = cloneDefaults(); saveConfig(); populateSettingsForm(); applyStandardsMode();
       });
+      document.getElementById('settings-overlay').addEventListener('click', (e) => { if (e.target.id === 'settings-overlay') closeSettings(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSettings(); });
+    }
 
-      // Close on overlay click (but not when clicking inside the modal) and on Escape.
-      document.getElementById('settings-overlay').addEventListener('click', (e) => {
-        if (e.target.id === 'settings-overlay') closeSettings();
-      });
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeSettings();
-      });
+    /* =========================================================
+       === NAME OVERLAY ===
+       ========================================================= */
+    function initNameOverlay() {
+      const overlay = document.getElementById('name-overlay');
+      const input = document.getElementById('name-input');
+      function finish(name) {
+        state.name = (name && name.trim()) ? name.trim() : 'Explorer';
+        saveName(state.name === 'Explorer' ? '' : state.name);
+        updatePassportName();
+        overlay.classList.remove('open');
+      }
+      document.getElementById('name-start').addEventListener('click', () => finish(input.value));
+      document.getElementById('name-skip').addEventListener('click', () => finish(''));
+      input.addEventListener('keydown', (e) => { if (e.key === 'Enter') finish(input.value); });
+      if (!loadName()) { overlay.classList.add('open'); setTimeout(() => input.focus(), 50); }
     }
 
     /* =========================================================
        === INIT ===
        ========================================================= */
     document.addEventListener('DOMContentLoaded', () => {
+      initJourney();
+      initPassport();
+      updatePassportName();
       applyStandardsMode();
       initSettings();
+      initNameOverlay();
       initTimeHelper();
       updateTrackers();
       renderApp();
