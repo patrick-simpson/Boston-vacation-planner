@@ -1,0 +1,9 @@
+{
+  "name": "boston-transit-adventure",
+  "version": "2.0.0",
+  "description": "A real-world Boston day-trip planner for middle-school special education (money math + elapsed time, aligned to Maine standards).",
+  "private": true,
+  "scripts": {
+    "test": "node tests/math.test.js"
+  }
+}
