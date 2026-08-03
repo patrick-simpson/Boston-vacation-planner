@@ -1,220 +1,116 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Boston Transit Adventure</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0a1420" />
+  <title>FROSTFALL — Arctic Survival</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❄️</text></svg>" />
 </head>
 <body>
-  <div class="app">
+  <div id="game-container"></div>
 
-    <!-- ====== HEADER ====== -->
-    <header class="app-header" role="banner">
-      <h1 class="app-title"><span class="emoji" aria-hidden="true">🚆</span>Boston Transit Adventure</h1>
-      <div class="tracker" role="status" aria-live="polite" aria-label="Budget remaining">
-        <span class="label">Budget:</span>
-        <span class="value" id="budget-value">$75</span>
+  <!-- ======================= HUD OVERLAY ======================= -->
+  <div id="hud" class="hidden">
+    <div id="vignette-freeze"></div>
+    <div id="vignette-damage"></div>
+
+    <div class="hud-top-left">
+      <div class="bar-block">
+        <div class="bar-label"><span class="ico">♥</span> HEALTH</div>
+        <div class="bar hp"><div class="bar-fill" id="health-fill"></div></div>
       </div>
-      <div class="tracker" role="status" aria-live="polite" aria-label="Time away from home">
-        <span class="label">Time Away:</span>
-        <span class="value" id="time-value">0 min</span>
+      <div class="bar-block">
+        <div class="bar-label"><span class="ico">🌡</span> WARMTH</div>
+        <div class="bar warmth"><div class="bar-fill" id="warmth-fill"></div></div>
       </div>
-      <button class="gear-btn" id="open-settings" aria-label="Open teacher settings" title="Teacher settings">⚙️</button>
-    </header>
+      <div class="bar-block">
+        <div class="bar-label"><span class="ico">🔥</span> CAMPFIRE</div>
+        <div class="bar fire"><div class="bar-fill" id="fire-fill"></div></div>
+      </div>
+    </div>
 
-    <!-- ====== JOURNEY PROGRESS MAP (rendered by JS from PHASES) ====== -->
-    <div class="journey" id="journey" aria-label="Trip progress"></div>
+    <div class="hud-top-center">
+      <div id="wave-label">WAVE 1</div>
+      <div id="wave-sub"></div>
+    </div>
 
-    <!-- ====== MAIN PHASE PANEL ====== -->
-    <main class="phase-root" id="phase-root" aria-live="polite"></main>
+    <div class="hud-top-right">
+      <div class="res"><span class="ico">🪵</span><span id="wood-count">0</span></div>
+      <div class="res"><span class="ico">⚙️</span><span id="scrap-count">0</span></div>
+      <button id="shop-button" class="hud-btn" title="Upgrades [Tab]">⚒ UPGRADES</button>
+    </div>
 
-    <!-- ====== SIDEBAR ====== -->
-    <aside class="sidebar" aria-label="Passport, Word Bank, and Time Helper">
-      <section class="card passport" aria-labelledby="passport-h">
-        <h2 id="passport-h"><span aria-hidden="true">🛂</span> My Passport</h2>
-        <div class="stamps" id="stamps"></div>
-      </section>
+    <div class="hud-bottom-right">
+      <div id="weapon-slots"></div>
+      <div id="ammo-display">
+        <span id="ammo-mag">30</span><span id="ammo-sep">/</span><span id="ammo-reserve">180</span>
+      </div>
+      <div id="reload-hint"></div>
+    </div>
 
-      <section class="card word-bank" aria-labelledby="wb-h">
-        <h2 id="wb-h"><span aria-hidden="true">📖</span> Word Bank</h2>
-        <p class="help-text">Travel words to know before you start.</p>
-        <dl id="word-bank-list"></dl>
-      </section>
+    <div id="interact-hint" class="hidden"></div>
+    <div id="toasts"></div>
+    <div id="hitmarker"></div>
+    <div id="crosshair">
+      <span class="ch-line ch-t"></span><span class="ch-line ch-b"></span>
+      <span class="ch-line ch-l"></span><span class="ch-line ch-r"></span>
+      <span class="ch-dot"></span>
+    </div>
 
-      <section class="card time-helper" aria-labelledby="th-h">
-        <h2 id="th-h"><span aria-hidden="true">⏱️</span> Time Helper
-          <span class="std-badge" id="th-std" title="">📐 3.MD.A.1</span>
-        </h2>
-        <p class="help-text">Pick a start time. Slide to find the end time. Count the green blocks!</p>
-        <div class="row">
-          <label for="th-start">Start:</label>
-          <select id="th-start"></select>
-        </div>
-        <div class="row">
-          <label for="th-end" class="sr-only">End time slider</label>
-          <input id="th-end" type="range" min="0" max="24" step="1" value="6" aria-valuemin="0" aria-valuemax="24" aria-valuenow="6">
-        </div>
-        <div class="ticks" id="th-ticks" aria-hidden="true"></div>
-        <div class="duration-out" id="th-out">From 8:00 AM to 11:00 AM = 3 hours</div>
-      </section>
-    </aside>
-  </div>
+    <!-- upgrade / shop panel -->
+    <div id="shop" class="panel hidden">
+      <div class="panel-title">FIELD WORKSHOP</div>
+      <div class="panel-sub">Spend scrap <span class="ico">⚙️</span> to survive longer &nbsp;·&nbsp; [Tab] to close</div>
+      <div id="shop-items"></div>
+    </div>
 
-  <!-- ====== NAME OVERLAY ====== -->
-  <div class="modal-overlay" id="name-overlay" role="dialog" aria-modal="true" aria-labelledby="name-title">
-    <div class="modal narrow">
-      <div class="modal-head"><h2 id="name-title">👋 Welcome aboard!</h2></div>
-      <p class="modal-intro">Type your first name to start your Boston adventure. Your name will go on your passport and certificate.</p>
-      <label class="field-label" for="name-input">Your first name</label>
-      <input type="text" class="set-input" id="name-input" maxlength="20" placeholder="e.g., Alex" autocomplete="off">
-      <div class="modal-foot" style="margin-top:18px;">
-        <button class="btn secondary" id="name-skip">Skip</button>
-        <button class="btn" id="name-start">Start the trip 🚆</button>
+    <!-- mobile touch controls -->
+    <div id="touch-ui" class="hidden">
+      <div id="joy-move" class="joystick"><div class="joy-knob"></div></div>
+      <div id="joy-aim" class="joystick"><div class="joy-knob"></div></div>
+      <div id="touch-buttons">
+        <button id="btn-interact" class="touch-btn">E</button>
+        <button id="btn-swap" class="touch-btn">⇄</button>
+        <button id="btn-reload" class="touch-btn">R</button>
+      </div>
+    </div>
+
+    <div id="pause-overlay" class="overlay hidden">
+      <div class="overlay-inner">
+        <h1>PAUSED</h1>
+        <p>Press [P] to resume</p>
       </div>
     </div>
   </div>
 
-  <!-- ====== SETTINGS MODAL (teacher tools) ====== -->
-  <div class="modal-overlay" id="settings-overlay" role="dialog" aria-modal="true" aria-labelledby="settings-title">
-    <div class="modal">
-      <div class="modal-head">
-        <h2 id="settings-title">⚙️ Teacher Settings</h2>
-        <button class="btn secondary small" id="close-settings-x" aria-label="Close settings">✕</button>
+  <!-- ======================= START SCREEN ======================= -->
+  <div id="start-screen" class="overlay">
+    <div class="overlay-inner">
+      <div class="game-logo">FROST<span>FALL</span></div>
+      <p class="tagline">The cold is coming. So are they.</p>
+      <div class="controls-grid">
+        <div><b>WASD</b> Move</div>
+        <div><b>MOUSE</b> Aim &amp; Shoot</div>
+        <div><b>E</b> Gather wood / Stoke fire</div>
+        <div><b>1·2·3</b> Weapons</div>
+        <div><b>R</b> Reload</div>
+        <div><b>TAB</b> Upgrades</div>
       </div>
-      <p class="modal-intro">
-        Customize the trip here — no code editing needed. Train times use the real
-        Downeaster schedule; prices are approximate and can be edited. Changes save in
-        this browser. <strong>Saving restarts the trip.</strong>
-      </p>
-
-      <div class="settings-section">
-        <h3>🎚️ Difficulty &amp; Accessibility</h3>
-        <label class="field-label" for="set-difficulty">Difficulty level</label>
-        <select class="set-select" id="set-difficulty" style="max-width:420px;">
-          <option value="support">Most Support — 2 choices, number line always shown</option>
-          <option value="friendly">Friendly — 3 choices, "Show me how" help</option>
-          <option value="challenge">Challenge — type the money, finer clock steps</option>
-        </select>
-        <label class="switch-row" style="margin-top:14px;">
-          <span class="switch"><input type="checkbox" id="set-simple"><span class="slider"></span></span>
-          <span>Use simpler words in the instructions</span>
-        </label>
-        <label class="switch-row" style="margin-top:12px;">
-          <span class="switch"><input type="checkbox" id="set-readaloud"><span class="slider"></span></span>
-          <span>Show "Read aloud" buttons (text-to-speech)</span>
-        </label>
-        <label class="switch-row" style="margin-top:12px;">
-          <span class="switch"><input type="checkbox" id="set-tax"><span class="slider"></span></span>
-          <span>Add Massachusetts tax to lunch &amp; souvenirs (real-world money)</span>
-        </label>
-        <label class="switch-row" style="margin-top:12px;">
-          <span class="switch"><input type="checkbox" id="set-standards"><span class="slider"></span></span>
-          <span>Show which Maine standard each part of the page teaches</span>
-        </label>
-      </div>
-
-      <div class="settings-section">
-        <h3>🧑‍🎓 Student &amp; Budget</h3>
-        <label class="field-label" for="set-name">Student name (optional)</label>
-        <input type="text" class="set-input" id="set-name" maxlength="20" style="max-width:320px;">
-        <label class="field-label" for="set-budget" style="margin-top:12px;">Starting budget $</label>
-        <input type="number" class="set-input" id="set-budget" min="0" max="999" step="1" style="width:120px;">
-      </div>
-
-      <div class="settings-section">
-        <h3>🚆 Trains to Boston (Phase 1)</h3>
-        <div class="erows-scroll">
-          <div class="erow-head train"><span>Train name</span><span>Leaves Portland</span><span>Arrives Boston</span><span></span></div>
-          <div id="trains-rows"></div>
-        </div>
-        <button class="btn secondary small" id="add-train">+ Add train</button>
-      </div>
-
-      <div class="settings-section">
-        <h3>🚆 Trains Home (Phase 6)</h3>
-        <div class="erows-scroll">
-          <div class="erow-head rtrain"><span>Return train name</span><span>Leaves Boston</span><span>Arrives Portland</span><span></span></div>
-          <div id="rtrains-rows"></div>
-        </div>
-        <button class="btn secondary small" id="add-rtrain">+ Add return train</button>
-      </div>
-
-      <div class="settings-section">
-        <h3>🎟️ Subway Passes (Phase 2)</h3>
-        <div class="erows-scroll">
-          <div class="erow-head pass"><span>Pass name</span><span>Cost $</span><span>Description</span><span></span></div>
-          <div id="passes-rows"></div>
-        </div>
-        <button class="btn secondary small" id="add-pass">+ Add pass</button>
-      </div>
-
-      <div class="settings-section">
-        <h3>🚇 Subway Route (Phase 2)</h3>
-        <div class="erow" style="grid-template-columns: 1fr 1fr; min-width:0;">
-          <label class="field-label">From station<input type="text" class="set-input" id="set-from"></label>
-          <label class="field-label">To station<input type="text" class="set-input" id="set-to"></label>
-        </div>
-        <div class="erow" style="grid-template-columns: 1fr 2fr; min-width:0; margin-top:8px;">
-          <label class="field-label">Correct line<select class="set-select" id="set-line"></select></label>
-          <label class="field-label">Hint shown to students<input type="text" class="set-input" id="set-hint"></label>
-        </div>
-      </div>
-
-      <div class="settings-section">
-        <h3>🗺️ Attractions (Phase 3)</h3>
-        <div class="erows-scroll">
-          <div class="erow-head dest"><span>Emoji</span><span>Name</span><span>Category</span><span>Line</span><span>Nearest stop</span><span>Youth $</span><span>Adult $</span><span>Hours</span><span>Fun fact</span><span></span></div>
-          <div id="dests-rows"></div>
-        </div>
-        <button class="btn secondary small" id="add-dest">+ Add attraction</button>
-      </div>
-
-      <div class="settings-section">
-        <h3>🍽️ Lunch Options (Phase 4)</h3>
-        <div class="erows-scroll">
-          <div class="erow-head food"><span>Emoji</span><span>Food</span><span>Cost $</span><span>Hours</span><span>Fun fact</span><span></span></div>
-          <div id="foods-rows"></div>
-        </div>
-        <button class="btn secondary small" id="add-food">+ Add lunch</button>
-      </div>
-
-      <div class="settings-section">
-        <h3>🎁 Souvenirs (Phase 5)</h3>
-        <div class="erows-scroll">
-          <div class="erow-head souvenir"><span>Emoji</span><span>Souvenir</span><span>Cost $</span><span></span></div>
-          <div id="souvenirs-rows"></div>
-        </div>
-        <button class="btn secondary small" id="add-souvenir">+ Add souvenir</button>
-      </div>
-
-      <div class="settings-section">
-        <h3>💾 Share Settings</h3>
-        <p class="io-note" id="io-note">Export your customized trip to a file, or import a file another teacher shared.</p>
-        <div class="io-row">
-          <button class="btn secondary small" id="export-settings">⬇️ Export settings</button>
-          <button class="btn secondary small" id="import-settings">⬆️ Import settings</button>
-          <input type="file" id="import-file" accept="application/json,.json" style="display:none;">
-        </div>
-      </div>
-
-      <div class="modal-foot">
-        <button class="btn danger small" id="reset-settings">↺ Reset to defaults</button>
-        <span class="spacer"></span>
-        <button class="btn secondary" id="cancel-settings">Cancel</button>
-        <button class="btn" id="save-settings">Save &amp; Restart</button>
-      </div>
+      <p class="hint-text">Keep the campfire burning or you will freeze.<br/>Everything wants to kill you — including the weather.</p>
+      <button id="start-button" class="big-btn">⛺ BEGIN SURVIVAL</button>
     </div>
   </div>
 
-  <div id="confetti" aria-hidden="true"></div>
+  <!-- ======================= GAME OVER ======================= -->
+  <div id="gameover-screen" class="overlay hidden">
+    <div class="overlay-inner">
+      <h1 id="gameover-title">YOU FROZE</h1>
+      <div id="gameover-stats"></div>
+      <button id="restart-button" class="big-btn">↻ TRY AGAIN</button>
+    </div>
+  </div>
 
-  <!-- Scripts: data + pure math + speech, then the app. Plain scripts
-       (no modules) so the page also works when opened directly from a
-       file, not just from a web server. -->
-  <script src="js/data.js"></script>
-  <script src="js/math.js"></script>
-  <script src="js/speech.js"></script>
-  <script src="js/app.js"></script>
+  <script type="module" src="./src/main.js"></script>
 </body>
 </html>

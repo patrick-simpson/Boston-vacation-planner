@@ -1,9 +1,18 @@
 {
-  "name": "boston-transit-adventure",
-  "version": "2.0.0",
-  "description": "A real-world Boston day-trip planner for middle-school special education (money math + elapsed time, aligned to Maine standards).",
+  "name": "frostfall-arctic-survival",
   "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "FROSTFALL — a 3D arctic wave-shooter survival game built with Three.js and Vite. Fight off polar bears, frost wolves and ice goliaths while keeping the campfire alive.",
   "scripts": {
-    "test": "node tests/math.test.js"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "three": "^0.170.0"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
   }
 }
