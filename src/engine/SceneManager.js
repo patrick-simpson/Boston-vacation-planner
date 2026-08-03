@@ -12,7 +12,8 @@ const SNOW_BOX = { x: 90, y: 34, z: 90 };
  * post-processing chain. Camera is a smoothed top-down action follow-cam.
  */
 export class SceneManager {
-  constructor(container) {
+  constructor(container, lowPower = false) {
+    this.lowPower = lowPower; // phones: smaller shadows, lower pixel ratio, lighter bloom
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x8fb6d4);
     this.fogBase = 0.014;
@@ -22,9 +23,9 @@ export class SceneManager {
     this.camera.position.set(0, 22, 15);
     this.camera.lookAt(0, 0, 0);
 
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+    this.renderer = new THREE.WebGLRenderer({ antialias: !lowPower, powerPreference: 'high-performance' });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, lowPower ? 1.5 : 2));
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -37,8 +38,9 @@ export class SceneManager {
     // post-processing: subtle bloom sells the fire, muzzle flashes and ice glints
     this.composer = new EffectComposer(this.renderer);
     this.composer.addPass(new RenderPass(this.scene, this.camera));
+    const bloomScale = lowPower ? 0.5 : 1;
     this.bloom = new UnrealBloomPass(
-      new THREE.Vector2(window.innerWidth, window.innerHeight), 0.42, 0.7, 0.82
+      new THREE.Vector2(window.innerWidth * bloomScale, window.innerHeight * bloomScale), 0.42, 0.7, 0.82
     );
     this.composer.addPass(this.bloom);
     this.composer.addPass(new OutputPass());
@@ -48,8 +50,16 @@ export class SceneManager {
     this.camOffset = new THREE.Vector3(0, 21, 13.5);
     this.shake = 0;
     this.storm = 0; // 0 calm .. 1 blizzard
+    this._updateCamOffset();
 
     window.addEventListener('resize', () => this._onResize());
+  }
+
+  /** Portrait screens see far less of the arena — pull the camera back to compensate. */
+  _updateCamOffset() {
+    const aspect = window.innerWidth / window.innerHeight;
+    const zoomOut = aspect < 0.7 ? 1.45 : aspect < 1.0 ? 1.25 : 1;
+    this.camOffset.set(0, 21 * zoomOut, 13.5 * zoomOut);
   }
 
   _setupLights() {
@@ -59,7 +69,8 @@ export class SceneManager {
     const sun = new THREE.DirectionalLight(0xfff2df, 1.5);
     sun.position.set(-30, 42, 18);
     sun.castShadow = true;
-    sun.shadow.mapSize.set(2048, 2048);
+    const sm = this.lowPower ? 1024 : 2048;
+    sun.shadow.mapSize.set(sm, sm);
     sun.shadow.camera.left = -60;
     sun.shadow.camera.right = 60;
     sun.shadow.camera.top = 60;
@@ -72,6 +83,7 @@ export class SceneManager {
   }
 
   _setupSnowfall() {
+    this.snowCount = this.lowPower ? 1300 : SNOW_COUNT;
     const pos = new Float32Array(SNOW_COUNT * 3);
     this._snowVel = new Float32Array(SNOW_COUNT); // fall speed per flake
     for (let i = 0; i < SNOW_COUNT; i++) {
@@ -82,7 +94,7 @@ export class SceneManager {
     }
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.BufferAttribute(pos, 3).setUsage(THREE.DynamicDrawUsage));
-    geo.setDrawRange(0, Math.floor(SNOW_COUNT * 0.45)); // calm weather uses fewer flakes
+    geo.setDrawRange(0, Math.floor(this.snowCount * 0.45)); // calm weather uses fewer flakes
 
     const c = document.createElement('canvas');
     c.width = c.height = 32;
@@ -123,7 +135,7 @@ export class SceneManager {
     const windZ = 0.6 + this.storm * 3;
     const speedMul = 1 + this.storm * 1.6;
     const cx = followPos.x, cz = followPos.z;
-    for (let i = 0; i < SNOW_COUNT; i++) {
+    for (let i = 0; i < this.snowCount; i++) {
       const i3 = i * 3;
       pos[i3] += windX * dt;
       pos[i3 + 1] -= this._snowVel[i] * speedMul * dt;
@@ -138,7 +150,7 @@ export class SceneManager {
       if (Math.abs(pos[i3 + 2] - cz) > SNOW_BOX.z / 2) pos[i3 + 2] = cz + (Math.random() - 0.5) * SNOW_BOX.z;
     }
     this.snow.geometry.attributes.position.needsUpdate = true;
-    this.snow.geometry.setDrawRange(0, Math.floor(SNOW_COUNT * (0.45 + this.storm * 0.55)));
+    this.snow.geometry.setDrawRange(0, Math.floor(this.snowCount * (0.45 + this.storm * 0.55)));
 
     const targetFog = this.fogBase + this.storm * 0.03;
     this.scene.fog.density += (targetFog - this.scene.fog.density) * Math.min(1, dt * 2);
@@ -169,5 +181,6 @@ export class SceneManager {
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(w, h);
     this.composer.setSize(w, h);
+    this._updateCamOffset();
   }
 }

@@ -170,12 +170,13 @@ export class Player {
 
     const nearFire = df < 3.2;
     const woodSrc = game.env.nearestWoodSource(this.pos);
+    const key = input.isTouch ? '<b>Ⓔ button</b>' : '<b>[E]</b>';
     if (nearFire) {
       game.hud.setInteractHint(this.wood > 0
-        ? '<b>[E]</b> Stoke fire (1 🪵)'
+        ? `${key} Stoke fire (1 🪵)`
         : 'Fire needs wood — chop trees! 🌲');
     } else if (woodSrc) {
-      game.hud.setInteractHint(`<b>[E]</b> Gather wood (${woodSrc.wood} left)`);
+      game.hud.setInteractHint(`${key} Gather wood (${woodSrc.wood} left)`);
     } else {
       game.hud.setInteractHint(null);
     }

@@ -231,7 +231,8 @@ export class Environment {
 
     this.fireLight = new THREE.PointLight(0xff7733, 3.2, 34, 1.6);
     this.fireLight.position.set(0, 1.6, 0);
-    this.fireLight.castShadow = true;
+    // point-light shadows re-render the scene 6x — too costly on phones
+    this.fireLight.castShadow = !this.game.sceneM.lowPower;
     this.fireLight.shadow.mapSize.set(512, 512);
     g.add(this.fireLight);
 

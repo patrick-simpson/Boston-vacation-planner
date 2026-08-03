@@ -21,8 +21,9 @@ class Game {
     this.stats = { kills: 0, waves: 0, time: 0, scrapEarned: 0 };
 
     const container = document.getElementById('game-container');
-    this.sceneM = new SceneManager(container);
     this.input = new Input();
+    // touch devices get the low-power render tier (phones are the target there)
+    this.sceneM = new SceneManager(container, this.input.isTouch);
     this.audio = new AudioEngine();
     this.particles = new ParticleSystem(this.sceneM.scene);
 
@@ -35,6 +36,14 @@ class Game {
 
     this.clock = new THREE.Clock();
     this.hud.showStart();
+
+    // auto-pause when the tab/app goes to the background (phone home button etc.)
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && this.state === 'playing') {
+        this.state = 'paused';
+        this.hud.setPaused(true);
+      }
+    });
 
     this.sceneM.renderer.setAnimationLoop(() => this._frame());
   }
@@ -89,7 +98,7 @@ class Game {
         this.hud.update(dt);
       }
     } else if (this.state === 'paused') {
-      if (this.input.wasPressed('KeyP')) {
+      if (this.input.wasPressed('KeyP') || this.hud.consumeResumeTap()) {
         this.state = 'playing';
         this.hud.setPaused(false);
         this.clock.getDelta();
@@ -111,4 +120,5 @@ class Game {
   }
 }
 
-new Game();
+const game = new Game();
+window.__FROSTFALL = game; // handy for debugging / automated smoke tests

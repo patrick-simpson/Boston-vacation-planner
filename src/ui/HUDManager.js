@@ -44,18 +44,32 @@ export class HUDManager {
     this._touchInteract = false;
     this._touchSwap = false;
     this._touchReload = false;
+    this._resumeTap = false;
     this._lastInteractHint = undefined;
 
     this._buildWeaponSlots();
     this._wire();
 
-    if (game.input.isTouch) this.el.touchUI.classList.remove('hidden');
+    if (game.input.isTouch) {
+      document.body.classList.add('touch');
+      this.el.touchUI.classList.remove('hidden');
+      // start screen: show touch controls instead of keyboard bindings
+      const grid = this.el.startScreen.querySelector('.controls-grid');
+      grid.innerHTML = `
+        <div><b>LEFT STICK</b> Move</div>
+        <div><b>RIGHT STICK</b> Aim &amp; auto-fire</div>
+        <div><b>Ⓔ</b> Gather wood / Stoke fire</div>
+        <div><b>⇄</b> Switch weapon</div>
+        <div><b>Ⓡ</b> Reload</div>
+        <div><b>⚒ UPGRADES</b> Open the workshop</div>`;
+    }
   }
 
   _wire() {
     this.el.startButton.addEventListener('click', () => this.game.start());
     this.el.restartButton.addEventListener('click', () => this.game.restart());
     this.el.shopButton.addEventListener('click', () => this.toggleShop());
+    document.getElementById('shop-close').addEventListener('click', () => this.closeShop());
 
     const touch = (id, cb) => {
       const b = document.getElementById(id);
@@ -64,8 +78,15 @@ export class HUDManager {
     touch('btn-interact', () => { this._touchInteract = true; });
     touch('btn-swap', () => { this._touchSwap = true; });
     touch('btn-reload', () => { this._touchReload = true; });
+
+    // pause screen: tapping anywhere resumes (phones have no P key)
+    this.el.pauseOverlay.addEventListener('pointerdown', () => { this._resumeTap = true; });
+    if (this.game.input.isTouch) {
+      this.el.pauseOverlay.querySelector('p').textContent = 'Tap to resume';
+    }
   }
 
+  consumeResumeTap() { const v = this._resumeTap; this._resumeTap = false; return v; }
   consumeTouchInteract() { const v = this._touchInteract; this._touchInteract = false; return v; }
   consumeTouchSwap() { const v = this._touchSwap; this._touchSwap = false; return v; }
   consumeTouchReload() { const v = this._touchReload; this._touchReload = false; return v; }
