@@ -5,12 +5,20 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# This repository's Pages site is configured with the "GitHub Actions"
+# source (build_type: workflow), so pushes to a gh-pages branch are
+# ignored. Deploy through the official Pages actions instead.
 permissions:
-  contents: write
+  contents: read
   pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -27,33 +35,21 @@ jobs:
       - name: Build
         run: npm run build
 
-      # Deploy the Vite dist folder to the gh-pages branch, which this
-      # repository's Pages configuration serves (avoids environment
-      # protection rules on the main-branch Pages environment).
-      - name: Deploy to gh-pages branch
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          branch: gh-pages
-          folder: dist
-          clean: true
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
 
-      # Pushes made with GITHUB_TOKEN don't reliably trigger the internal
-      # pages-build-deployment workflow, leaving the CDN serving stale
-      # content. Explicitly request a Pages build after every deploy.
-      - name: Request GitHub Pages build
-        run: |
-          echo "== Pages site configuration =="
-          curl -s -w "\nHTTP %{http_code}\n" \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${{ github.repository }}/pages"
-          echo "== Latest Pages build =="
-          curl -s -w "\nHTTP %{http_code}\n" \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${{ github.repository }}/pages/builds/latest"
-          echo "== Requesting Pages build =="
-          curl -s -w "\nHTTP %{http_code}\n" -X POST \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${{ github.repository }}/pages/builds"
+      - name: Upload dist artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
