@@ -38,25 +38,13 @@ jobs:
           folder: dist
           clean: true
 
-      # The Pages site was left configured with the "GitHub Actions" source,
-      # whose protected github-pages environment rejects our deployments, while
-      # branch pushes were silently ignored. Point Pages back at the gh-pages
-      # branch (idempotent) and request a build so the pushed content goes live.
-      - name: Ensure Pages serves gh-pages and request a build
+      # Belt-and-braces: once the repo's Pages source is set to "Deploy from a
+      # branch" (gh-pages), this makes sure a Pages build runs even when the
+      # branch push comes from a bot token. Harmless (403) until then; the
+      # Pages source itself must be changed by an admin in Settings → Pages.
+      - name: Request Pages build
         run: |
-          echo "== Set Pages source to the gh-pages branch =="
-          curl -s -w "\nHTTP %{http_code}\n" -X PUT \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github+json" \
-            -d '{"build_type":"legacy","source":{"branch":"gh-pages","path":"/"}}' \
-            "https://api.github.com/repos/${{ github.repository }}/pages"
-          echo "== Request Pages build =="
           curl -s -w "\nHTTP %{http_code}\n" -X POST \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/${{ github.repository }}/pages/builds"
-          echo "== Resulting configuration =="
-          curl -s -w "\nHTTP %{http_code}\n" \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${{ github.repository }}/pages"
