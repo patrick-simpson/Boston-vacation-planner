@@ -28,20 +28,26 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
+      - name: Build into docs/
         run: npm run build
 
-      - name: Deploy dist to gh-pages branch
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          branch: gh-pages
-          folder: dist
-          clean: true
+      # GitHub Pages serves main:/docs, so the built site is committed back
+      # to main whenever the source changed it. Pushes made with GITHUB_TOKEN
+      # do not re-trigger this workflow, so this cannot loop.
+      - name: Commit built site back to main
+        run: |
+          if [ -n "$(git status --porcelain docs)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add docs
+            git commit -m "Build site into docs/ [skip ci]"
+            git push origin HEAD:main
+          else
+            echo "docs/ already up to date"
+          fi
 
-      # Belt-and-braces: once the repo's Pages source is set to "Deploy from a
-      # branch" (gh-pages), this makes sure a Pages build runs even when the
-      # branch push comes from a bot token. Harmless (403) until then; the
-      # Pages source itself must be changed by an admin in Settings → Pages.
+      # Bot pushes don't always trigger the internal Pages build, so ask for
+      # one explicitly. Requires Pages source: Deploy from a branch (main /docs).
       - name: Request Pages build
         run: |
           curl -s -w "\nHTTP %{http_code}\n" -X POST \

@@ -41,10 +41,12 @@ npm run preview  # preview the production build
 
 ## Deployment
 
-Pushing to `main` triggers `.github/workflows/deploy.yml`, which builds the
-Vite project and publishes `dist/` to the `gh-pages` branch for GitHub Pages.
-The Vite `base: './'` setting keeps all asset paths relative so the game works
-from the repository subpath.
+GitHub Pages serves the `docs/` folder on `main` (Settings → Pages →
+Deploy from a branch → `main` `/docs`). Pushing source changes to `main`
+triggers `.github/workflows/deploy.yml`, which rebuilds the game into
+`docs/`, commits the result back to `main`, and requests a Pages build.
+The Vite `base: './'` setting keeps all asset paths relative so the game
+works from any subpath.
 
 ## Architecture
 
