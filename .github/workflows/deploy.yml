@@ -42,7 +42,18 @@ jobs:
       # content. Explicitly request a Pages build after every deploy.
       - name: Request GitHub Pages build
         run: |
-          curl -sf -X POST \
+          echo "== Pages site configuration =="
+          curl -s -w "\nHTTP %{http_code}\n" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/pages"
+          echo "== Latest Pages build =="
+          curl -s -w "\nHTTP %{http_code}\n" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/pages/builds/latest"
+          echo "== Requesting Pages build =="
+          curl -s -w "\nHTTP %{http_code}\n" -X POST \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/${{ github.repository }}/pages/builds"
